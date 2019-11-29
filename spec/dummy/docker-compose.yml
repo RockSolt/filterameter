@@ -1,0 +1,15 @@
+version: '3'
+services:
+  db:
+    container_name: filterameter_db
+    image: postgres:10.7
+    environment:
+      - POSTGRES_USER=filterameter
+      - POSTGRES_DB=filterameter
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
