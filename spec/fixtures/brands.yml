@@ -1,0 +1,7 @@
+happy_shirts:
+  vendor: happy_house
+  name: "Happy Shirts"
+
+fun_shirts:
+  vendor: fun_house
+  name: "Fun Shirts"
