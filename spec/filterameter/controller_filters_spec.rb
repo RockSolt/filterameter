@@ -60,6 +60,21 @@ RSpec.describe Filterameter::ControllerFilters do
     end
   end
 
+  context 'with starting query' do
+    let(:instance) do
+      described_class.new('shirts', 'shirts').tap do |cf|
+        cf.add_filter(:color, {})
+      end
+    end
+    let(:filter_params) { { color: 'blue' }.stringify_keys }
+    let(:starting_query) { Shirt.where(size: 'Medium') }
+    let(:query) { instance.build_query(filter_params, starting_query) }
+
+    it 'includes starting criteria' do
+      expect(query.where_values_hash).to include('color' => 'blue', 'size' => 'Medium')
+    end
+  end
+
   describe 'undeclared parameters' do
     let(:instance) do
       described_class.new('shirts', 'shirts').tap do |cf|
@@ -68,7 +83,8 @@ RSpec.describe Filterameter::ControllerFilters do
       end
     end
     let(:filter_params) { { color: 'blue', style: 'crew-neck' }.stringify_keys }
-    let(:query) { instance.build_query(filter_params) }
+    let(:starting_query) { nil }
+    let(:query) { instance.build_query(filter_params, starting_query) }
 
     before { allow(Filterameter.configuration).to receive(:action_on_undeclared_parameters).and_return(action) }
 
@@ -103,7 +119,7 @@ RSpec.describe Filterameter::ControllerFilters do
       let(:action) { :raise }
 
       it 'raises exception' do
-        expect { instance.build_query(filter_params) }
+        expect { instance.build_query(filter_params, nil) }
           .to raise_error(Filterameter::Exceptions::UndeclaredParameterError,
                           'The following filter parameter(s) have not been declared: ["style"]')
       end
@@ -118,7 +134,7 @@ RSpec.describe Filterameter::ControllerFilters do
       end
     end
     let(:filter_params) { { color: 'blue', size: 'Extra Large' }.stringify_keys }
-    let(:query) { instance.build_query(filter_params) }
+    let(:query) { instance.build_query(filter_params, nil) }
 
     before { allow(Filterameter.configuration).to receive(:action_on_validation_failure).and_return(action) }
 
@@ -153,7 +169,7 @@ RSpec.describe Filterameter::ControllerFilters do
       let(:action) { :raise }
 
       it 'raises exception' do
-        expect { instance.build_query(filter_params) }
+        expect { instance.build_query(filter_params, nil) }
           .to raise_error(Filterameter::Exceptions::ValidationError,
                           'The following parameter(s) failed validation: ["Size is not included in the list"]')
       end
