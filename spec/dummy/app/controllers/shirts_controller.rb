@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ShirtsController < ApplicationController
+  before_action :start_query
   include Filterameter::DeclarativeFilters
 
   filter :color
@@ -13,5 +14,14 @@ class ShirtsController < ApplicationController
   def index
     params.permit(:color)
     render json: @shirts
+  end
+
+  private
+
+  # provides test case for existing query when params include flag
+  def start_query
+    return unless params.key?(:with_existing_query)
+
+    @shirts = Shirt.where(color: 'Blue')
   end
 end

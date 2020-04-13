@@ -39,8 +39,12 @@ module Filterameter
     private
 
     def build_filtered_query
-      instance_variable_set("@#{self.class.controller_filters.query_variable_name}",
-                            self.class.controller_filters.build_query(params.to_unsafe_h.fetch(:filter, {})))
+      var_name = "@#{self.class.controller_filters.query_variable_name}"
+      instance_variable_set(
+        var_name,
+        self.class.controller_filters.build_query(params.to_unsafe_h.fetch(:filter, {}),
+                                                  instance_variable_get(var_name))
+      )
     end
   end
 end

@@ -54,6 +54,13 @@ RSpec.describe ShirtsController, type: :controller do
     end
   end
 
+  context 'with instance variable already populated' do
+    before { get :index, params: { with_existing_query: true, filter: { size: 'Medium' } } }
+
+    it_behaves_like 'successful response'
+    it_behaves_like 'count is correct', 1
+  end
+
   context 'with invalid parameter value' do
     let(:filter) { { size: 'Extra Large' } }
     let(:request) { get :index, params: { filter: filter } }

@@ -40,8 +40,8 @@ module Filterameter
       @query_variable_name ||= model_class.model_name.plural
     end
 
-    def build_query(filter_params)
-      valid_filters(filter_params).reduce(model_class.all) do |query, (name, value)|
+    def build_query(filter_params, starting_query)
+      valid_filters(filter_params).reduce(starting_query || model_class.all) do |query, (name, value)|
         @filters[name].apply(query, value)
       end
     end
