@@ -9,10 +9,6 @@ module Filterameter
   module DeclarativeFilters
     extend ActiveSupport::Concern
 
-    included do
-      before_action :build_filtered_query, only: :index
-    end
-
     class_methods do
       def filter_model(model_class, query_var_name = nil)
         controller_filters.model_class = model_class

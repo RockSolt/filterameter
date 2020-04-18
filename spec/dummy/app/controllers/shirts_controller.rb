@@ -2,7 +2,7 @@
 
 class ShirtsController < ApplicationController
   before_action :start_query
-  include Filterameter::DeclarativeFilters
+  before_action :build_filtered_query, only: :index
 
   filter :color
   filter :size, validates: { inclusion: { in: %w[Small Medium Large] }, unless: -> { size.is_a? Array } }
