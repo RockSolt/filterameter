@@ -10,6 +10,7 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - 'Guardfile'
 Metrics/LineLength:
   Max: 120
 Style/FrozenStringLiteralComment:
