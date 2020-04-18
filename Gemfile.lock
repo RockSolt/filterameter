@@ -159,10 +159,10 @@ PLATFORMS
 
 DEPENDENCIES
   filterameter!
-  pg
+  pg (~> 1.1.4)
   rspec-rails (~> 3.9)
   rubocop (~> 0.77)
-  simplecov
+  simplecov (~> 0.18)
 
 BUNDLED WITH
    2.1.4
