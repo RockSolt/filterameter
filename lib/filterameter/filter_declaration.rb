@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/array/wrap'
+require 'filterameter/options/partial_options'
 
 module Filterameter
   # = Filter Declaration
@@ -17,6 +18,7 @@ module Filterameter
       @association = options[:association]
       @filter_on_empty = options.fetch(:filter_on_empty, false)
       @validations = Array.wrap(options[:validates])
+      @raw_partial_options = options.fetch(:partial, false)
     end
 
     def nested?
@@ -31,10 +33,18 @@ module Filterameter
       @filter_on_empty
     end
 
+    def partial_search?
+      partial_options.present?
+    end
+
+    def partial_options
+      @partial_options ||= @raw_partial_options ? Options::PartialOptions.new(@raw_partial_options) : nil
+    end
+
     private
 
     def validate_options(options)
-      options.assert_valid_keys(:name, :association, :filter_on_empty, :validates)
+      options.assert_valid_keys(:name, :association, :filter_on_empty, :validates, :partial)
     end
   end
 end

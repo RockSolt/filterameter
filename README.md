@@ -39,6 +39,24 @@ filter :size, validates: { inclusion: { in: %w[Small Medium Large] }, unless: ->
 
 Note that the `inclusion` validator does not allow arrays to be specified. If the filter should allow multiple values to be specified, then the validation needs to be disabled when the value an array.
 
+#### partial
+Specify the partial option if the filter should do a partial search (SQL's `LIKE`). The partial option accepts a hash to specify the search behavior. Here are the available options:
+- match: anywhere (default), from_start, dynamic
+- case_sensitive: true, false (default)
+
+There are two shortcuts: : the partial option can be declared with `true`, which just uses the defaults; or the partial option can be declared with the match option directly, such as `partial: :from_start`.
+
+```ruby
+filter :description, partial: true
+filter :department_name, partial: :from_start
+filter :reason, partial: { match: :dynamic, case_sensitive: true } 
+```
+
+The `match` options defines where you are searching (which then controls where the wildcard(s) appear):
+- anywhere: adds wildcards at the start and end, for example '%blue%'
+- from_start: adds a wildcard at the end, for example 'blue%'
+- dynamic: adds no wildcards; this enables the client to fully control the search string
+
 ### Configuring Controllers
 
 Rails conventions are used to determine the controller's model as well as the name of the instance variable to apply the filters to. For example, the PhotosController will use the variable `@photos` to store a query against the Photo model. If the conventions do not provide the correct info, they can be overridden with the following two methods:

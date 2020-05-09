@@ -52,6 +52,51 @@ RSpec.describe ShirtsController, type: :controller do
       it_behaves_like 'successful response'
       it_behaves_like 'count is correct', 3
     end
+
+    describe 'partial match from start' do
+      let(:filter) { { color_type_ahead: 'Bl' } }
+
+      it_behaves_like 'successful response'
+      it_behaves_like 'count is correct', 3
+    end
+
+    describe 'partial match anywhere' do
+      let(:filter) { { fuzzy_color: 'lu' } }
+
+      it_behaves_like 'successful response'
+      it_behaves_like 'count is correct', 3
+    end
+
+    describe 'partial match dynamically' do
+      let(:filter) { { color_client_search: 'B__e' } }
+
+      it_behaves_like 'successful response'
+      it_behaves_like 'count is correct', 3
+    end
+
+    describe 'case sensitive partial' do
+      fixtures :brands
+
+      context 'when case sensitive' do
+        let(:filter) do
+          Shirt.create!(color: 'blue', brand: brands('happy_shirts'))
+          { case_sensitive_color: 'bl' }
+        end
+
+        # it_behaves_like 'successful response'
+        it_behaves_like 'count is correct', 1
+      end
+
+      context 'when not case sensitive' do
+        let(:filter) do
+          Shirt.create!(color: 'blue', brand: brands('happy_shirts'))
+          { fuzzy_color: 'bl' }
+        end
+
+        it_behaves_like 'successful response'
+        it_behaves_like 'count is correct', 4
+      end
+    end
   end
 
   context 'with instance variable already populated' do

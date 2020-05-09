@@ -2,6 +2,7 @@
 
 require 'filterameter/filters/attribute_filter'
 require 'filterameter/filters/conditional_scope_filter'
+require 'filterameter/filters/matches_filter'
 require 'filterameter/filters/nested_filter'
 require 'filterameter/filters/scope_filter'
 
@@ -16,19 +17,21 @@ module Filterameter
 
     def build(declaration)
       model = declaration.nested? ? model_from_association(declaration.association) : @model_class
-      filter = build_filter(model, declaration.name)
+      filter = build_filter(model, declaration)
 
       declaration.nested? ? Filterameter::Filters::NestedFilter.new(declaration.association, model, filter) : filter
     end
 
     private
 
-    def build_filter(model, name)
+    def build_filter(model, declaration)
       # checking dangerous_class_method? excludes any names that cannot be scope names, such as "name"
-      if model.respond_to?(name) && !model.dangerous_class_method?(name)
-        Filterameter::Filters::ScopeFilter.new(name)
+      if model.respond_to?(declaration.name) && !model.dangerous_class_method?(declaration.name)
+        Filterameter::Filters::ScopeFilter.new(declaration.name)
+      elsif declaration.partial_search?
+        Filterameter::Filters::MatchesFilter.new(declaration.name, declaration.partial_options)
       else
-        Filterameter::Filters::AttributeFilter.new(name)
+        Filterameter::Filters::AttributeFilter.new(declaration.name)
       end
     end
 
