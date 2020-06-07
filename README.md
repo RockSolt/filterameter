@@ -1,4 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/filterameter.svg)](https://badge.fury.io/rb/filterameter)
+![RuboCop](https://github.com/RockSolt/filterameter/workflows/RuboCop/badge.svg)
 
 # Filterameter
 Declarative Filter Parameters for Rails Controllers.
