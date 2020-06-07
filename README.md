@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/filterameter.svg)](https://badge.fury.io/rb/filterameter)
+
 # Filterameter
 Declarative Filter Parameters for Rails Controllers.
 
