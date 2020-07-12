@@ -42,21 +42,28 @@ RSpec.describe Filterameter::ControllerFilters do
   end
 
   describe '#add_filter' do
-    let(:filter_declaration) { class_spy(Filterameter::FilterDeclaration).as_stubbed_const }
     let(:instance) { described_class.new('foo', 'foo/bar') }
-
-    before do
-      filter_declaration
-      instance.add_filter(:color, {})
-      instance.add_filter(:size, {})
-    end
+    let(:filter_keys) { instance.instance_variable_get('@declarations').keys }
 
     it 'stores two declarations' do
-      expect(instance.instance_variable_get('@declarations').size).to eq 2
+      instance.add_filter(:color, {})
+      instance.add_filter(:size, {})
+      expect(filter_keys).to contain_exactly('color', 'size')
     end
 
-    it 'adds color filter' do
-      expect(filter_declaration).to have_received(:new).with(:color, {})
+    it 'adds range filters' do
+      instance.add_filter(:date, range: true)
+      expect(filter_keys).to contain_exactly('date', 'date_min', 'date_max')
+    end
+
+    it 'adds min filters' do
+      instance.add_filter(:date, range: :min_only)
+      expect(filter_keys).to contain_exactly('date', 'date_min')
+    end
+
+    it 'adds max filters' do
+      instance.add_filter(:date, range: :max_only)
+      expect(filter_keys).to contain_exactly('date', 'date_max')
     end
   end
 

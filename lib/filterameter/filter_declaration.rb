@@ -8,6 +8,8 @@ module Filterameter
   #
   # Class FilterDeclaration captures the filter declaration within the controller.
   class FilterDeclaration
+    VALID_RANGE_OPTIONS = [true, :min_only, :max_only].freeze
+
     attr_reader :name, :parameter_name, :association, :validations
 
     def initialize(parameter_name, options)
@@ -19,6 +21,7 @@ module Filterameter
       @filter_on_empty = options.fetch(:filter_on_empty, false)
       @validations = Array.wrap(options[:validates])
       @raw_partial_options = options.fetch(:partial, false)
+      @raw_range = options[:range]
     end
 
     def nested?
@@ -41,10 +44,33 @@ module Filterameter
       @partial_options ||= @raw_partial_options ? Options::PartialOptions.new(@raw_partial_options) : nil
     end
 
+    def range_enabled?
+      @raw_range.present?
+    end
+
+    def range?
+      @raw_range == true
+    end
+
+    def minimum?
+      @raw_range == :min_only
+    end
+
+    def maximum?
+      @raw_range == :max_only
+    end
+
     private
 
     def validate_options(options)
-      options.assert_valid_keys(:name, :association, :filter_on_empty, :validates, :partial)
+      options.assert_valid_keys(:name, :association, :filter_on_empty, :validates, :partial, :range)
+      validate_range(options[:range]) if options.key?(:range)
+    end
+
+    def validate_range(range)
+      return if VALID_RANGE_OPTIONS.include?(range)
+
+      raise ArgumentError, "Invalid range option: #{range}"
     end
   end
 end
