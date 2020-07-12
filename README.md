@@ -60,6 +60,24 @@ The `match` options defines where you are searching (which then controls where t
 - from_start: adds a wildcard at the end, for example 'blue%'
 - dynamic: adds no wildcards; this enables the client to fully control the search string
 
+#### range
+Specify the range option to enable searches by ranges, minimum values, or maximum values. (All of these are inclusive. A search for a minimum value of $10.00 would include all items priced at $10.00.)
+
+Here are the available options:
+- true: enable ranges, minimum values, and/or maximum values
+- min_only: enables minimum values
+- max_only: enables maximum values
+
+Using the range option means that _in addition to the attribute filter_ minimum and maximum query parameters may also be specified. The parameter names are the attribute name plus the suffix <tt>_min</tt> or <tt>_max</tt>.
+
+```ruby
+filter :price, range: true
+filter :approved_at, range: :min_only
+filter :sale_price, range: :max_only
+```
+
+In the first example, query parameters could include <tt>price</tt>, <tt>price_min</tt>, and <tt>price_max</tt>.
+
 ### Configuring Controllers
 
 Rails conventions are used to determine the controller's model as well as the name of the instance variable to apply the filters to. For example, the PhotosController will use the variable `@photos` to store a query against the Photo model. If the conventions do not provide the correct info, they can be overridden with the following two methods:
