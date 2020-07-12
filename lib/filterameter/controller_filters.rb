@@ -25,6 +25,7 @@ module Filterameter
       @controller_name = controller_name
       @controller_path = controller_path
       @declarations = {}
+      @ranges = {}
       @filters = Hash.new { |hash, key| hash[key] = filter_factory.build(@declarations[key]) }
     end
 
@@ -33,7 +34,10 @@ module Filterameter
     end
 
     def add_filter(parameter_name, options)
-      @declarations[parameter_name.to_s] = Filterameter::FilterDeclaration.new(parameter_name, options)
+      @declarations[parameter_name.to_s] =
+        Filterameter::FilterDeclaration.new(parameter_name, options).tap do |fd|
+          add_declarations_for_range(fd, options, parameter_name) if fd.range_enabled?
+        end
     end
 
     def query_variable_name
@@ -41,7 +45,9 @@ module Filterameter
     end
 
     def build_query(filter_params, starting_query)
-      valid_filters(filter_params).reduce(starting_query || model_class.all) do |query, (name, value)|
+      valid_filters(filter_params)
+        .tap { |parameters| convert_min_and_max_to_range(parameters) }
+        .reduce(starting_query || model_class.all) do |query, (name, value)|
         @filters[name].apply(query, value)
       end
     end
@@ -64,6 +70,16 @@ module Filterameter
       remove_invalid_values(
         remove_undeclared_filters(filter_params)
       )
+    end
+
+    # if both min and max are present in the query parameters, replace with range
+    def convert_min_and_max_to_range(parameters)
+      @ranges.each do |attribute_name, min_max_names|
+        next unless min_max_names.values.all? { |min_max_name| parameters[min_max_name].present? }
+
+        parameters[attribute_name] = Range.new(parameters.delete(min_max_names[:min]),
+                                               parameters.delete(min_max_names[:max]))
+      end
     end
 
     def remove_undeclared_filters(filter_params)
@@ -105,6 +121,28 @@ module Filterameter
 
     def validator_class
       @validator_class ||= Filterameter::ParametersBase.build_sub_class(@declarations.values)
+    end
+
+    # if range is enabled, then in addition to the attribute filter this also adds min and/or max filters
+    def add_declarations_for_range(attribute_declaration, options, parameter_name)
+      add_range_minimum(parameter_name, options) if attribute_declaration.range? || attribute_declaration.minimum?
+      add_range_maximum(parameter_name, options) if attribute_declaration.range? || attribute_declaration.maximum?
+      capture_range_declaration(parameter_name) if attribute_declaration.range?
+    end
+
+    def add_range_minimum(parameter_name, options)
+      @declarations["#{parameter_name}_min"] = Filterameter::FilterDeclaration.new(parameter_name,
+                                                                                   options.merge(range: :min_only))
+    end
+
+    def add_range_maximum(parameter_name, options)
+      @declarations["#{parameter_name}_max"] = Filterameter::FilterDeclaration.new(parameter_name,
+                                                                                   options.merge(range: :max_only))
+    end
+
+    # memoizing these makes it easier to spot and replace ranges in query parameters; see convert_min_and_max_to_range
+    def capture_range_declaration(name)
+      @ranges[name] = { min: "#{name}_min", max: "#{name}_max" }
     end
   end
 end

@@ -27,12 +27,16 @@ module Filterameter
 
     private
 
-    def build_filter(model, declaration)
+    def build_filter(model, declaration) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       # checking dangerous_class_method? excludes any names that cannot be scope names, such as "name"
       if model.respond_to?(declaration.name) && !model.dangerous_class_method?(declaration.name)
         Filterameter::Filters::ScopeFilter.new(declaration.name)
       elsif declaration.partial_search?
         Filterameter::Filters::MatchesFilter.new(declaration.name, declaration.partial_options)
+      elsif declaration.minimum?
+        Filterameter::Filters::MinimumFilter.new(model, declaration.name)
+      elsif declaration.maximum?
+        Filterameter::Filters::MaximumFilter.new(model, declaration.name)
       else
         Filterameter::Filters::AttributeFilter.new(declaration.name)
       end

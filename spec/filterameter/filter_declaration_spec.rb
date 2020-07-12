@@ -36,6 +36,35 @@ RSpec.describe Filterameter::FilterDeclaration do
     it('#parital_options') { expect(declaration.partial_options).to be_a(Options::PartialOptions) }
   end
 
+  context 'with range' do
+    let(:options) { { range: true } }
+
+    it('#range_enabled?') { expect(declaration.range_enabled?).to be true }
+    it('#range?') { expect(declaration.range?).to be true }
+  end
+
+  context 'with range: :min_only' do
+    let(:options) { { range: :min_only } }
+
+    it('#range_enabled?') { expect(declaration.range_enabled?).to be true }
+    it('#range?') { expect(declaration.range?).to be false }
+    it('#minimum?') { expect(declaration.minimum?).to be true }
+  end
+
+  context 'with range: :max_only' do
+    let(:options) { { range: :max_only } }
+
+    it('#range_enabled?') { expect(declaration.range_enabled?).to be true }
+    it('#range?') { expect(declaration.range?).to be false }
+    it('#maximum?') { expect(declaration.maximum?).to be true }
+  end
+
+  context 'with invalid range' do
+    let(:options) { { range: :min } }
+
+    it('raise argument error') { expect { declaration }.to raise_error(ArgumentError) }
+  end
+
   context 'with invalid option' do
     let(:options) { { invalid: 12 } }
 
