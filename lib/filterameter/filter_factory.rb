@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'filterameter/filters/arel_filter'
 require 'filterameter/filters/attribute_filter'
 require 'filterameter/filters/conditional_scope_filter'
 require 'filterameter/filters/matches_filter'
+require 'filterameter/filters/maximum_filter'
+require 'filterameter/filters/minimum_filter'
 require 'filterameter/filters/nested_filter'
 require 'filterameter/filters/scope_filter'
 
