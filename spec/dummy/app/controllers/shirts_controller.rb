@@ -13,6 +13,7 @@ class ShirtsController < ApplicationController
   filter :fuzzy_color, name: :color, partial: true
   filter :color_client_search, name: :color, partial: { match: :dynamic }
   filter :case_sensitive_color, name: :color, partial: { case_sensitive: true }
+  filter :price, name: :current, association: :price, range: true
 
   # GET /shirts
   def index
