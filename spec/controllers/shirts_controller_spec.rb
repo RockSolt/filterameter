@@ -97,6 +97,38 @@ RSpec.describe ShirtsController, type: :controller do
         it_behaves_like 'count is correct', 4
       end
     end
+
+    describe 'price range' do
+      fixtures :prices
+
+      context 'from 11.99 - 21.99' do
+        let(:filter) { { price_min: 11.99, price_max: 21.99 } }
+
+        it_behaves_like 'successful response'
+        it_behaves_like 'count is correct', 3
+      end
+
+      context 'from 11.99' do
+        let(:filter) { { price_min: 11.99 } }
+
+        it_behaves_like 'successful response'
+        it_behaves_like 'count is correct', 6
+      end
+
+      context 'up to 19.99' do
+        let(:filter) { { price_max: 19.99 } }
+
+        it_behaves_like 'successful response'
+        it_behaves_like 'count is correct', 3
+      end
+
+      context 'attribute filter still works' do
+        let(:filter) { { price: 19.99 } }
+
+        it_behaves_like 'successful response'
+        it_behaves_like 'count is correct', 3
+      end
+    end
   end
 
   context 'with instance variable already populated' do
