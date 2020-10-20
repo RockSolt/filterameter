@@ -1,0 +1,52 @@
+name: 'RSpec'
+on:
+  - push
+
+jobs:
+  tests:
+    name: 'RSpec'
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:11
+        env:
+          POSTGRES_USER: filterameter
+          POSTGRES_DB: filterameter_test
+          POSTGRES_PASSWORD: r!teoqA2bA
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7.1
+
+      - name: Ruby gem cache
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install gems
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
+        run: bundle exec rails db:test:load
+
+      - name: 'RSpec'
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
+          POSTGRES_USER: filteramter
+          POSTGRES_PASSWORD: r!teoqA2bA
+        run: bundle exec rspec --format progress
