@@ -10,6 +10,7 @@ module Filterameter
       attr_reader :keys
 
       def initialize(keys)
+        super
         @keys = keys
       end
 

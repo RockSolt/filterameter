@@ -22,11 +22,12 @@ module Options
       @match = 'anywhere'
       @case_sensitive = false
 
-      if options.is_a?(TrueClass)
+      case options
+      when TrueClass
         nil
-      elsif options.is_a? Hash
+      when Hash
         evaluate_hash(options)
-      elsif options.is_a?(String) || options.is_a?(Symbol)
+      when String, Symbol
         assign_match(options)
       end
     end
