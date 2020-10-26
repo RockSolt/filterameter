@@ -13,7 +13,7 @@ RSpec.describe Filterameter::Configuration do
   end
 
   context 'development environment' do
-    before { allow(Rails).to receive(:env).and_return('development'.inquiry) }
+    before { allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new('development')) }
 
     it '#action_on_undeclared_parameters' do
       expect(config.action_on_undeclared_parameters).to eq :log
@@ -35,7 +35,7 @@ RSpec.describe Filterameter::Configuration do
   end
 
   context 'production environment' do
-    before { allow(Rails).to receive(:env).and_return('production'.inquiry) }
+    before { allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new('production')) }
 
     it '#action_on_undeclared_parameters' do
       expect(config.action_on_undeclared_parameters).to be false

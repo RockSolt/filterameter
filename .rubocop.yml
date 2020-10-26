@@ -1,3 +1,5 @@
+require: rubocop-rails
+
 AllCops:
   TargetRubyVersion: 2.6
   Exclude:
@@ -12,7 +14,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'Guardfile'
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 Style/FrozenStringLiteralComment:
   Exclude:
