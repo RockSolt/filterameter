@@ -2,6 +2,7 @@
 
 require 'active_model/attribute_assignment'
 require 'active_model/validations'
+require 'filterameter/validators/inclusion_validator'
 
 module Filterameter
   # = Parameters
@@ -9,6 +10,7 @@ module Filterameter
   # Class Parameters is sub-classed to provide controller-specific validations.
   class ParametersBase
     include ActiveModel::Validations
+    include Filterameter::Validators
 
     def self.build_sub_class(declarations)
       Class.new(self).tap do |sub_class|

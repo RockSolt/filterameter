@@ -39,10 +39,15 @@ filter :manager_id, association: :department
 If the filter value should be validated, use the `validates` option along with [ActiveModel validations](https://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates). Here's an example of the inclusion validator being used to restrict sizes:
 
 ```ruby
-filter :size, validates: { inclusion: { in: %w[Small Medium Large] }, unless: -> { size.is_a? Array } }
+filter :size, validates: { inclusion: { in: %w[Small Medium Large] } }
 ```
 
-Note that the `inclusion` validator does not allow arrays to be specified. If the filter should allow multiple values to be specified, then the validation needs to be disabled when the value an array.
+The `inclusion` validator has been overridden to provide the additional option `allow_multiple_values`. When true, the value can be an array and each entry in the array will be validated. Use this when the filter can specify one or more values.
+
+```ruby
+filter :size, validates: { inclusion: { in: %w[Small Medium Large], allow_multiple_values: true } }
+```
+
 
 #### partial
 Specify the partial option if the filter should do a partial search (SQL's `LIKE`). The partial option accepts a hash to specify the search behavior. Here are the available options:
