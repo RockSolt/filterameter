@@ -14,6 +14,14 @@ RSpec.describe ShirtsController, type: :controller do
     it { expect(response_body.size).to eq count }
   end
 
+  shared_examples 'raises ValidationError' do |message|
+    it do
+      expect { request }
+        .to raise_error(Filterameter::Exceptions::ValidationError,
+                        "The following parameter(s) failed validation: #{message}")
+    end
+  end
+
   describe 'with no filters' do
     before { get :index }
 
@@ -142,10 +150,13 @@ RSpec.describe ShirtsController, type: :controller do
     let(:filter) { { size: 'Extra Large' } }
     let(:request) { get :index, params: { filter: filter } }
 
-    it 'raises ValidationError' do
-      expect { request }
-        .to raise_error(Filterameter::Exceptions::ValidationError,
-                        'The following parameter(s) failed validation: ["Size is not included in the list"]')
-    end
+    it_behaves_like 'raises ValidationError', '["Size is not included in the list"]'
+  end
+
+  context 'with array of values that has an invalid value' do
+    let(:filter) { { size: %w[Medium Large Big] } }
+    let(:request) { get :index, params: { filter: filter } }
+
+    it_behaves_like 'raises ValidationError', '["Size is not included in the list"]'
   end
 end
