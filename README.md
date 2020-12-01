@@ -11,7 +11,7 @@ Declare filters at the top of controllers to increase readability and reduce boi
 
 ```ruby
   filter :color
-  filter :size, validates: { inclusion: { in: %w[Small Medium Large] }, unless: -> { size.is_a? Array } }
+  filter :size, validates: { inclusion: { in: %w[Small Medium Large], allow_multiple_values: true } }
   filter :brand_name, association: :brand, name: :name
   filter :on_sale, association: :price, validates: [{ numericality: { greater_than: 0 } },
                                                     { numericality: { less_than: 100 } }]
