@@ -3,10 +3,10 @@
 require 'filterameter/controller_filters'
 
 module Filterameter
-  # = Declarative Filters
+  # = Declarative Controller Filters
   #
-  # module DeclarativeFilters provides a controller DSL to declare filters along with any validations.
-  module DeclarativeFilters
+  # Mixin DeclarativeControllerFilters can included in controllers to enable the filter DSL.
+  module DeclarativeControllerFilters
     extend ActiveSupport::Concern
 
     class_methods do

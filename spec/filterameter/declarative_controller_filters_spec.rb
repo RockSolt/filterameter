@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Filterameter::DeclarativeFilters do
+RSpec.describe Filterameter::DeclarativeControllerFilters do
   describe '.filter_model' do
     let(:model_class) { controller.controller_filters.instance_variable_get('@model_class') }
 
@@ -11,7 +11,7 @@ RSpec.describe Filterameter::DeclarativeFilters do
         Class.new(ApplicationController) do
           @controller_name = 'bars'
           @controller_path = 'foo/bars'
-          include Filterameter::DeclarativeFilters
+          include Filterameter::DeclarativeControllerFilters
 
           filter_model 'Price'
         end
@@ -27,7 +27,7 @@ RSpec.describe Filterameter::DeclarativeFilters do
         Class.new(ApplicationController) do
           @controller_name = 'bars'
           @controller_path = 'foo/bars'
-          include Filterameter::DeclarativeFilters
+          include Filterameter::DeclarativeControllerFilters
 
           filter_model Price
         end
@@ -44,7 +44,7 @@ RSpec.describe Filterameter::DeclarativeFilters do
       Class.new(ApplicationController) do
         @controller_name = 'bars'
         @controller_path = 'foo/bars'
-        include Filterameter::DeclarativeFilters
+        include Filterameter::DeclarativeControllerFilters
 
         filter_query_var_name :price_data
       end
