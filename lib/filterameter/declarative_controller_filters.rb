@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'filterameter/declarative_filters'
+require 'filterameter/filterable'
 require 'filterameter/controller_filters'
 
 module Filterameter
@@ -9,7 +9,7 @@ module Filterameter
   # Mixin DeclarativeControllerFilters can included in controllers to enable the filter DSL.
   module DeclarativeControllerFilters
     extend ActiveSupport::Concern
-    include Filterameter::DeclarativeFilters
+    include Filterameter::Filterable
 
     class_methods do
       def filter_model(model_class, query_var_name = nil)
