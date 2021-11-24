@@ -3,8 +3,8 @@
 module Filterameter
   # = Declarative Filters
   #
-  # module DeclarativeFilters provides a controller DSL to declare filters along with any validations.
-  module DeclarativeFilters
+  # Mixin Filterable provides class methods <tt>filter</tt> and <tt>filters</tt>.
+  module Filterable
     extend ActiveSupport::Concern
 
     class_methods do
@@ -45,6 +45,8 @@ module Filterameter
         controller_filters.add_filter(name, options)
       end
 
+      # Declares a list of filters that can be read from the parameters and applied to the query. The name can be either
+      # an attribute or a scope. Declare filters individually with <tt>filter</tt> if more options are required.
       def filters(*names)
         names.each { |name| filter(name) }
       end
