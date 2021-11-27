@@ -42,7 +42,7 @@ module Filterameter
       #   - :min_only: enables additional parameter with attribute name plus suffix <tt>_min</tt>
       #   - :max_only: enables additional parameter with attribute name plus suffix <tt>_max</tt>
       def filter(name, options = {})
-        controller_filters.add_filter(name, options)
+        filter_coordinator.add_filter(name, options)
       end
 
       # Declares a list of filters that can be read from the parameters and applied to the query. The name can be either
