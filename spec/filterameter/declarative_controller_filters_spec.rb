@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Filterameter::DeclarativeControllerFilters do
   describe '.filter_model' do
-    let(:model_class) { controller.controller_filters.instance_variable_get('@model_class') }
+    let(:model_class) { controller.filter_coordinator.instance_variable_get('@model_class') }
 
     context 'with model as string' do
       let(:controller) do
@@ -51,7 +51,7 @@ RSpec.describe Filterameter::DeclarativeControllerFilters do
     end
 
     it 'assigns model class' do
-      expect(controller.controller_filters.query_variable_name).to be :price_data
+      expect(controller.filter_coordinator.query_variable_name).to be :price_data
     end
   end
 end
