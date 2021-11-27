@@ -27,4 +27,26 @@ RSpec.describe Filterameter::FilterRegistry do
       expect(registry.filter_names).to contain_exactly('date', 'date_max')
     end
   end
+
+  describe '#fetch' do
+    let(:factory) { instance_spy(Filterameter::FilterFactory) }
+    let(:registry) { described_class.new(factory).tap { |r| r.add_filter(:color, {}) } }
+
+    describe 'builds filter from factory' do
+      it 'works with string' do
+        registry.fetch('color')
+        expect(factory).to have_received(:build)
+      end
+
+      it 'works with symbol' do
+        registry.fetch(:color)
+        expect(factory).to have_received(:build)
+      end
+    end
+
+    it 'raises undeclared parameter error' do
+      expect { registry.fetch(:foo) }.to raise_exception Filterameter::Exceptions::UndeclaredParameterError,
+                                                         'The following filter parameter has not been declared: foo'
+    end
+  end
 end
