@@ -48,13 +48,15 @@ module Filterameter
     end
 
     def add_range_minimum(parameter_name, options)
-      @declarations["#{parameter_name}_min"] = Filterameter::FilterDeclaration.new(parameter_name,
-                                                                                   options.merge(range: :min_only))
+      parameter_name_min = "#{parameter_name}_min"
+      @declarations[parameter_name_min] = Filterameter::FilterDeclaration.new(parameter_name_min,
+                                                                              options.merge(range: :min_only))
     end
 
     def add_range_maximum(parameter_name, options)
-      @declarations["#{parameter_name}_max"] = Filterameter::FilterDeclaration.new(parameter_name,
-                                                                                   options.merge(range: :max_only))
+      parameter_name_min = "#{parameter_name}_max"
+      @declarations[parameter_name_min] = Filterameter::FilterDeclaration.new(parameter_name_min,
+                                                                              options.merge(range: :max_only))
     end
 
     def capture_range_declaration(name)
