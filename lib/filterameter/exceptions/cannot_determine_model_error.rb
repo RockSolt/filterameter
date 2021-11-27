@@ -10,7 +10,7 @@ module Filterameter
     class CannotDetermineModelError < FilterameterError
       def initialize(name, path)
         super "Cannot determine model name from controller name #{value_and_classify(name)} " \
-          "or path #{value_and_classify(path)}. Declare the model explicitly with filter_model."
+              "or path #{value_and_classify(path)}. Declare the model explicitly with filter_model."
       end
 
       private

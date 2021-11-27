@@ -7,6 +7,6 @@ RSpec.describe Filterameter::Exceptions::CannotDetermineModelError do
 
   it '#message' do
     expect(error.message).to eq 'Cannot determine model name from controller name (foo => Foo) '\
-                                  'or path (foo/bar => Foo::Bar). Declare the model explicitly with filter_model.'
+                                'or path (foo/bar => Foo::Bar). Declare the model explicitly with filter_model.'
   end
 end

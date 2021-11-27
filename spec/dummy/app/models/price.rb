@@ -8,6 +8,6 @@ class Price < ApplicationRecord
 
   # original - current / original = percent reduced
   def self.percent_reduced(percentage)
-    where(arel_table[:current] / arel_table[:original].lteq(1 - percentage.to_f / 100))
+    where(arel_table[:current] / arel_table[:original].lteq(1 - (percentage.to_f / 100)))
   end
 end
