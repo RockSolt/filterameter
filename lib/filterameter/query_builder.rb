@@ -14,16 +14,21 @@ module Filterameter
       valid_filters(filter_params)
         .tap { |parameters| convert_min_and_max_to_range(parameters) }
         .reduce(starting_query || @default_query) do |query, (name, value)|
-        @registry.fetch(name).apply(query, value)
+        add_filter_parameter_to_query(query, name, value)
       end
     end
 
     private
 
+    def add_filter_parameter_to_query(query, filter_name, parameter_value)
+      @registry.fetch(filter_name).apply(query, parameter_value)
+    rescue Filterameter::Exceptions::UndeclaredParameterError => e
+      handle_undeclared_parameter(e)
+      query
+    end
+
     def valid_filters(filter_params)
-      remove_invalid_values(
-        remove_undeclared_filters(filter_params)
-      )
+      remove_invalid_values(filter_params)
     end
 
     # if both min and max are present in the query parameters, replace with range
@@ -36,22 +41,15 @@ module Filterameter
       end
     end
 
-    def remove_undeclared_filters(filter_params)
-      filter_params.slice(*declared_parameter_names).tap do |declared_parameters|
-        handle_undeclared_parameters(filter_params) if declared_parameters.size != filter_params.size
-      end
-    end
-
-    def handle_undeclared_parameters(filter_params)
+    def handle_undeclared_parameter(exception)
       action = Filterameter.configuration.action_on_undeclared_parameters
       return unless action
 
-      undeclared_parameter_names = filter_params.keys - declared_parameter_names
       case action
       when :log
-        ActiveSupport::Notifications.instrument('undeclared_parameters.filterameter', keys: undeclared_parameter_names)
+        ActiveSupport::Notifications.instrument('undeclared_parameters.filterameter', key: exception.key)
       when :raise
-        raise Filterameter::Exceptions::UndeclaredParameterError, undeclared_parameter_names
+        raise exception
       end
     end
 
@@ -67,10 +65,6 @@ module Filterameter
       end
 
       filter_params.except(*validator.errors.keys.map(&:to_s))
-    end
-
-    def declared_parameter_names
-      @registry.filter_names
     end
 
     def validator_class
