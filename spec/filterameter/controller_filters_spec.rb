@@ -102,7 +102,7 @@ RSpec.describe Filterameter::ControllerFilters do
       it 'raises exception' do
         expect { instance.build_query(filter_params, nil) }
           .to raise_error(Filterameter::Exceptions::UndeclaredParameterError,
-                          'The following filter parameter(s) have not been declared: ["style"]')
+                          'The following filter parameter has not been declared: style')
       end
     end
   end

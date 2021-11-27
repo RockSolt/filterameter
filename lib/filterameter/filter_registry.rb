@@ -22,7 +22,10 @@ module Filterameter
     end
 
     def fetch(name)
+      name = name.to_s
       @filters.fetch(name) do
+        raise Filterameter::Exceptions::UndeclaredParameterError, name unless filter_names.include?(name)
+
         @filters[name] = @filter_factory.build(@declarations[name])
       end
     end

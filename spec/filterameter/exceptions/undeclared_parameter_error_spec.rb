@@ -3,14 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Filterameter::Exceptions::UndeclaredParameterError do
-  let(:keys) { %w[collar size_with_typo] }
-  let(:instance) { described_class.new(keys) }
+  let(:instance) { described_class.new(:foo) }
 
   it '#message' do
-    expect(instance.message).to eq "The following filter parameter(s) have not been declared: #{keys}"
+    expect(instance.message).to eq 'The following filter parameter has not been declared: foo'
   end
 
-  it '#keys' do
-    expect(instance.keys).to eq keys
+  it '#key' do
+    expect(instance.key).to eq :foo
   end
 end
