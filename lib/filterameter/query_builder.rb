@@ -64,7 +64,7 @@ module Filterameter
         raise Filterameter::Exceptions::ValidationError, validator.errors
       end
 
-      filter_params.except(*validator.errors.keys.map(&:to_s))
+      filter_params.except(*validator.errors.attribute_names.map(&:to_s))
     end
 
     def validator_class
