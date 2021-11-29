@@ -2,6 +2,7 @@
 
 require 'filterameter/configuration'
 require 'filterameter/declarative_controller_filters'
+require 'filterameter/declarative_filters'
 require 'filterameter/exceptions'
 
 # = Filterameter

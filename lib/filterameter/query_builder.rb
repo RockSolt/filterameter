@@ -10,7 +10,7 @@ module Filterameter
       @registry = filter_registry
     end
 
-    def build_query(filter_params, starting_query)
+    def build_query(filter_params, starting_query = nil)
       valid_filters(filter_params)
         .tap { |parameters| convert_min_and_max_to_range(parameters) }
         .reduce(starting_query || @default_query) do |query, (name, value)|
