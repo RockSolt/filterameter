@@ -25,10 +25,14 @@ module Filterameter
       end
 
       def query_builder
-        @query_builder ||= Filterameter::QueryBuilder.new(model_class.all, registry)
+        @query_builder ||= Filterameter::QueryBuilder.new(default_query, registry)
       end
 
       private
+
+      def default_query
+        model_class.all
+      end
 
       # lazy so that model_class can be optionally set
       def registry
