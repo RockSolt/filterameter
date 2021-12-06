@@ -4,10 +4,10 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d9d87f9ce8020eb6e656/maintainability)](https://codeclimate.com/github/RockSolt/filterameter/maintainability)
 
 # Filterameter
-Declarative Filter Parameters for Rails Controllers.
+Declarative filter parameters provide provide clean and clear filters for queries.
 
 ## Usage
-Declare filters at the top of controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes, scopes, or attributes from singular associations (`belongs_to` or `has_one`). Validations can also be assigned.
+Declare filters in query classes or controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes, scopes, or attributes from singular associations (`belongs_to` or `has_one`). Validations can also be assigned.
 
 ```ruby
   filter :color
@@ -85,9 +85,41 @@ filter :sale_price, range: :max_only
 
 In the first example, query parameters could include <tt>price</tt>, <tt>price_min</tt>, and <tt>price_max</tt>.
 
-### Configuring Controllers
+### Query Classes
 
-Rails conventions are used to determine the controller's model as well as the name of the instance variable to apply the filters to. For example, the PhotosController will use the variable `@photos` to store a query against the Photo model. If the conventions do not provide the correct info, they can be overridden with the following two methods:
+Include module `Filterameter::DeclarativeFilters` in the query class. The model must be declared using `model`, and a default query can optionally be declared using `default_query`. If no default query is provided, then the default is `.all`.
+
+#### Example
+
+Here's what a query class for the Widgets model with filters on size and color might look like:
+
+```ruby
+class WidgetQuery
+  include Filterameter::DeclarativeFilters
+
+  model Widget
+  filter :size
+  filter :color
+end
+```
+
+Build the query using class method `build_query`. The method takes two parameters:
+
+- filter: the hash of filter parameters
+- starting_query: any scope to build on (if not provided, the default query is the starting point)
+
+Here's how the query might be invoked:
+
+```ruby
+filters = { size: 'large', color: 'blue' }
+widgets = WidgetQuery.build_query(filters, Widget.limit(10))
+```
+
+### Controllers
+
+Include module `Filterameter::DeclarativeControllerFilters` in the controller. Add before action callback `build_filtered_query` for controller actions that should build the query.
+
+Rails conventions are used to determine the controller's model as well as the name of the instance variable to apply the filters to. For example, the PhotosController will use the variable `@photos` to store a query against the Photo model. **If the conventions do not provide the correct info**, they can be overridden with the following two methods:
 
 #### filter_model
 Provide the name of the model. This method also allows the variable name to be optionally provided as the second parameter.
@@ -101,6 +133,24 @@ Provide the name of the instance variable. For example, if the query is stored a
 
 ```ruby
 filter_query_var_name :data
+```
+
+#### Example
+
+In the happy path, the WidgetsController serves Widgets and can filter on size and color. Here's what the controller might look like:
+
+```ruby
+class WidgetController < ApplicationController
+  include Filterameter::DeclarativeControllerFilters
+  before_action :build_filtered_query, only: :index
+
+  filter :size
+  filter :color
+
+  def index
+    render json: @widgets
+  end
+end
 ```
 
 ## Installation
