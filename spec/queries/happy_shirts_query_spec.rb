@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe HappyShirtsQuery do
   fixtures :shirts
+  fixtures :brands
 
   let(:filter) { {} }
   let(:query) { described_class.build_query(filter, nil) }
