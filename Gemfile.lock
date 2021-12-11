@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    filterameter (0.1.4)
+    filterameter (0.2.0)
       rails (>= 5.2.2)
 
 GEM
