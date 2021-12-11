@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'applies filter parameters' do
-  fixtures :shirts
-
   describe 'with no filters' do
     let(:filter) { {} }
 
