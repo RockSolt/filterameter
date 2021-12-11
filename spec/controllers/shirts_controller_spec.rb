@@ -4,6 +4,8 @@ require 'rails_helper'
 require 'support/shared_examples_for_shirts'
 
 RSpec.describe ShirtsController, type: :controller do
+  fixtures :shirts
+
   let(:response_body) { JSON.parse(response.body) }
 
   shared_examples 'count is correct' do |count|
