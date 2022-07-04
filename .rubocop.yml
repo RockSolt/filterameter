@@ -4,6 +4,7 @@ AllCops:
   TargetRubyVersion: 2.6
   Exclude:
     - 'filterameter.gemspec'
+    - 'gemfiles/*.gemfile'
     - 'Rakefile'
     - 'spec/dummy/bin/**/*'
     - 'spec/dummy/db/schema.rb'
