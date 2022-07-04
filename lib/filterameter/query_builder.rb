@@ -64,7 +64,15 @@ module Filterameter
         raise Filterameter::Exceptions::ValidationError, validator.errors
       end
 
-      filter_params.except(*validator.errors.attribute_names.map(&:to_s))
+      filter_params.except(*invalid_attributes(validator.errors).map(&:to_s))
+    end
+
+    def invalid_attributes(errors)
+      if errors.respond_to? :attribute_names
+        errors.attribute_names
+      else # pre rails 6.1
+        errors.keys
+      end
     end
 
     def validator_class
