@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.version     = Filterameter::VERSION
   spec.authors     = ["Todd Kummer"]
   spec.email       = ["todd@rockridgesolutions.com"]
-  spec.summary     = "Declarative Filter Parameters for Rails Controllers"
-  spec.description = "Enable filter parameters to be declared in controllers."
+  spec.summary     = "Declarative Filter Parameters"
+  spec.description = "Enable filter parameters to be declared in query classes or controllers."
   spec.homepage    = "https://github.com/RockSolt/filterameter"
   spec.license     = "MIT"
 
