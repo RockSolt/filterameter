@@ -2,6 +2,7 @@
 .bundle/
 **/.DS_Store
 coverage/
+gemfiles/*.lock
 log/*.log
 pkg/
 spec/dummy/log/*.log
