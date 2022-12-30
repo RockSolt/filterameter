@@ -7,6 +7,7 @@ RSpec.describe Filterameter::QueryBuilder do
     Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Shirt)).tap do |registry|
       registry.add_filter(:size, {})
       registry.add_filter(:color, {})
+      registry.add_filter(:price, name: :current, association: :price, range: true)
     end
   end
 
@@ -29,6 +30,34 @@ RSpec.describe Filterameter::QueryBuilder do
 
     it 'includes starting criteria' do
       expect(query.where_values_hash).to include('color' => 'blue', 'size' => 'Medium')
+    end
+  end
+
+  context 'with min and max prices' do
+    let(:default_query) { Shirt.where(size: 'Medium') }
+    let(:instance) { described_class.new(default_query, registry) }
+    let(:filter_params) { { price_min: 12.34, price_max: 34.56 }.stringify_keys }
+    let(:query) { instance.build_query(filter_params, nil) }
+
+    it 'includes price range' do
+      expect(query.to_sql).to include('"prices"."current" BETWEEN 12.34 AND 34.56')
+    end
+  end
+
+  context 'with min and max params' do
+    let(:registry) do
+      Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Shirt)).tap do |registry|
+        registry.add_filter(:price, { range: true })
+      end
+    end
+    let(:price_filter) { instance_spy(Filterameter::Filters::AttributeFilter) }
+
+    it 'passes range to price filter' do
+      allow(registry).to receive(:fetch).and_return(price_filter)
+
+      builder = described_class.new(Shirt.all, registry)
+      builder.build_query({ price_min: 12.34, price_max: 23.45 })
+      expect(price_filter).to have_received(:apply).once.with(anything, instance_of(Range))
     end
   end
 
