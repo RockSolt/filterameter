@@ -14,7 +14,8 @@ blue_medium:
   <<: *blue_shirt
 blue_large:
   shirt: blue_large
-  <<: *blue_shirt
+  current: 20.99
+  original: 25.99
 
 gold_small:
   shirt: gold_small
@@ -24,4 +25,5 @@ gold_medium:
   <<: *gold_shirt
 gold_large:
   shirt: gold_medium
-  <<: *gold_shirt
+  current: 25.99
+  original: 25.99

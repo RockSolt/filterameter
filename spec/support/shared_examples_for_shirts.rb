@@ -76,8 +76,8 @@ RSpec.shared_examples 'applies filter parameters' do
     describe 'price range' do
       fixtures :prices
 
-      context 'from 11.99 - 21.99' do
-        let(:filter) { { price_min: 11.99, price_max: 21.99 } }
+      context 'from 20.00 - 25.00' do
+        let(:filter) { { price_min: 20.00, price_max: 25.00 } }
 
         it_behaves_like 'count is correct', 3
       end
@@ -91,13 +91,13 @@ RSpec.shared_examples 'applies filter parameters' do
       context 'up to 19.99' do
         let(:filter) { { price_max: 19.99 } }
 
-        it_behaves_like 'count is correct', 3
+        it_behaves_like 'count is correct', 2
       end
 
       context 'attribute filter still works' do
         let(:filter) { { price: 19.99 } }
 
-        it_behaves_like 'count is correct', 3
+        it_behaves_like 'count is correct', 2
       end
     end
   end
