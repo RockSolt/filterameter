@@ -11,7 +11,7 @@ module Filterameter
     end
 
     def build_query(filter_params, starting_query = nil)
-      valid_filters(filter_params)
+      valid_filters(filter_params.stringify_keys)
         .tap { |parameters| convert_min_and_max_to_range(parameters) }
         .reduce(starting_query || @default_query) do |query, (name, value)|
         add_filter_parameter_to_query(query, name, value)

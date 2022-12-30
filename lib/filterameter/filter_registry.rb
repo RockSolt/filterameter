@@ -16,13 +16,14 @@ module Filterameter
     end
 
     def add_filter(parameter_name, options)
-      @declarations[parameter_name.to_s] = Filterameter::FilterDeclaration.new(parameter_name, options).tap do |fd|
-        add_declarations_for_range(fd, options, parameter_name) if fd.range_enabled?
+      name = parameter_name.to_s
+      @declarations[name] = Filterameter::FilterDeclaration.new(name, options).tap do |fd|
+        add_declarations_for_range(fd, options, name) if fd.range_enabled?
       end
     end
 
-    def fetch(name)
-      name = name.to_s
+    def fetch(parameter_name)
+      name = parameter_name.to_s
       @filters.fetch(name) do
         raise Filterameter::Exceptions::UndeclaredParameterError, name unless @declarations.keys.include?(name)
 
