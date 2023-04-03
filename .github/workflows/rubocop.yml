@@ -14,7 +14,7 @@ jobs:
       - name: Install RuboCop
         run: |
           gem install bundler --no-document
-          gem install rubocop -v 1.22.3 --no-document
-          gem install rubocop-rails -v 2.8.1 --no-document
+          gem install rubocop -v 1.31.2 --no-document
+          gem install rubocop-rails -v 2.15.2 --no-document
       - name: RuboCop
         run: rubocop
