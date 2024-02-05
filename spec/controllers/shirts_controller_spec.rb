@@ -6,7 +6,7 @@ require 'support/shared_examples_for_shirts'
 RSpec.describe ShirtsController, type: :controller do
   fixtures :shirts
 
-  let(:response_body) { JSON.parse(response.body) }
+  let(:response_body) { response.parsed_body }
 
   shared_examples 'count is correct' do |count|
     let(:response) { get :index, params: { filter: filter } }
