@@ -23,8 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard-rspec", "~> 4.7"
   spec.add_development_dependency "guard-rubocop", "~> 1.5.0"
   spec.add_development_dependency "pg", "~> 1.5.4"
-  spec.add_development_dependency "rspec-rails", "~> 3.9"
-  spec.add_development_dependency "rubocop", "~> 1.31.1"
-  spec.add_development_dependency "rubocop-rails", "~> 2.15.1"
+  spec.add_development_dependency "rspec-rails", "~> 4.0"
+  spec.add_development_dependency "rubocop", "~> 1.60.2"
+  spec.add_development_dependency "rubocop-rails", "~> 2.23.1"
   spec.add_development_dependency "simplecov", "~> 0.18"
 end
