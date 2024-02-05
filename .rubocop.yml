@@ -1,7 +1,9 @@
-require: rubocop-rails
+require: 
+  - rubocop-packaging
+  - rubocop-rails
 
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.2
   Exclude:
     - 'filterameter.gemspec'
     - 'gemfiles/*.gemfile'
@@ -20,3 +22,5 @@ Layout/LineLength:
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'spec/dummy/db/**/*'
+Style/HashSyntax:
+  EnforcedShorthandSyntax: either
