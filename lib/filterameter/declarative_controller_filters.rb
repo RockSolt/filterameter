@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'filterameter/filterable'
-require 'filterameter/coordinators/controller_coordinator'
-
 module Filterameter
   # = Declarative Controller Filters
   #

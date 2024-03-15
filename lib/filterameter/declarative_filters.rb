@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'filterameter/coordinators/query_coordinator'
-require 'filterameter/filterable'
-require 'filterameter/query_builder'
-
 module Filterameter
   # = Declarative Filters
   #

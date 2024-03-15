@@ -7,8 +7,6 @@ require 'action_dispatch'
 require 'action_controller/metal/live'
 require 'action_controller/metal/strong_parameters'
 
-require 'filterameter/coordinators/base'
-
 module Filterameter
   module Coordinators
     # = Controller Filters
