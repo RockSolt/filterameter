@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-require 'filterameter/filter_declaration'
-require 'filterameter/filter_factory'
-require 'filterameter/filter_registry'
-require 'filterameter/log_subscriber'
-require 'filterameter/parameters_base'
-require 'filterameter/query_builder'
-
 module Filterameter
   module Coordinators
     # = Coordinators Base

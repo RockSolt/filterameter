@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Options::PartialOptions do
+RSpec.describe Filterameter::Options::PartialOptions do
   shared_examples 'matches anywhere' do
     it { expect(options).to be_match_anywhere }
     it { expect(options).not_to be_match_from_start }

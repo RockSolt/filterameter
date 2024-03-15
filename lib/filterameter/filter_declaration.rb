@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/array/wrap'
-require 'filterameter/options/partial_options'
 
 module Filterameter
   # = Filter Declaration

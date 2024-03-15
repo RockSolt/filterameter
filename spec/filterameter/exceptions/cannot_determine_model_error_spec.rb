@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'filterameter/exceptions'
-
 RSpec.describe Filterameter::Exceptions::CannotDetermineModelError do
   let(:error) { described_class.new('foo', 'foo/bar') }
 

@@ -33,7 +33,7 @@ RSpec.describe Filterameter::FilterDeclaration do
     let(:options) { { partial: true } }
 
     it('#partial_match?') { expect(declaration.partial_search?).to be true }
-    it('#parital_options') { expect(declaration.partial_options).to be_a(Options::PartialOptions) }
+    it('#parital_options') { expect(declaration.partial_options).to be_a(Filterameter::Options::PartialOptions) }
   end
 
   context 'with range' do

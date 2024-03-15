@@ -2,8 +2,6 @@
 
 require 'rails_helper'
 
-require 'filterameter/parameters_base'
-
 RSpec.describe Filterameter::ParametersBase do
   let(:parameters) do
     Class.new(described_class).tap do |pc|

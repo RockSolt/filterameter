@@ -2,7 +2,6 @@
 
 require 'active_model/attribute_assignment'
 require 'active_model/validations'
-require 'filterameter/validators/inclusion_validator'
 
 module Filterameter
   # = Parameters
