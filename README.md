@@ -170,6 +170,26 @@ Or install it yourself as:
 $ gem install filterameter
 ```
 
+## Forms and Query Parameters
+
+The controller mixin will look for filter parameters nested under the `filter` key. For example, here's what the query parameters might look like for size and color:
+
+```
+?filter[size]=large&filter[color]=blue
+```
+
+On [a generic search form](https://guides.rubyonrails.org/form_helpers.html#a-generic-search-form), the [`form_with` form helper takes the option `scope`](https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-form_with) that allows parameters to be grouped:
+
+```erb
+<%= form_with url: "/search", scope: :filter, method: :get do |form| %>
+  <%= form.label :size, "Size:" %>
+  <%= form.text_field :size %>
+  <%= form.label :color, "Color:" %>
+  <%= form.text_field :color %>
+  <%= form.submit "Search" %>
+<% end %>
+```
+
 
 ## Running Tests
 
