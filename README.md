@@ -173,19 +173,19 @@ $ gem install filterameter
 
 ## Running Tests
 
-Tests are written in RSpec and the dummy app uses a docker database. First, start the database and prepare it from the dummy folder.
+Tests are written in RSpec and the dummy app uses a docker database. The script `bin/start_db.sh` starts and prepares the test
+database. It is a one-time step before running the tests.
 
 ```bash
-cd spec/dummy
-docker-compose up -d
-bundle exec rails db:test:prepare
-cd ../..
+bin/start_db.rb
+bundle exec rspec
 ```
 
-Run the tests from the main directory
+The tests can also be run across all the ruby and Rails combinations using appraisal. The install is also a one-time step.
 
 ```bash
-bundle exec rspec
+bundle exec appraisal install
+bundle exec appraisal rspec
 ```
 
 ## License

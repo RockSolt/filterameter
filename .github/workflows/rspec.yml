@@ -18,7 +18,7 @@ jobs:
       BUNDLE_PATH_RELATIVE_TO_CWD: true
     services:
       db:
-        image: postgres:11
+        image: postgres:16
         env:
           POSTGRES_USER: filterameter
           POSTGRES_DB: filterameter_test

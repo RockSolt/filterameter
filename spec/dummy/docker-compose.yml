@@ -1,8 +1,7 @@
-version: '3'
 services:
   db:
     container_name: filterameter_db
-    image: postgres:11
+    image: postgres:16
     environment:
       - POSTGRES_USER=filterameter
       - POSTGRES_DB=filterameter
