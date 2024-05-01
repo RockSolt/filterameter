@@ -51,8 +51,8 @@ module Filterameter
     end
 
     def add_range_maximum(parameter_name, options)
-      parameter_name_min = "#{parameter_name}_max"
-      @declarations[parameter_name_min] = Filterameter::FilterDeclaration.new(parameter_name_min,
+      parameter_name_max = "#{parameter_name}_max"
+      @declarations[parameter_name_max] = Filterameter::FilterDeclaration.new(parameter_name_max,
                                                                               options.merge(range: :max_only))
     end
 
