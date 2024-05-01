@@ -13,7 +13,11 @@ module Filterameter
       model = declaration.nested? ? model_from_association(declaration.association) : @model_class
       filter = build_filter(model, declaration)
 
-      declaration.nested? ? Filterameter::Filters::NestedFilter.new(declaration.association, model, filter) : filter
+      if declaration.nested?
+        build_nested_filter(model, declaration, filter)
+      else
+        filter
+      end
     end
 
     private
@@ -30,6 +34,15 @@ module Filterameter
         Filterameter::Filters::MaximumFilter.new(model, declaration.name)
       else
         Filterameter::Filters::AttributeFilter.new(declaration.name)
+      end
+    end
+
+    def build_nested_filter(model, declaration, filter)
+      association = @model_class.reflect_on_association(declaration.association)
+      if association.collection?
+        Filterameter::Filters::NestedCollectionFilter.new(association.foreign_key, model, filter)
+      else
+        Filterameter::Filters::NestedFilter.new(declaration.association, model, filter)
       end
     end
 

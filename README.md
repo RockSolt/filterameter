@@ -29,11 +29,13 @@ filter :status, name: :current_status
 ```
 
 #### association
-If the attribute or scope is nested, it can be referenced by naming the association. Only singular associations are valid. For example, if the manager_id attribute lives on an employee's department record, use the following:
+If the attribute or scope is nested, it can be referenced by naming the association. For example, if the manager_id attribute lives on an employee's department record, use the following:
 
 ```ruby
 filter :manager_id, association: :department
 ```
+
+If the association is a `has_many`, then a sub-query will be used to find matching rows.
 
 #### validates
 If the filter value should be validated, use the `validates` option along with [ActiveModel validations](https://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates). Here's an example of the inclusion validator being used to restrict sizes:
