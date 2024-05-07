@@ -45,6 +45,4 @@ jobs:
           DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
           POSTGRES_USER: filteramter
           POSTGRES_PASSWORD: r!teoqA2bA
-        run: |
-          bundle exec rails db:test:prepare
-          bundle exec rspec --format progress
+        run: bundle exec rspec --format progress
