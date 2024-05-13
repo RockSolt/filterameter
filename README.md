@@ -87,7 +87,7 @@ In the first example, query parameters could include <tt>price</tt>, <tt>price_m
 
 ### Controllers
 
-Include module `Filterameter::DeclarativeControllerFilters` in the controller. Add before action callback `build_filtered_query` for controller actions that should build the query.
+Include module `Filterameter::DeclarativeFilters` in the controller. Add before action callback `build_filtered_query` for controller actions that should build the query.
 
 Rails conventions are used to determine the controller's model as well as the name of the instance variable to apply the filters to. For example, the PhotosController will use the variable `@photos` to store a query against the Photo model. **If the conventions do not provide the correct info**, they can be overridden with the following two methods:
 
@@ -111,7 +111,7 @@ In the happy path, the WidgetsController serves Widgets and can filter on size a
 
 ```ruby
 class WidgetController < ApplicationController
-  include Filterameter::DeclarativeControllerFilters
+  include Filterameter::DeclarativeFilters
   before_action :build_filtered_query, only: :index
 
   filter :size

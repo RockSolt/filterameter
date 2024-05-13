@@ -3,8 +3,8 @@
 module Filterameter
   # = Declarative Controller Filters
   #
-  # Mixin DeclarativeControllerFilters can included in controllers to enable the filter DSL.
-  module DeclarativeControllerFilters
+  # Mixin DeclarativeFilters can included in controllers to enable the filter DSL.
+  module DeclarativeFilters
     extend ActiveSupport::Concern
     include Filterameter::Filterable
 
