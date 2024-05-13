@@ -11,7 +11,7 @@ module Filterameter
       end
 
       def apply(query, value)
-        query.send(@scope_name, value)
+        query.public_send(@scope_name, value)
       end
     end
   end

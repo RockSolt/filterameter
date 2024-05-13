@@ -13,7 +13,7 @@ module Filterameter
       def apply(query, value)
         return query unless ActiveModel::Type::Boolean.new.cast(value)
 
-        query.send(@scope_name)
+        query.public_send(@scope_name)
       end
     end
   end
