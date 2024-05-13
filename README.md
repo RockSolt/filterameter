@@ -4,10 +4,10 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d9d87f9ce8020eb6e656/maintainability)](https://codeclimate.com/github/RockSolt/filterameter/maintainability)
 
 # Filterameter
-Declarative filter parameters provide clean and clear filters for queries.
+Declarative filter parameters provide clean and clear filters for Rails controllers.
 
 ## Usage
-Declare filters in query classes or controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes, scopes, or attributes from singular associations (`belongs_to` or `has_one`). Validations can also be assigned.
+Declare filters in controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes, scopes, or attributes from singular associations (`belongs_to` or `has_one`). Validations can also be assigned.
 
 ```ruby
   filter :color
@@ -84,36 +84,6 @@ filter :sale_price, range: :max_only
 ```
 
 In the first example, query parameters could include <tt>price</tt>, <tt>price_min</tt>, and <tt>price_max</tt>.
-
-### Query Classes
-
-Include module `Filterameter::DeclarativeFilters` in the query class. The model must be declared using `model`, and a default query can optionally be declared using `default_query`. If no default query is provided, then the default is `.all`.
-
-#### Example
-
-Here's what a query class for the Widgets model with filters on size and color might look like:
-
-```ruby
-class WidgetQuery
-  include Filterameter::DeclarativeFilters
-
-  model Widget
-  filter :size
-  filter :color
-end
-```
-
-Build the query using class method `build_query`. The method takes two parameters:
-
-- filter: the hash of filter parameters
-- starting_query: any scope to build on (if not provided, the default query is the starting point)
-
-Here's how the query might be invoked:
-
-```ruby
-filters = { size: 'large', color: 'blue' }
-widgets = WidgetQuery.build_query(filters, Widget.limit(10))
-```
 
 ### Controllers
 
