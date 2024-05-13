@@ -19,7 +19,7 @@ module Filterameter
       end
 
       def filter_coordinator
-        @filter_coordinator ||= Filterameter::Coordinators::ControllerCoordinator.new(controller_name, controller_path)
+        @filter_coordinator ||= Filterameter::FilterCoordinator.new(controller_name, controller_path)
       end
     end
 
