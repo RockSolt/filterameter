@@ -23,7 +23,7 @@ guard :rspec, cmd: 'bundle exec rspec' do
   watch('spec/dummy/app/controllers/application_controller.rb') { "#{rspec.spec_dir}/controllers" }
 end
 
-guard :rubocop, cli: %w[--display-cop-names --auto-correct-all] do
+guard :rubocop, cli: %w[--display-cop-names --autocorrect-all] do
   watch(/.+\.rb$/)
   watch(%r{(?:.+/)?\.rubocop(?:_todo)?\.yml$}) { |m| File.dirname(m[0]) }
 end
