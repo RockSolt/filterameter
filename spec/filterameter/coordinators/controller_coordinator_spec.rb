@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Filterameter::Coordinators::ControllerCoordinator do
+RSpec.describe Filterameter::FilterCoordinator do
   describe 'constructor tries to populate model class from controller name and path' do
     let(:controller_name) { 'my_models' }
     let(:controller_path) { 'foo_bar/my_models' }
