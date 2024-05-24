@@ -16,7 +16,7 @@ module Filterameter
 
       validate_options(options)
       @name = options.fetch(:name, parameter_name).to_s
-      @association = options[:association]
+      @association = Array.wrap(options[:association]).presence
       @filter_on_empty = options.fetch(:filter_on_empty, false)
       @validations = Array.wrap(options[:validates])
       @raw_partial_options = options.fetch(:partial, false)
@@ -24,7 +24,7 @@ module Filterameter
     end
 
     def nested?
-      @association.present?
+      !@association.nil?
     end
 
     def validations?

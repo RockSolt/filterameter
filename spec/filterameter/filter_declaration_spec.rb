@@ -27,6 +27,14 @@ RSpec.describe Filterameter::FilterDeclaration do
     let(:options) { { association: :brand } }
 
     it('#nested?') { expect(declaration.nested?).to be true }
+    it('is an array') { expect(declaration.association).to be_a Array }
+  end
+
+  context 'with multi-level association' do
+    let(:options) { { association: %i[brand vendor] } }
+
+    it('#nested?') { expect(declaration.nested?).to be true }
+    it('is an array') { expect(declaration.association).to be_a Array }
   end
 
   context 'with partial' do

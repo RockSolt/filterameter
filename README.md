@@ -28,12 +28,22 @@ If the name of the parameter is different than the name of the attribute or scop
 filter :status, name: :current_status
 ```
 
+This option can also be helpful with nested filters so that the query parameter can be prefixed with the model name. See the `association` option for an example.
+
 #### association
 If the attribute or scope is nested, it can be referenced by naming the association. Only singular associations are valid. For example, if the manager_id attribute lives on an employee's department record, use the following:
 
 ```ruby
 filter :manager_id, association: :department
 ```
+
+The attribute or scope can be nested more than one level. Declare the filter with an array specifying the associations in order. For example, if an employee belongs to a department and a department belongs to a business unit, use the following to query on the business unit name:
+
+```ruby
+filter :business_unit_name, name: :name, association: [:department, :business_unit]
+```
+
+
 
 #### validates
 If the filter value should be validated, use the `validates` option along with [ActiveModel validations](https://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates). Here's an example of the inclusion validator being used to restrict sizes:
