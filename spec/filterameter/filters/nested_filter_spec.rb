@@ -23,7 +23,8 @@ RSpec.describe Filterameter::Filters::NestedFilter do
     end
 
     it 'applies nested filter' do
-      expect(result.map(&:brand).map(&:vendor).map(&:name).uniq).to eq ['Happy House']
+      expect(result.map(&:brand).map(&:vendor).map(&:name).uniq)
+        .to eq(['Happy House']), "The following query did not return the expected results: #{result.to_sql}"
     end
   end
 
@@ -36,7 +37,8 @@ RSpec.describe Filterameter::Filters::NestedFilter do
     end
 
     it 'applies nested filter' do
-      expect(result.map(&:brand).map(&:vendor).map(&:name).uniq).to eq ['Happy House']
+      expect(result.map(&:brand).map(&:vendor).map(&:name).uniq)
+        .to eq(['Happy House']), "The following query did not return the expected results: #{result.to_sql}"
     end
   end
 end
