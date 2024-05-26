@@ -11,15 +11,21 @@ module Filterameter
 
     def build(declaration)
       if declaration.nested?
-        model = model_from_association(declaration.association)
-        filter = build_filter(model, declaration)
-        Filterameter::Filters::NestedFilter.new(declaration.association, model, filter)
+        build_nested_filter(declaration)
       else
         build_filter(@model_class, declaration)
       end
     end
 
     private
+
+    def build_nested_filter(declaration)
+      model = model_from_association(declaration.association)
+      filter = build_filter(model, declaration)
+      clazz = filter_class(declaration.association)
+
+      clazz.new(declaration.association, model, filter)
+    end
 
     def build_filter(model, declaration) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       # checking dangerous_class_method? excludes any names that cannot be scope names, such as "name"
@@ -33,6 +39,14 @@ module Filterameter
         Filterameter::Filters::MaximumFilter.new(model, declaration.name)
       else
         Filterameter::Filters::AttributeFilter.new(declaration.name)
+      end
+    end
+
+    def filter_class(association_names)
+      if any_collections?(association_names)
+        Filters::NestedCollectionFilter
+      else
+        Filters::NestedFilter
       end
     end
 

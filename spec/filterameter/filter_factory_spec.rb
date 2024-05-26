@@ -40,4 +40,10 @@ RSpec.describe Filterameter::FilterFactory do
     let(:declaration) { Filterameter::FilterDeclaration.new(:name, { association: :brand }) }
     it('is an NestedFilter') { expect(filter).to be_a Filterameter::Filters::NestedFilter }
   end
+
+  context 'with collection association declaration on Brand' do
+    let(:factory) { Filterameter::FilterFactory.new(Brand) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:color, { association: :shirts }) }
+    it('is an NestedCollectionFilter') { expect(filter).to be_a Filterameter::Filters::NestedCollectionFilter }
+  end
 end
