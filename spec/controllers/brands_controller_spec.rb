@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe BrandsController, type: :controller do
-  fixtures :brands
+  fixtures :brands, :shirts
 
   let(:brand_with_blue_shirts) { brands(:happy_shirts) }
   let(:response_body) { response.parsed_body }
