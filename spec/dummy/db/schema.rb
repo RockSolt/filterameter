@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_28_223943) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_28_224644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_28_223943) do
     t.datetime "updated_at", null: false
     t.index ["activity_manager_id"], name: "index_activities_on_activity_manager_id"
     t.index ["project_id"], name: "index_activities_on_project_id"
+  end
+
+  create_table "activity_members", force: :cascade do |t|
+    t.bigint "activity_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_activity_members_on_activity_id"
+    t.index ["user_id"], name: "index_activity_members_on_user_id"
   end
 
   create_table "brands", force: :cascade do |t|
@@ -77,6 +86,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_28_223943) do
 
   add_foreign_key "activities", "projects"
   add_foreign_key "activities", "users", column: "activity_manager_id"
+  add_foreign_key "activity_members", "activities"
+  add_foreign_key "activity_members", "users"
   add_foreign_key "brands", "vendors"
   add_foreign_key "prices", "shirts"
   add_foreign_key "shirts", "brands"
