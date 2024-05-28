@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_28_223335) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_28_223943) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "activity_manager_id", null: false
+    t.string "name"
+    t.integer "task_count"
+    t.boolean "completed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_manager_id"], name: "index_activities_on_activity_manager_id"
+    t.index ["project_id"], name: "index_activities_on_project_id"
+  end
 
   create_table "brands", force: :cascade do |t|
     t.bigint "vendor_id"
@@ -63,6 +75,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_28_223335) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "activities", "projects"
+  add_foreign_key "activities", "users", column: "activity_manager_id"
   add_foreign_key "brands", "vendors"
   add_foreign_key "prices", "shirts"
   add_foreign_key "shirts", "brands"
