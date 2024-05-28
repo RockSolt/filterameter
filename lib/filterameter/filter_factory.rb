@@ -10,10 +10,13 @@ module Filterameter
     end
 
     def build(declaration)
-      model = declaration.nested? ? model_from_association(declaration.association) : @model_class
-      filter = build_filter(model, declaration)
-
-      declaration.nested? ? Filterameter::Filters::NestedFilter.new(declaration.association, model, filter) : filter
+      if declaration.nested?
+        model = model_from_association(declaration.association)
+        filter = build_filter(model, declaration)
+        Filterameter::Filters::NestedFilter.new(declaration.association, model, filter)
+      else
+        build_filter(@model_class, declaration)
+      end
     end
 
     private
@@ -33,9 +36,20 @@ module Filterameter
       end
     end
 
+    def any_collections?(association_names)
+      association_names.reduce(@model_class) do |model, name|
+        association = model.reflect_on_association(name)
+        return true if association.collection?
+
+        association.klass
+      end
+
+      false
+    end
+
     # TODO: rescue then raise custom error with cause
     def model_from_association(association)
-      [association].flatten.reduce(@model_class) { |memo, name| memo.reflect_on_association(name).klass }
+      association.flatten.reduce(@model_class) { |memo, name| memo.reflect_on_association(name).klass }
       # rescue StandardError => e
     end
   end

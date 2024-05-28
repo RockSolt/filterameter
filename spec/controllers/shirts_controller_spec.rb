@@ -40,6 +40,22 @@ RSpec.describe ShirtsController, type: :controller do
       it_behaves_like 'count is correct', 3
     end
 
+    describe 'multi-level nested filter' do
+      fixtures :brands, :vendors
+
+      context 'with attribute filter' do
+        let(:filter) { { vendor_name: 'Happy House' } }
+
+        it_behaves_like 'count is correct', 3
+      end
+
+      context 'with scope filter' do
+        let(:filter) { { ships_by: 5.days.from_now } }
+
+        it_behaves_like 'count is correct', 3
+      end
+    end
+
     describe 'partial match from start' do
       let(:filter) { { color_type_ahead: 'Bl' } }
 
