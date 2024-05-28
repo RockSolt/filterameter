@@ -7,7 +7,7 @@
 Declarative filter parameters provide clean and clear filters for Rails controllers.
 
 ## Usage
-Declare filters in controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes, scopes, or attributes from singular associations (`belongs_to` or `has_one`). Validations can also be assigned.
+Declare filters in controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes or scopes, either directly on the model or on an associated model. Validations can also be assigned.
 
 ```ruby
   filter :color
@@ -31,7 +31,7 @@ filter :status, name: :current_status
 This option can also be helpful with nested filters so that the query parameter can be prefixed with the model name. See the `association` option for an example.
 
 #### association
-If the attribute or scope is nested, it can be referenced by naming the association. Only singular associations are valid. For example, if the manager_id attribute lives on an employee's department record, use the following:
+If the attribute or scope is nested, it can be referenced by naming the association. For example, if the manager_id attribute lives on an employee's department record, use the following:
 
 ```ruby
 filter :manager_id, association: :department
@@ -43,7 +43,9 @@ The attribute or scope can be nested more than one level. Declare the filter wit
 filter :business_unit_name, name: :name, association: [:department, :business_unit]
 ```
 
+If an association is a `has_many` [the distinct method](https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-distinct) is called on the query.
 
+_Limitation:_ If there is more than one association to the same table _and_ both associations can be part of the query, then you cannot use a nested filter directly. Instead, build a scope that disambiguates the associations then build a filter against that scope.
 
 #### validates
 If the filter value should be validated, use the `validates` option along with [ActiveModel validations](https://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates). Here's an example of the inclusion validator being used to restrict sizes:
