@@ -1,0 +1,34 @@
+boil_water:
+  activity: make_coffee
+  description: 'Boil water'
+  completed: true
+grind_coffee_beans:
+  activity: make_coffee
+  description: 'Grind coffee beans'
+  completed: true
+french_press:
+  activity: make_coffee
+  description: 'Add beans and water to french press'
+  completed: true
+pour_coffee:
+  activity: make_coffee
+  description: 'Push the plunger, pour the coffee'
+  completed: true
+
+pour_juice:
+  activity: good_breakfast
+  description: 'Pour freshly squeezed OJ'
+  completed: true
+make_toast:
+  activity: good_breakfast
+  description: 'Make toast'
+  completed: false
+scramble_eggs:
+  activity: good_breakfast
+  description: 'Scramble eggs'
+  completed: false
+
+change_out_of_pajamas:
+  activity: look_sharp
+  description: 'Take off PJs, put on clothes'
+  completed: false

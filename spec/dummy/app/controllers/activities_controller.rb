@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class ActivitiesController < ApplicationController
-  def index
-    @activities = Activity.all
+  filter :activity_manager_id
+  filter :manager_id, name: :activity_manager_id
 
-    render json: @activities
+  def index
+    activities = build_query
+
+    render json: activities
   end
 end

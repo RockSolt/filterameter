@@ -1,0 +1,11 @@
+french_roast:
+  name: French Roast
+  active: true
+
+pancakes_mcgee:
+  name: Pancakes McGee
+  active: true
+
+joe_jackson:
+  name: Joe Jackson
+  active: true

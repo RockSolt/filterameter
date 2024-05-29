@@ -1,0 +1,20 @@
+make_coffee:
+  project: start_day
+  name: 'Make coffee'
+  activity_manager: french_roast
+  task_count: 4
+  completed: true
+
+good_breakfast:
+  project: start_day
+  name: 'Have a good breakfast'
+  activity_manager: pancakes_mcgee
+  task_count: 3
+  completed: false
+
+look_sharp:
+  project: start_day
+  name: 'Get dressed'
+  activity_manager: joe_jackson
+  task_count: 1
+  completed: false

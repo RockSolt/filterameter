@@ -1,0 +1,5 @@
+start_day:
+  name: 'Start day on the right foot'
+  priority: 'high'
+  start_date: <%= Time.zone.today %>
+  end_date: <%= 1.week.from_now %>
