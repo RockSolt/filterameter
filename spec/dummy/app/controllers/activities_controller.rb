@@ -3,6 +3,8 @@
 class ActivitiesController < ApplicationController
   filter :activity_manager_id
   filter :manager_id, name: :activity_manager_id
+  filter :incomplete
+  filter :in_progress, name: :incomplete
 
   def index
     activities = build_query
