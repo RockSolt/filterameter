@@ -18,6 +18,11 @@ RSpec.describe Filterameter::FilterRegistry do
       expect(filter_names).to contain_exactly('date', 'date_min', 'date_max')
     end
 
+    it 'stores ranges filters with correct name' do
+      registry.add_filter(:date, range: true)
+      expect(registry.filter_declarations.map(&:name).uniq).to contain_exactly('date')
+    end
+
     it 'adds min filters' do
       registry.add_filter(:date, range: :min_only)
       expect(filter_names).to contain_exactly('date', 'date_min')
@@ -26,6 +31,18 @@ RSpec.describe Filterameter::FilterRegistry do
     it 'adds max filters' do
       registry.add_filter(:date, range: :max_only)
       expect(filter_names).to contain_exactly('date', 'date_max')
+    end
+
+    context 'with name specified for range filter' do
+      before { registry.add_filter(:date, name: :start_date, range: true) }
+
+      it 'adds range filters' do
+        expect(filter_names).to contain_exactly('date', 'date_min', 'date_max')
+      end
+
+      it 'stores ranges filters with correct attribute name' do
+        expect(registry.filter_declarations.map(&:name).uniq).to contain_exactly('start_date')
+      end
     end
   end
 
