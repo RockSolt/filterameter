@@ -21,4 +21,10 @@ RSpec.configure do |config|
 
   config.order = :random
   Kernel.srand config.seed
+
+  RSpec::Matchers.define :include_a_record_with do |expected_attributes|
+    match do |records|
+      expect(records).to include(a_hash_including(expected_attributes))
+    end
+  end
 end
