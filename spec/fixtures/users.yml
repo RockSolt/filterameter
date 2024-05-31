@@ -9,3 +9,11 @@ pancakes_mcgee:
 joe_jackson:
   name: Joe Jackson
   active: true
+
+coach:
+  name: Coach M. Up
+  active: true
+
+john_muir:
+  name: John Muir
+  active: false

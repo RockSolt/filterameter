@@ -32,3 +32,30 @@ change_out_of_pajamas:
   activity: look_sharp
   description: 'Take off PJs, put on clothes'
   completed: false
+
+
+lace_up_running_shoes:
+  activity: go_for_a_run
+  description: 'Lace up those running shoes'
+  completed: true
+
+out_the_door:
+  activity: go_for_a_run
+  description: 'Start running'
+  completed: false
+
+
+put_on_boots:
+  activity: go_for_a_hike
+  description: 'Put on your boots'
+  completed: false
+
+wear_sunscreen:
+  activity: go_for_a_hike
+  description: 'Apply sunscreen'
+  completed: false
+
+carry_water:
+  activity: go_for_a_hike
+  description: 'Always carry water'
+  completed: false

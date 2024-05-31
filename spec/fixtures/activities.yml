@@ -18,3 +18,17 @@ look_sharp:
   activity_manager: joe_jackson
   task_count: 1
   completed: false
+
+go_for_a_run:
+  project: exercise
+  name: 'Go for a run'
+  activity_manager: coach
+  task_count: 2
+  completed: false
+
+go_for_a_hike:
+  project: exercise
+  name: 'Go for a hike'
+  activity_manager: john_muir
+  task_count: 3
+  completed: false

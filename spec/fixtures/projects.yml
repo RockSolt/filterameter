@@ -3,3 +3,9 @@ start_day:
   priority: 'high'
   start_date: <%= Time.zone.today %>
   end_date: <%= 1.week.from_now %>
+
+exercise: 
+  name: 'Get some exercise'
+  priority: 'low'
+  start_date: <%= 1.month.from_now %>
+  end_date: <%= 1.year.from_now %>
