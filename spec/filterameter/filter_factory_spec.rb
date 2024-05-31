@@ -12,8 +12,14 @@ RSpec.describe Filterameter::FilterFactory do
   end
 
   context 'with scope declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:blue, {}) }
+    let(:factory) { Filterameter::FilterFactory.new(Price) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:percent_reduced, {}) }
     it('is a ScopeFilter') { expect(filter).to be_a Filterameter::Filters::ScopeFilter }
+  end
+
+  context 'with conditional scope declaration' do
+    let(:declaration) { Filterameter::FilterDeclaration.new(:blue, {}) }
+    it('is a ConditionalScopeFilter') { expect(filter).to be_a Filterameter::Filters::ConditionalScopeFilter }
   end
 
   context 'with partial declaration' do

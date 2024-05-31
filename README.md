@@ -97,6 +97,20 @@ filter :sale_price, range: :max_only
 
 In the first example, query parameters could include <tt>price</tt>, <tt>price_min</tt>, and <tt>price_max</tt>.
 
+### Scope Filters
+
+For scopes that do not take arguments, the filter should provide a boolean that indicates whether or not the scope should be invoked. For example, imagine a scope called `high_priority` with criteria that identifies high priority records. The scope would be invoked by the query parameters `high_priority=true`.
+
+Passing `high_priority=false` will not invoke the scope. This makes it easy to include a filter with a check box UI.
+
+Scopes that do take arguments [must be written as class methods, not inline scopes.](https://guides.rubyonrails.org/active_record_querying.html#passing-in-arguments) For example, imagine a scope called `recent` that takes an as of date as an argument. Here is what that might look like:
+
+```ruby
+def self.recent(as_of_date)
+  where('created_at > ?', as_of_date)
+end
+```
+
 ### Controllers
 
 Include module `Filterameter::DeclarativeFilters` in the controller. Add before action callback `build_filtered_query` for controller actions that should build the query.

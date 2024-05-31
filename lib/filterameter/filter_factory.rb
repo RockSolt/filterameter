@@ -30,7 +30,7 @@ module Filterameter
     def build_filter(model, declaration) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       # checking dangerous_class_method? excludes any names that cannot be scope names, such as "name"
       if model.respond_to?(declaration.name) && !model.dangerous_class_method?(declaration.name)
-        Filterameter::Filters::ScopeFilter.new(declaration.name)
+        build_scope_filter(model, declaration)
       elsif declaration.partial_search?
         Filterameter::Filters::MatchesFilter.new(declaration.name, declaration.partial_options)
       elsif declaration.minimum?
@@ -39,6 +39,16 @@ module Filterameter
         Filterameter::Filters::MaximumFilter.new(model, declaration.name)
       else
         Filterameter::Filters::AttributeFilter.new(declaration.name)
+      end
+    end
+
+    # Inline scopes return an arity of -1 regardless of arguments, so those will always be assumed to be
+    # conditional scopes. To have a filter that passes a value to a scope, it must be a class method.
+    def build_scope_filter(model, declaration)
+      if model.method(declaration.name).arity == 1
+        Filterameter::Filters::ScopeFilter.new(declaration.name)
+      else
+        Filterameter::Filters::ConditionalScopeFilter.new(declaration.name)
       end
     end
 
