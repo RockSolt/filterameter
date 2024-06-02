@@ -32,3 +32,8 @@ go_for_a_hike:
   activity_manager: john_muir
   task_count: 3
   completed: false
+
+read_book:
+  project: read_a_book
+  name: 'Read book'
+  activity_manager: pancakes_mcgee

@@ -1,0 +1,20 @@
+breakfast_toast:
+  activity: good_breakfast
+  user: toast_guy
+
+breakfast_juice:
+  activity: good_breakfast
+  user: juice_guy
+  
+breakfast_chef:
+  activity: good_breakfast
+  user: egg_chef
+
+
+exercise_steph:
+  activity: lace_up_running_shoes
+  user: step
+
+exercise_klay:
+  activity: lace_up_running_shoes
+  user: klay

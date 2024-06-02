@@ -59,3 +59,14 @@ carry_water:
   activity: go_for_a_hike
   description: 'Always carry water'
   completed: false
+
+
+pick_book:
+  activity: read_book
+  description: 'Pick a good book'
+  completed: true
+
+read_book:
+  activity: read_book
+  description: 'Read the book'
+  completed: true

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Project < ApplicationRecord
+  has_many :activities
+
   # enum signature changed in Rails 7
   if method(:enum).arity == 1
     enum priority: %i[low medium high], _suffix: true
