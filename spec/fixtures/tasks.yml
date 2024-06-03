@@ -1,0 +1,72 @@
+boil_water:
+  activity: make_coffee
+  description: 'Boil water'
+  completed: true
+grind_coffee_beans:
+  activity: make_coffee
+  description: 'Grind coffee beans'
+  completed: true
+french_press:
+  activity: make_coffee
+  description: 'Add beans and water to french press'
+  completed: true
+pour_coffee:
+  activity: make_coffee
+  description: 'Push the plunger, pour the coffee'
+  completed: true
+
+pour_juice:
+  activity: good_breakfast
+  description: 'Pour freshly squeezed OJ'
+  completed: true
+make_toast:
+  activity: good_breakfast
+  description: 'Make toast'
+  completed: false
+scramble_eggs:
+  activity: good_breakfast
+  description: 'Scramble eggs'
+  completed: false
+
+change_out_of_pajamas:
+  activity: look_sharp
+  description: 'Take off PJs, put on clothes'
+  completed: false
+
+
+lace_up_running_shoes:
+  activity: go_for_a_run
+  description: 'Lace up those running shoes'
+  completed: true
+
+out_the_door:
+  activity: go_for_a_run
+  description: 'Start running'
+  completed: false
+
+
+put_on_boots:
+  activity: go_for_a_hike
+  description: 'Put on your boots'
+  completed: false
+
+wear_sunscreen:
+  activity: go_for_a_hike
+  description: 'Apply sunscreen'
+  completed: false
+
+carry_water:
+  activity: go_for_a_hike
+  description: 'Always carry water'
+  completed: false
+
+
+pick_book:
+  activity: read_book
+  description: 'Pick a good book'
+  completed: true
+
+read_book:
+  activity: read_book
+  description: 'Read the book'
+  completed: true

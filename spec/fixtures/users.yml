@@ -1,0 +1,39 @@
+french_roast:
+  name: French Roast
+  active: true
+
+pancakes_mcgee:
+  name: Pancakes McGee
+  active: true
+
+toast_guy:
+  name: Toasty Toasterson
+  active: false
+
+juice_guy:
+  name: Orange Julius
+  active: true
+
+egg_chef:
+  name: Scrambles McGee
+  active: true
+
+joe_jackson:
+  name: Joe Jackson
+  active: true
+
+coach:
+  name: Coach M. Up
+  active: true
+
+steph:
+  name: Stephen Curry
+  active: true
+
+klay:
+  name: Game Six
+  active: true
+
+john_muir:
+  name: John Muir
+  active: false

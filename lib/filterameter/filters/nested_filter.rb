@@ -14,7 +14,7 @@ module Filterameter
 
       def apply(query, value)
         query.joins(@joins_values)
-             .merge(@attribute_filter.apply(@association_model, value))
+             .merge(@attribute_filter.apply(@association_model.all, value))
       end
 
       private

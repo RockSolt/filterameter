@@ -1,0 +1,17 @@
+start_day:
+  name: 'Start day on the right foot'
+  priority: 'high'
+  start_date: <%= Time.zone.today %>
+  end_date: <%= 1.week.from_now %>
+
+exercise: 
+  name: 'Get some exercise'
+  priority: 'low'
+  start_date: <%= 1.month.from_now %>
+  end_date: <%= 1.year.from_now %>
+
+read_a_book:
+  name: 'Read a book'
+  priority: 'medium'
+  start_date: <%= 1.month.ago %>
+  end_date: <%= 1.week.ago %>
