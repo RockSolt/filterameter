@@ -1,7 +1,0 @@
-happy_house:
-  name: "Happy House"
-  ship_time_in_days: 3
-
-fun_house:
-  name: "Fun House"
-  ship_time_in_days: 7
