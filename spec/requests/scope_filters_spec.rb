@@ -51,3 +51,19 @@ RSpec.describe 'Conditional scope filters', type: :request do
     end
   end
 end
+
+RSpec.describe 'Scopes with argument filters', type: :request do
+  fixtures :projects
+
+  before { get '/projects', params: { filter: { in_progress: 1.day.from_now } } }
+
+  it 'returns the correct number of rows' do
+    count = Project.in_progress(1.day.from_now).count
+    expect(response.parsed_body.size).to eq count
+  end
+
+  it 'returns Start day on the right foot' do
+    expect(response).to have_http_status(:success)
+    expect(response.parsed_body).to include_a_record_with('name' => projects(:start_day).name)
+  end
+end
