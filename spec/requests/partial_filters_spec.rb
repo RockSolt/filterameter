@@ -15,7 +15,7 @@ RSpec.describe 'Partial filters', type: :request do
 
     it 'returns Grind coffee beans' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body).to include(a_hash_including('description' => tasks(:grind_coffee_beans).description))
+      expect(response.parsed_body).to include_a_record_with('description' => tasks(:grind_coffee_beans).description)
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe 'Partial filters', type: :request do
 
     it 'returns Add beans and water to french press' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body).to include(a_hash_including('description' => tasks(:french_press).description))
+      expect(response.parsed_body).to include_a_record_with('description' => tasks(:french_press).description)
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe 'Partial filters', type: :request do
 
     it 'returns Add beans and water to french press' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body).to include(a_hash_including('description' => tasks(:french_press).description))
+      expect(response.parsed_body).to include_a_record_with('description' => tasks(:french_press).description)
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe 'Partial filters', type: :request do
 
     it 'returns Grind coffee beans' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body).to include(a_hash_including('description' => tasks(:grind_coffee_beans).description))
+      expect(response.parsed_body).to include_a_record_with('description' => tasks(:grind_coffee_beans).description)
     end
   end
 end

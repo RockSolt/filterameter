@@ -15,7 +15,7 @@ RSpec.describe 'Conditional scope filters', type: :request do
 
     it 'returns Have a good breakfast' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body.first).to include('name' => activities(:good_breakfast).name)
+      expect(response.parsed_body).to include_a_record_with('name' => activities(:good_breakfast).name)
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe 'Conditional scope filters', type: :request do
 
     it 'returns Have a good breakfast' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body.first).to include('name' => activities(:good_breakfast).name)
+      expect(response.parsed_body).to include_a_record_with('name' => activities(:good_breakfast).name)
     end
   end
 

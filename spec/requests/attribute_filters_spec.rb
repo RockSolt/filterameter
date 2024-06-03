@@ -15,7 +15,7 @@ RSpec.describe 'Attribute filters', type: :request do
 
     it 'returns Get dressed' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body.first).to include('name' => activities(:look_sharp).name)
+      expect(response.parsed_body).to include_a_record_with('name' => activities(:look_sharp).name)
     end
   end
 
@@ -29,12 +29,12 @@ RSpec.describe 'Attribute filters', type: :request do
 
     it 'returns Get dressed' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body).to include(a_hash_including('name' => activities(:look_sharp).name))
+      expect(response.parsed_body).to include_a_record_with('name' => activities(:look_sharp).name)
     end
 
     it 'does not return Make coffee' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body).not_to include(a_hash_including('name' => activities(:make_coffee).name))
+      expect(response.parsed_body).not_to include_a_record_with('name' => activities(:make_coffee).name)
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe 'Attribute filters', type: :request do
 
     it 'returns Start day on the right foot' do
       expect(response).to have_http_status(:success)
-      expect(response.parsed_body).to include(a_hash_including('name' => projects(:start_day).name))
+      expect(response.parsed_body).to include_a_record_with('name' => projects(:start_day).name)
     end
   end
 
