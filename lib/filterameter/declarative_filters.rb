@@ -3,7 +3,7 @@
 module Filterameter
   # = Declarative Controller Filters
   #
-  # Mixin DeclarativeFilters can included in controllers to enable the filter DSL.
+  # Mixin DeclarativeFilters should be included in controllers to enable the filter DSL.
   module DeclarativeFilters
     extend ActiveSupport::Concern
     include Filterameter::Filterable
@@ -23,15 +23,20 @@ module Filterameter
       end
     end
 
+    def build_query_from_filters(starting_query = nil)
+      self.class.filter_coordinator.build_query(filter_parameters, starting_query)
+    end
+
+    def filter_parameters
+      params.to_unsafe_h.fetch(:filter, {})
+    end
+
     private
 
     def build_filtered_query
       var_name = "@#{self.class.filter_coordinator.query_variable_name}"
-      instance_variable_set(
-        var_name,
-        self.class.filter_coordinator.build_query(params.to_unsafe_h.fetch(:filter, {}),
-                                                  instance_variable_get(var_name))
-      )
+      starting_query = instance_variable_get(var_name)
+      instance_variable_set(var_name, build_query_from_filters(starting_query))
     end
   end
 end

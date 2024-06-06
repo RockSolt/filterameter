@@ -13,7 +13,7 @@ class TasksController < ApplicationController
   filter :with_inactive_activity_member, name: :inactive, association: %i[activity activity_members]
 
   def index
-    @tasks = build_query
+    @tasks = build_query_from_filters
 
     render json: @tasks
   end
