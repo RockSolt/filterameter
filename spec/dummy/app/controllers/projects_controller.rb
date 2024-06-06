@@ -9,7 +9,7 @@ class ProjectsController < ApplicationController
   filter :in_progress
 
   def index
-    @projects = build_query
+    @projects = build_query_from_filters
 
     render json: @projects
   end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ActivitiesController < ApplicationController
+  before_action :build_filtered_query, only: :index
+
   filter :activity_manager_id
   filter :manager_id, name: :activity_manager_id
   filter :incomplete
@@ -14,8 +16,6 @@ class ActivitiesController < ApplicationController
   filter :incomplete_tasks, name: :incomplete, association: :tasks
 
   def index
-    activities = build_query
-
-    render json: activities
+    render json: @activities
   end
 end

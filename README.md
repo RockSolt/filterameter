@@ -9,12 +9,23 @@ Declarative filter parameters provide clean and clear filters for Rails controll
 ## Usage
 Declare filters in controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes or scopes, either directly on the model or on an associated model. Validations can also be assigned.
 
+Include module `Filterameter::DeclarativeFilters` in the controller to provide the filter DSL. It can be included in the `ApplicationController` to make the functionality available to all controllers or it can be mixed in on a case-by-case basis.
+
+
 ```ruby
   filter :color
   filter :size, validates: { inclusion: { in: %w[Small Medium Large], allow_multiple_values: true } }
   filter :brand_name, association: :brand, name: :name
   filter :on_sale, association: :price, validates: [{ numericality: { greater_than: 0 } },
                                                     { numericality: { less_than: 100 } }]
+```
+
+Filters without options can be declared all at once with `filters`:
+
+```ruby
+filters :color,
+        :size,
+        :name
 ```
 
 ### Filtering Options
@@ -111,27 +122,35 @@ def self.recent(as_of_date)
 end
 ```
 
-### Controllers
+### Building the Query
 
-Include module `Filterameter::DeclarativeFilters` in the controller. Add before action callback `build_filtered_query` for controller actions that should build the query.
+There are two ways to apply the filters and build the query, depending on how much control and/or visibility is desired:
+
+- Use the `build_filtered_query` before action callback
+- Manually call `build_query_from_filters`
+
+
+#### Use the `build_filtered_query` before action callback
+
+Add before action callback `build_filtered_query` for controller actions that should build the query. This can be done either in the `ApplicationController` or on a case-by-case basis.
 
 Rails conventions are used to determine the controller's model as well as the name of the instance variable to apply the filters to. For example, the PhotosController will use the variable `@photos` to store a query against the Photo model. **If the conventions do not provide the correct info**, they can be overridden with the following two methods:
 
-#### filter_model
+##### filter_model
 Provide the name of the model. This method also allows the variable name to be optionally provided as the second parameter.
 
 ```ruby
 filter_model 'Picture'
 ```
 
-#### filter_query_var_name
+##### filter_query_var_name
 Provide the name of the instance variable. For example, if the query is stored as `@data`, use the following:
 
 ```ruby
 filter_query_var_name :data
 ```
 
-#### Example
+##### Example
 
 In the happy path, the WidgetsController serves Widgets and can filter on size and color. Here's what the controller might look like:
 
@@ -148,6 +167,59 @@ class WidgetController < ApplicationController
   end
 end
 ```
+
+#### Manually call `build_query_from_filters`
+
+To generate the query manually, you can call `build_query_from_filters` directly _instead of using the callback_.
+
+###### Example
+
+Here's the Widgets controller again, this time building the query manually:
+
+```ruby
+class WidgetController < ApplicationController
+  include Filterameter::DeclarativeFilters
+
+  filter :size
+  filter :color
+
+  def index
+    @widgets = build_query_from_filters
+    render json: @widgets
+  end
+end
+```
+
+This method optionally takes a starting query. If there was a controller for Active Widgets that should only return active widgets, the following could be passed into the method as the starting point:
+
+```ruby
+  def index
+    @widgets = build_query_from_filters(Widget.where(active: true))
+  end
+```
+
+### Query Parameters
+
+The query parameters are pulled from the controller parameters, nested under the key `filter`. For example a request for large, blue widgets might have the following url:
+
+`/widgets?filter[size]=large&filter[color]=blue`
+
+To change the source of the query parameters, override the `filter_parameters` method. Here is another way to provide a default filter:
+
+```ruby
+def filter_parameters
+  super.with_defaults(active: true)
+end
+```
+
+This also provides an easy way to nest the criteria under a key other than `filter`:
+
+```ruby
+def filter_parameters
+  params.to_unsafe_h.fetch(:criteria, {})
+end
+```
+
 
 ## Installation
 Add this line to your application's Gemfile:
