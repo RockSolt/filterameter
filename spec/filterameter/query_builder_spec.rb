@@ -4,67 +4,50 @@ require 'rails_helper'
 
 RSpec.describe Filterameter::QueryBuilder do
   let(:registry) do
-    Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Shirt)).tap do |registry|
-      registry.add_filter(:size, {})
-      registry.add_filter(:color, {})
-      registry.add_filter(:price, name: :current, association: :price, range: true)
+    Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Activity)).tap do |registry|
+      registry.add_filter(:name, {})
+      registry.add_filter(:completed, {})
+      registry.add_filter(:task_count, range: true)
     end
   end
 
   context 'with default query' do
-    let(:default_query) { Shirt.where(size: 'Medium') }
+    let(:default_query) { Activity.where(activity_manager_id: 123) }
     let(:instance) { described_class.new(default_query, registry) }
-    let(:filter_params) { { color: 'gold' }.stringify_keys }
+    let(:filter_params) { { name: 'The Activity Name' }.stringify_keys }
     let(:query) { instance.build_query(filter_params, nil) }
 
     it 'includes default criteria' do
-      expect(query.where_values_hash).to include('color' => 'gold', 'size' => 'Medium')
+      expect(query.where_values_hash).to include('activity_manager_id' => 123, 'name' => 'The Activity Name')
     end
   end
 
   context 'with starting query' do
-    let(:starting_query) { Shirt.where(size: 'Medium') }
+    let(:starting_query) { Activity.where(activity_manager_id: 123) }
     let(:instance) { described_class.new(nil, registry) }
-    let(:filter_params) { { color: 'blue' }.stringify_keys }
+    let(:filter_params) { { name: 'The Activity Name' }.stringify_keys }
     let(:query) { instance.build_query(filter_params, starting_query) }
 
     it 'includes starting criteria' do
-      expect(query.where_values_hash).to include('color' => 'blue', 'size' => 'Medium')
+      expect(query.where_values_hash).to include('activity_manager_id' => 123, 'name' => 'The Activity Name')
     end
   end
 
-  context 'with min and max prices' do
-    let(:default_query) { Shirt.where(size: 'Medium') }
+  context 'with min and max criteria' do
+    let(:default_query) { Activity.where(activity_manager_id: 123) }
     let(:instance) { described_class.new(default_query, registry) }
-    let(:filter_params) { { price_min: 12.34, price_max: 34.56 }.stringify_keys }
+    let(:filter_params) { { task_count_min: 12, task_count_max: 34 }.stringify_keys }
     let(:query) { instance.build_query(filter_params, nil) }
 
     it 'includes price range' do
-      expect(query.to_sql).to include('"prices"."current" BETWEEN 12.34 AND 34.56')
-    end
-  end
-
-  context 'with min and max params' do
-    let(:registry) do
-      Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Shirt)).tap do |registry|
-        registry.add_filter(:price, { range: true })
-      end
-    end
-    let(:price_filter) { instance_spy(Filterameter::Filters::AttributeFilter) }
-
-    it 'passes range to price filter' do
-      allow(registry).to receive(:fetch).and_return(price_filter)
-
-      builder = described_class.new(Shirt.all, registry)
-      builder.build_query({ price_min: 12.34, price_max: 23.45 })
-      expect(price_filter).to have_received(:apply).once.with(anything, instance_of(Range))
+      expect(query.to_sql).to include('"activities"."task_count" BETWEEN 12 AND 34')
     end
   end
 
   describe 'undeclared parameters' do
-    let(:filter_params) { { color: 'blue', style: 'crew-neck' }.stringify_keys }
+    let(:filter_params) { { name: 'The Activity Name', not_a_filter: 42 }.stringify_keys }
     let(:instance) { described_class.new(nil, registry) }
-    let(:query) { instance.build_query(filter_params, Shirt.all) }
+    let(:query) { instance.build_query(filter_params, Activity.all) }
 
     before { allow(Filterameter.configuration).to receive(:action_on_undeclared_parameters).and_return(action) }
 
@@ -72,7 +55,7 @@ RSpec.describe Filterameter::QueryBuilder do
       let(:action) { false }
 
       it 'builds query with valid parameter' do
-        expect(query.where_values_hash).to match('color' => 'blue')
+        expect(query.where_values_hash).to match('name' => 'The Activity Name')
       end
     end
 
@@ -86,7 +69,7 @@ RSpec.describe Filterameter::QueryBuilder do
       end
 
       it 'builds query with valid parameter' do
-        expect(query.where_values_hash).to match('color' => 'blue')
+        expect(query.where_values_hash).to match('name' => 'The Activity Name')
       end
 
       it 'notifies subscriber for undeclared_parameters.filterameter' do
@@ -99,22 +82,21 @@ RSpec.describe Filterameter::QueryBuilder do
       let(:action) { :raise }
 
       it 'raises exception' do
-        expect { instance.build_query(filter_params, Shirt.all) }
-          .to raise_error(Filterameter::Exceptions::UndeclaredParameterError)
+        expect { query }.to raise_error(Filterameter::Exceptions::UndeclaredParameterError)
       end
     end
   end
 
   describe 'validation failure' do
     let(:registry) do
-      Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Shirt)).tap do |registry|
-        registry.add_filter(:size, validates: { inclusion: { in: %w[Small Medium Large] } })
-        registry.add_filter(:color, {})
+      Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Project)).tap do |registry|
+        registry.add_filter(:priority, validates: { inclusion: { in: Project.priorities } })
+        registry.add_filter(:name, {})
       end
     end
     let(:instance) { described_class.new(nil, registry) }
-    let(:filter_params) { { color: 'blue', size: 'Extra Large' }.stringify_keys }
-    let(:query) { described_class.new(nil, registry).build_query(filter_params, Shirt.all) }
+    let(:filter_params) { { name: 'The Project Name', priority: 'Very Important' }.stringify_keys }
+    let(:query) { described_class.new(nil, registry).build_query(filter_params, Project.all) }
 
     before { allow(Filterameter.configuration).to receive(:action_on_validation_failure).and_return(action) }
 
@@ -122,7 +104,7 @@ RSpec.describe Filterameter::QueryBuilder do
       let(:action) { false }
 
       it 'builds query with valid parameter' do
-        expect(query.where_values_hash).to match('color' => 'blue')
+        expect(query.where_values_hash).to match('name' => 'The Project Name')
       end
     end
 
@@ -136,7 +118,7 @@ RSpec.describe Filterameter::QueryBuilder do
       end
 
       it 'builds query with valid parameter' do
-        expect(query.where_values_hash).to match('color' => 'blue')
+        expect(query.where_values_hash).to match('name' => 'The Project Name')
       end
 
       it 'notifies subscriber for undeclared_parameters.filterameter' do
@@ -149,9 +131,10 @@ RSpec.describe Filterameter::QueryBuilder do
       let(:action) { :raise }
 
       it 'raises exception' do
-        expect { instance.build_query(filter_params, nil) }
-          .to raise_error(Filterameter::Exceptions::ValidationError,
-                          'The following parameter(s) failed validation: ["Size is not included in the list"]')
+        expect { query }.to raise_error(
+          Filterameter::Exceptions::ValidationError,
+          'The following parameter(s) failed validation: ["Priority is not included in the list"]'
+        )
       end
     end
   end

@@ -3,53 +3,52 @@
 require 'rails_helper'
 
 RSpec.describe Filterameter::FilterFactory do
-  let(:factory) { Filterameter::FilterFactory.new(Shirt) }
+  let(:factory) { Filterameter::FilterFactory.new(Project) }
   let(:filter) { factory.build(declaration) }
 
   context 'with attribute declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:size, {}) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:name, {}) }
     it('is an AttributeFilter') { expect(filter).to be_a Filterameter::Filters::AttributeFilter }
   end
 
   context 'with scope declaration' do
-    let(:factory) { Filterameter::FilterFactory.new(Price) }
-    let(:declaration) { Filterameter::FilterDeclaration.new(:percent_reduced, {}) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:in_progress, {}) }
     it('is a ScopeFilter') { expect(filter).to be_a Filterameter::Filters::ScopeFilter }
   end
 
   context 'with conditional scope declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:blue, {}) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:high_priority, {}) }
     it('is a ConditionalScopeFilter') { expect(filter).to be_a Filterameter::Filters::ConditionalScopeFilter }
   end
 
   context 'with partial declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:color, { partial: true }) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:name, { partial: true }) }
     it('is a MatchesFilter') { expect(filter).to be_a Filterameter::Filters::MatchesFilter }
   end
 
   context 'with minimum declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:size_min, { range: :min_only }) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:priority_min, { range: :min_only }) }
     it('is a MinimumFilter') { expect(filter).to be_a Filterameter::Filters::MinimumFilter }
   end
 
   context 'with maximum declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:size_max, { range: :max_only }) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:priority_max, { range: :max_only }) }
     it('is a MaximumFilter') { expect(filter).to be_a Filterameter::Filters::MaximumFilter }
   end
 
   context 'with range declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:size, { range: true }) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:priority, { range: true }) }
     it('is an AttributeFilter') { expect(filter).to be_a Filterameter::Filters::AttributeFilter }
   end
 
   context 'with singular association declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:name, { association: :brand }) }
+    let(:factory) { Filterameter::FilterFactory.new(Activity) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:name, { association: :project }) }
     it('is an NestedFilter') { expect(filter).to be_a Filterameter::Filters::NestedFilter }
   end
 
-  context 'with collection association declaration on Brand' do
-    let(:factory) { Filterameter::FilterFactory.new(Brand) }
-    let(:declaration) { Filterameter::FilterDeclaration.new(:color, { association: :shirts }) }
+  context 'with collection association declaration' do
+    let(:declaration) { Filterameter::FilterDeclaration.new(:name, { association: :activities }) }
     it('is an NestedCollectionFilter') { expect(filter).to be_a Filterameter::Filters::NestedCollectionFilter }
   end
 end
