@@ -13,12 +13,12 @@ RSpec.describe Filterameter::DeclarativeFilters do
           @controller_path = 'foo/bars'
           include Filterameter::DeclarativeFilters
 
-          filter_model 'Price'
+          filter_model 'Project'
         end
       end
 
       it 'assigns model class' do
-        expect(model_class).to be Price
+        expect(model_class).to be Project
       end
     end
 
@@ -29,12 +29,12 @@ RSpec.describe Filterameter::DeclarativeFilters do
           @controller_path = 'foo/bars'
           include Filterameter::DeclarativeFilters
 
-          filter_model Price
+          filter_model Project
         end
       end
 
       it 'assigns model class' do
-        expect(model_class).to be Price
+        expect(model_class).to be Project
       end
     end
   end

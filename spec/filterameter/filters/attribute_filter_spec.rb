@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Filterameter::Filters::AttributeFilter do
   let(:filter) { described_class.new(:color) }
-  let(:query) { class_spy(Shirt) }
+  let(:query) { class_spy('ActiveRecord::Base') }
 
   it 'applies filter to query' do
     filter.apply(query, 'blue')
