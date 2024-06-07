@@ -47,7 +47,7 @@ RSpec.describe 'Range filters', type: :request do
   end
 
   context 'when range: :min_only' do
-    context 'with exact value', skip: 're-evaluating min_only feature' do
+    context 'with exact value' do
       before { get '/activities', params: { filter: { min_only_task_count: 3 } } }
 
       it 'returns the correct number of rows' do
@@ -75,7 +75,7 @@ RSpec.describe 'Range filters', type: :request do
   end
 
   context 'when range: :max_only' do
-    context 'with exact value', skip: 're-evaluating max_only feature' do
+    context 'with exact value' do
       before { get '/activities', params: { filter: { max_only_task_count: 3 } } }
 
       it 'returns the correct number of rows' do

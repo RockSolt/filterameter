@@ -27,12 +27,12 @@ RSpec.describe Filterameter::FilterFactory do
   end
 
   context 'with minimum declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:priority_min, { range: :min_only }) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:priority_min, { range: :min_only }, range_type: :minimum) }
     it('is a MinimumFilter') { expect(filter).to be_a Filterameter::Filters::MinimumFilter }
   end
 
   context 'with maximum declaration' do
-    let(:declaration) { Filterameter::FilterDeclaration.new(:priority_max, { range: :max_only }) }
+    let(:declaration) { Filterameter::FilterDeclaration.new(:priority_max, { range: :max_only }, range_type: :maximum) }
     it('is a MaximumFilter') { expect(filter).to be_a Filterameter::Filters::MaximumFilter }
   end
 

@@ -56,7 +56,17 @@ RSpec.describe Filterameter::FilterDeclaration do
 
     it('#range_enabled?') { expect(declaration.range_enabled?).to be true }
     it('#range?') { expect(declaration.range?).to be false }
-    it('#minimum?') { expect(declaration.minimum?).to be true }
+    it('#min_only?') { expect(declaration.min_only?).to be true }
+    it('#minimum_range?') { expect(declaration.minimum_range?).to be false }
+  end
+
+  context 'with range: :min_only and range_type: :minimum' do
+    let(:declaration) { described_class.new(:size, { range: :min_only }, range_type: :minimum) }
+
+    it('#range_enabled?') { expect(declaration.range_enabled?).to be true }
+    it('#range?') { expect(declaration.range?).to be false }
+    it('#min_only?') { expect(declaration.min_only?).to be true }
+    it('#minimum_range?') { expect(declaration.minimum_range?).to be true }
   end
 
   context 'with range: :max_only' do
@@ -64,7 +74,17 @@ RSpec.describe Filterameter::FilterDeclaration do
 
     it('#range_enabled?') { expect(declaration.range_enabled?).to be true }
     it('#range?') { expect(declaration.range?).to be false }
-    it('#maximum?') { expect(declaration.maximum?).to be true }
+    it('#max_only?') { expect(declaration.max_only?).to be true }
+    it('#maximum_range?') { expect(declaration.maximum_range?).to be false }
+  end
+
+  context 'with range: :max_only and range_type: :maximum' do
+    let(:declaration) { described_class.new(:size, { range: :max_only }, range_type: :maximum) }
+
+    it('#range_enabled?') { expect(declaration.range_enabled?).to be true }
+    it('#range?') { expect(declaration.range?).to be false }
+    it('#max_only?') { expect(declaration.max_only?).to be true }
+    it('#maximum_range?') { expect(declaration.maximum_range?).to be true }
   end
 
   context 'with invalid range' do

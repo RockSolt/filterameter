@@ -33,9 +33,9 @@ module Filterameter
         build_scope_filter(model, declaration)
       elsif declaration.partial_search?
         Filterameter::Filters::MatchesFilter.new(declaration.name, declaration.partial_options)
-      elsif declaration.minimum?
+      elsif declaration.minimum_range?
         Filterameter::Filters::MinimumFilter.new(model, declaration.name)
-      elsif declaration.maximum?
+      elsif declaration.maximum_range?
         Filterameter::Filters::MaximumFilter.new(model, declaration.name)
       else
         Filterameter::Filters::AttributeFilter.new(declaration.name)

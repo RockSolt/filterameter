@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Filterameter::FilterRegistry do
   describe '#add_filter' do
-    let(:registry) { described_class.new(instance_spy(Filterameter::FilterFactory)) }
+    let(:registry) { described_class.new(Filterameter::FilterFactory.new(Project)) }
     let(:filter_names) { registry.filter_declarations.map(&:parameter_name) }
 
     it 'stores two declarations' do
@@ -23,14 +23,36 @@ RSpec.describe Filterameter::FilterRegistry do
       expect(registry.filter_declarations.map(&:name).uniq).to contain_exactly('date')
     end
 
-    it 'adds min filters' do
-      registry.add_filter(:date, range: :min_only)
-      expect(filter_names).to contain_exactly('date', 'date_min')
+    context 'with min-only range' do
+      before { registry.add_filter(:date, range: :min_only) }
+
+      it 'adds min filters' do
+        expect(filter_names).to contain_exactly('date', 'date_min')
+      end
+
+      it 'builds attribute filter' do
+        expect(registry.fetch('date')).to be_a Filterameter::Filters::AttributeFilter
+      end
+
+      it 'builds minimum filter' do
+        expect(registry.fetch('date_min')).to be_a Filterameter::Filters::MinimumFilter
+      end
     end
 
-    it 'adds max filters' do
-      registry.add_filter(:date, range: :max_only)
-      expect(filter_names).to contain_exactly('date', 'date_max')
+    context 'with max-only range' do
+      before { registry.add_filter(:date, range: :max_only) }
+
+      it 'adds max filters' do
+        expect(filter_names).to contain_exactly('date', 'date_max')
+      end
+
+      it 'builds attribute filter' do
+        expect(registry.fetch('date')).to be_a Filterameter::Filters::AttributeFilter
+      end
+
+      it 'builds maximum filter' do
+        expect(registry.fetch('date_max')).to be_a Filterameter::Filters::MaximumFilter
+      end
     end
 
     context 'with name specified for range filter' do

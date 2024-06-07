@@ -39,23 +39,25 @@ module Filterameter
 
     # if range is enabled, then in addition to the attribute filter this also adds min and/or max filters
     def add_declarations_for_range(attribute_declaration, options, parameter_name)
-      add_range_minimum(parameter_name, options) if attribute_declaration.range? || attribute_declaration.minimum?
-      add_range_maximum(parameter_name, options) if attribute_declaration.range? || attribute_declaration.maximum?
+      add_range_minimum(parameter_name, options) if attribute_declaration.range? || attribute_declaration.min_only?
+      add_range_maximum(parameter_name, options) if attribute_declaration.range? || attribute_declaration.max_only?
       capture_range_declaration(parameter_name) if attribute_declaration.range?
     end
 
     def add_range_minimum(parameter_name, options)
       parameter_name_min = "#{parameter_name}_min"
-      options_with_range = options.with_defaults(name: parameter_name)
-                                  .merge(range: :min_only)
-      @declarations[parameter_name_min] = Filterameter::FilterDeclaration.new(parameter_name_min, options_with_range)
+      options_with_name = options.with_defaults(name: parameter_name)
+      @declarations[parameter_name_min] = Filterameter::FilterDeclaration.new(parameter_name_min,
+                                                                              options_with_name,
+                                                                              range_type: :minimum)
     end
 
     def add_range_maximum(parameter_name, options)
       parameter_name_max = "#{parameter_name}_max"
-      options_with_range = options.with_defaults(name: parameter_name)
-                                  .merge(range: :max_only)
-      @declarations[parameter_name_max] = Filterameter::FilterDeclaration.new(parameter_name_max, options_with_range)
+      options_with_name = options.with_defaults(name: parameter_name)
+      @declarations[parameter_name_max] = Filterameter::FilterDeclaration.new(parameter_name_max,
+                                                                              options_with_name,
+                                                                              range_type: :maximum)
     end
 
     def capture_range_declaration(name)
