@@ -6,12 +6,19 @@ module Filterameter
   # = Filter Declaration
   #
   # Class FilterDeclaration captures the filter declaration within the controller.
+  #
+  # When the min_only or max_only range option is specified, in addition to the attribute filter which carries that
+  # option, the registry builds a duplicate declaration that also carries the range_type flag (as either :minimum
+  # or :maximum).
+  #
+  # The predicate methods `min_only?` and `max_only?` answer what was declared; the predicate methods `minimum_range?`
+  # and `maximum_range?` answer what type of filter should be built.
   class FilterDeclaration
     VALID_RANGE_OPTIONS = [true, :min_only, :max_only].freeze
 
     attr_reader :name, :parameter_name, :association, :validations
 
-    def initialize(parameter_name, options)
+    def initialize(parameter_name, options, range_type: nil)
       @parameter_name = parameter_name.to_s
 
       validate_options(options)
@@ -21,6 +28,7 @@ module Filterameter
       @validations = Array.wrap(options[:validates])
       @raw_partial_options = options.fetch(:partial, false)
       @raw_range = options[:range]
+      @range_type = range_type
     end
 
     def nested?
@@ -51,12 +59,20 @@ module Filterameter
       @raw_range == true
     end
 
-    def minimum?
+    def min_only?
       @raw_range == :min_only
     end
 
-    def maximum?
+    def max_only?
       @raw_range == :max_only
+    end
+
+    def minimum_range?
+      @range_type == :minimum
+    end
+
+    def maximum_range?
+      @range_type == :maximum
     end
 
     private
