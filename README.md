@@ -267,8 +267,21 @@ On [a generic search form](https://guides.rubyonrails.org/form_helpers.html#a-ge
 <% end %>
 ```
 
+## Contributions
 
-## Running Tests
+Feedback, feature requests, and proposed changes are welcomed. Please use the [issue tracker](https://github.com/RockSolt/filterameter/issues) 
+for feedback and feature requests. To propose a change directly, please fork the repo and open a pull request. Keep an eye on the actions to make
+sure the tests and Rubocop are passing. [Code Climate](https://codeclimate.com/github/RockSolt/filterameter) is also used manually to assess the codeline.
+
+To report a bug, please use the [issue tracker](https://github.com/RockSolt/filterameter/issues) and provide the following information:
+
+- the version in use
+- the filter declarations
+- the SQL generated (for invalid / incorrect queries)
+
+Gold stars will be awarded if you are able to [replicate the issue with a test](spec/README.md).
+
+### Running Tests
 
 Tests are written in RSpec and the dummy app uses a docker database. The script `bin/start_db.sh` starts and prepares the test
 database. It is a one-time step before running the tests.
