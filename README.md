@@ -122,6 +122,17 @@ def self.recent(as_of_date)
 end
 ```
 
+### Specifying the Model
+
+Rails conventions are used to determine the controller's model. For example, the PhotosController builds a query against the Photo model. If a controller is namespaced, the model will first be looked up without the namespace, then with the namespace. 
+
+**If the conventions do not provide the correct model**, the model can be named explicitly with the following:
+
+```ruby
+filter_model 'Picture'
+```
+
+
 ### Building the Query
 
 There are two ways to apply the filters and build the query, depending on how much control and/or visibility is desired:
@@ -134,20 +145,16 @@ There are two ways to apply the filters and build the query, depending on how mu
 
 Add before action callback `build_filtered_query` for controller actions that should build the query. This can be done either in the `ApplicationController` or on a case-by-case basis.
 
-Rails conventions are used to determine the controller's model as well as the name of the instance variable to apply the filters to. For example, the PhotosController will use the variable `@photos` to store a query against the Photo model. **If the conventions do not provide the correct info**, they can be overridden with the following two methods:
-
-##### filter_model
-Provide the name of the model. This method also allows the variable name to be optionally provided as the second parameter.
-
-```ruby
-filter_model 'Picture'
-```
-
-##### filter_query_var_name
-Provide the name of the instance variable. For example, if the query is stored as `@data`, use the following:
+When using the callback, the variable name is the pluralized model name. For example, the Photo model will use the variable `@photos` to store the query. The variable name can be explicitly specified with with `filter_query_var_name`. For example, if the query is stored as `@data`, use the following:
 
 ```ruby
 filter_query_var_name :data
+```
+
+Additionally, the `filter_model` command takes an optional second parameter to specify the variable name. Both the model and the variable name can be specified with this short-cut. For example, to use the Picture model and store the results as `@data`, use the following:
+
+```ruby
+filter_model 'Picture', :data
 ```
 
 ##### Example
@@ -155,7 +162,7 @@ filter_query_var_name :data
 In the happy path, the WidgetsController serves Widgets and can filter on size and color. Here's what the controller might look like:
 
 ```ruby
-class WidgetController < ApplicationController
+class WidgetsController < ApplicationController
   include Filterameter::DeclarativeFilters
   before_action :build_filtered_query, only: :index
 
@@ -177,7 +184,7 @@ To generate the query manually, you can call `build_query_from_filters` directly
 Here's the Widgets controller again, this time building the query manually:
 
 ```ruby
-class WidgetController < ApplicationController
+class WidgetsController < ApplicationController
   include Filterameter::DeclarativeFilters
 
   filter :size
@@ -197,6 +204,8 @@ This method optionally takes a starting query. If there was a controller for Act
     @widgets = build_query_from_filters(Widget.where(active: true))
   end
 ```
+
+Note that the starting query provides the model, so the model is not looked up and any `model_name` declaration is ignored.
 
 ### Query Parameters
 
