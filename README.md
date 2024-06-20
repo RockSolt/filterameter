@@ -108,6 +108,20 @@ filter :sale_price, range: :max_only
 
 In the first example, query parameters could include <tt>price</tt>, <tt>price_min</tt>, and <tt>price_max</tt>.
 
+#### sortable
+
+By default most filters are sortable. To prevent an attribute filter from being sortable, set the option to false.
+
+```ruby
+filter :price, sortable: false
+```
+
+The following filters are not sortable:
+
+- scope filters (see [_Sorting with a Scope_](#sorting-with-a-scope))
+- filters with collection associations
+
+
 ### Scope Filters
 
 For scopes that do not take arguments, the filter should provide a boolean that indicates whether or not the scope should be invoked. For example, imagine a scope called `high_priority` with criteria that identifies high priority records. The scope would be invoked by the query parameters `high_priority=true`.
@@ -121,6 +135,60 @@ def self.recent(as_of_date)
   where('created_at > ?', as_of_date)
 end
 ```
+
+### Sorting
+
+As noted above, most attribute filters are sortable by default. If no filter has been declared for an attribute, the `sort` declaration can be used. Use the same `name` and `association` options as needed.
+
+For example, the following declaration could be used on an activity controller to allow activities to be sorted by project created at.
+
+```ruby
+sort :project_created_at, name: :created_at, association: :project
+```
+
+Sorts without options can be declared all at once with `sorts`:
+
+```ruby
+sorts :created_at,
+      :updated_at,
+      :description
+```
+
+#### Sorting with a Scope
+
+Scopes can be used for sorting, but must be declared with `sort` (or `sorts`). For example, if a model included a scope called `by_created_at` you could add the following to the controller to expose it.
+
+```ruby
+sort :by_created_at
+```
+
+The `name` and `association` options can also be used. For example, if the scope was on the Project model it could also be used on a child Activity controller using the `association` option:
+
+```ruby
+sort :by_created_at, association: :project
+```
+
+Only singular associations are valid for sorting. A collection association could return multiple values, making the sort indeterminate.
+
+A scope that is used for sorting must accept a single argument. It will be passed either `:asc` or `:desc` depending on the parameter.
+
+The example scope above might be defined as follows:
+
+```ruby
+def self.by_created_at(dir)
+  order(created_at: dir)
+end
+```
+
+#### Default Sort
+
+A default sort can be declared using `default_sort`. The argument(s) should specify one or more of the declared sorts or sortable filters by name. By default, the order is ascending. If you want descending order, you can map the column name symbol to :desc.
+
+```ruby
+default_sort updated_at: :desc, :description
+```
+
+In order to provide consistent results, a sort is always applied. If no default is specified, it will use primary key descending.
 
 ### Specifying the Model
 
@@ -192,7 +260,6 @@ class WidgetsController < ApplicationController
 
   def index
     @widgets = build_query_from_filters
-    render json: @widgets
   end
 end
 ```
@@ -212,6 +279,28 @@ Note that the starting query provides the model, so the model is not looked up a
 The query parameters are pulled from the controller parameters, nested under the key `filter`. For example a request for large, blue widgets might have the following url:
 
 `/widgets?filter[size]=large&filter[color]=blue`
+
+#### Sort Parameters
+
+The sort is also nested underneath the key `filter`. 
+
+`/widgets?filter[sort]=size`
+
+Use an array to pass multiple sorts. The order of the parameters is the order the sorts will be applied. For example, the following sorts first by size then by color:
+
+`/widgets?filter[sort]=size&filter[sort]=color`
+
+Sorts are ascending by default, but can use a prefix can be added to control the sort:
+
+- `+` ascending (the default)
+- `-` descending
+
+For example, the following sorts by size descending:
+
+`/widgets?filter[sort]=-size`
+
+
+#### Override the Filter Key
 
 To change the source of the query parameters, override the `filter_parameters` method. Here is another way to provide a default filter:
 
