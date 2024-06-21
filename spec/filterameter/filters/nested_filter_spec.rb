@@ -2,16 +2,6 @@
 
 require 'rails_helper'
 
-RSpec.describe Filterameter::Filters::NestedFilter::JoinsValuesBuilder do
-  it 'returns association name with single entry' do
-    expect(described_class.build(%i[the_name])).to eq :the_name
-  end
-
-  it 'returns nested hash with two entries' do
-    expect(described_class.build(%i[a b])).to eq({ a: { b: {} } })
-  end
-end
-
 RSpec.describe Filterameter::Filters::NestedFilter do
   let(:filter) { described_class.new([:activity], Activity, Filterameter::Filters::AttributeFilter.new(:name)) }
   let(:query) { filter.apply(Task.all, 'The Activity Name') }
