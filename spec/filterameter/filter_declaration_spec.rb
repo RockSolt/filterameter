@@ -13,6 +13,7 @@ RSpec.describe Filterameter::FilterDeclaration do
     it('#nested?') { expect(declaration.nested?).to be false }
     it('#validations?') { expect(declaration.validations?).to be false }
     it('#partial_match?') { expect(declaration.partial_search?).to be false }
+    it('#sortable?') { expect(declaration.sortable?).to be true }
   end
 
   context 'with name specified' do
@@ -90,6 +91,11 @@ RSpec.describe Filterameter::FilterDeclaration do
     let(:options) { { range: :min } }
 
     it('raise argument error') { expect { declaration }.to raise_error(ArgumentError) }
+  end
+
+  context 'without sort' do
+    let(:options) { { sortable: false } }
+    it('#sortable?') { expect(declaration.sortable?).to be false }
   end
 
   context 'with invalid option' do

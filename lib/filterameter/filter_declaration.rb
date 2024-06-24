@@ -28,6 +28,7 @@ module Filterameter
       @raw_partial_options = options.fetch(:partial, false)
       @raw_range = options[:range]
       @range_type = range_type
+      @sortable = options.fetch(:sortable, true)
     end
 
     def nested?
@@ -70,10 +71,14 @@ module Filterameter
       @range_type == :maximum
     end
 
+    def sortable?
+      @sortable
+    end
+
     private
 
     def validate_options(options)
-      options.assert_valid_keys(:name, :association, :validates, :partial, :range)
+      options.assert_valid_keys(:name, :association, :validates, :partial, :range, :sortable)
       validate_range(options[:range]) if options.key?(:range)
     end
 
