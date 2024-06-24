@@ -21,7 +21,7 @@ module Filterameter
     private
 
     def add_filter_parameter_to_query(query, filter_name, parameter_value)
-      @registry.fetch(filter_name).apply(query, parameter_value)
+      @registry.fetch_filter(filter_name).apply(query, parameter_value)
     rescue Filterameter::Exceptions::UndeclaredParameterError => e
       handle_undeclared_parameter(e)
       query

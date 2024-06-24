@@ -19,7 +19,7 @@ module Filterameter
   class FilterCoordinator
     attr_writer :query_variable_name
 
-    delegate :add_filter, to: :registry
+    delegate :add_filter, :add_sort, to: :registry
     delegate :build_query, to: :query_builder
 
     def initialize(controller_name, controller_path)
@@ -54,7 +54,7 @@ module Filterameter
 
     # lazy so that model_class can be optionally set
     def registry
-      @registry ||= Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(model_class))
+      @registry ||= Filterameter::Registries::Registry.new(model_class)
     end
   end
 end

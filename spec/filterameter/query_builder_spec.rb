@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Filterameter::QueryBuilder do
   let(:registry) do
-    Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Activity)).tap do |registry|
+    Filterameter::Registries::Registry.new(Activity).tap do |registry|
       registry.add_filter(:name, {})
       registry.add_filter(:completed, {})
       registry.add_filter(:task_count, range: true)
@@ -89,7 +89,7 @@ RSpec.describe Filterameter::QueryBuilder do
 
   describe 'validation failure' do
     let(:registry) do
-      Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(Project)).tap do |registry|
+      Filterameter::Registries::Registry.new(Project).tap do |registry|
         registry.add_filter(:priority, validates: { inclusion: { in: Project.priorities } })
         registry.add_filter(:name, {})
       end
