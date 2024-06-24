@@ -14,4 +14,8 @@ class Project < ApplicationRecord
     where(start_date: ..as_of)
       .where(end_date: as_of..)
   end
+
+  def self.by_created_at(dir)
+    order(created_at: dir)
+  end
 end
