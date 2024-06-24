@@ -14,7 +14,8 @@ module Filterameter
       end
 
       def add_filter(parameter_name, options)
-        @filter_registry.add(parameter_name, options)
+        declaration = @filter_registry.add(parameter_name, options)
+        add_sort(parameter_name, options.slice(:name, :association)) if declaration.sortable?
       end
 
       def fetch_filter(parameter_name)
