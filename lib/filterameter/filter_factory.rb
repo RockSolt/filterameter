@@ -10,26 +10,27 @@ module Filterameter
     end
 
     def build(declaration)
+      context = Helpers::DeclarationWithModel.new(@model_class, declaration)
+
       if declaration.nested?
-        build_nested_filter(declaration)
+        build_nested_filter(declaration, context)
       else
-        build_filter(@model_class, declaration)
+        build_filter(@model_class, declaration, context.scope?)
       end
     end
 
     private
 
-    def build_nested_filter(declaration)
-      model = model_from_association(declaration.association)
-      filter = build_filter(model, declaration)
-      clazz = filter_class(declaration.association)
+    def build_nested_filter(declaration, context)
+      model = context.model_from_association
+      filter = build_filter(model, declaration, context.scope?)
+      nested_filter_class = context.any_collections? ? Filters::NestedCollectionFilter : Filters::NestedFilter
 
-      clazz.new(declaration.association, model, filter)
+      nested_filter_class.new(declaration.association, model, filter)
     end
 
-    def build_filter(model, declaration) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      # checking dangerous_class_method? excludes any names that cannot be scope names, such as "name"
-      if model.respond_to?(declaration.name) && !model.dangerous_class_method?(declaration.name)
+    def build_filter(model, declaration, declaration_is_a_scope) # rubocop:disable Metrics/MethodLength
+      if declaration_is_a_scope
         build_scope_filter(model, declaration)
       elsif declaration.partial_search?
         Filterameter::Filters::MatchesFilter.new(declaration.name, declaration.partial_options)
@@ -50,31 +51,6 @@ module Filterameter
       else
         Filterameter::Filters::ConditionalScopeFilter.new(declaration.name)
       end
-    end
-
-    def filter_class(association_names)
-      if any_collections?(association_names)
-        Filters::NestedCollectionFilter
-      else
-        Filters::NestedFilter
-      end
-    end
-
-    def any_collections?(association_names)
-      association_names.reduce(@model_class) do |model, name|
-        association = model.reflect_on_association(name)
-        return true if association.collection?
-
-        association.klass
-      end
-
-      false
-    end
-
-    # TODO: rescue then raise custom error with cause
-    def model_from_association(association)
-      association.flatten.reduce(@model_class) { |memo, name| memo.reflect_on_association(name).klass }
-      # rescue StandardError => e
     end
   end
 end
