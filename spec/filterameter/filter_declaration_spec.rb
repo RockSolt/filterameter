@@ -12,7 +12,6 @@ RSpec.describe Filterameter::FilterDeclaration do
     it('#name') { expect(declaration.name).to eq 'size' }
     it('#nested?') { expect(declaration.nested?).to be false }
     it('#validations?') { expect(declaration.validations?).to be false }
-    it('#filter_on_empty?') { expect(declaration.filter_on_empty?).to be false }
     it('#partial_match?') { expect(declaration.partial_search?).to be false }
   end
 

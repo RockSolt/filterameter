@@ -24,7 +24,6 @@ module Filterameter
       validate_options(options)
       @name = options.fetch(:name, parameter_name).to_s
       @association = Array.wrap(options[:association]).presence
-      @filter_on_empty = options.fetch(:filter_on_empty, false)
       @validations = Array.wrap(options[:validates])
       @raw_partial_options = options.fetch(:partial, false)
       @raw_range = options[:range]
@@ -37,10 +36,6 @@ module Filterameter
 
     def validations?
       !@validations.empty?
-    end
-
-    def filter_on_empty?
-      @filter_on_empty
     end
 
     def partial_search?
@@ -78,7 +73,7 @@ module Filterameter
     private
 
     def validate_options(options)
-      options.assert_valid_keys(:name, :association, :filter_on_empty, :validates, :partial, :range)
+      options.assert_valid_keys(:name, :association, :validates, :partial, :range)
       validate_range(options[:range]) if options.key?(:range)
     end
 
