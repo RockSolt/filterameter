@@ -75,6 +75,16 @@ module Filterameter
       @sortable
     end
 
+    def to_s
+      options = {}
+      options[:name] = ":#{@name}" if @parameter_name != @name
+      options[:association] = @association if nested?
+      options[:partial] = partial_options if partial_options
+
+      (["filter :#{@parameter_name}"] + options.map { |k, v| "#{k}: #{v}" })
+        .join(', ')
+    end
+
     private
 
     def validate_options(options)

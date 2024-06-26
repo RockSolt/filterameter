@@ -11,6 +11,7 @@ RSpec.describe Filterameter::SortDeclaration do
     it('#parameter_name') { expect(declaration.parameter_name).to eq 'size' }
     it('#name') { expect(declaration.name).to eq 'size' }
     it('#nested?') { expect(declaration.nested?).to be false }
+    it('#to_s') { expect(declaration.to_s).to eq 'sort :size' }
   end
 
   context 'with name specified' do
@@ -18,6 +19,7 @@ RSpec.describe Filterameter::SortDeclaration do
 
     it('#parameter_name') { expect(declaration.parameter_name).to eq 'size' }
     it('#name') { expect(declaration.name).to eq 'shirt_size' }
+    it('#to_s') { expect(declaration.to_s).to eq 'sort :size, name: :shirt_size' }
   end
 
   context 'with association' do
@@ -25,6 +27,7 @@ RSpec.describe Filterameter::SortDeclaration do
 
     it('#nested?') { expect(declaration.nested?).to be true }
     it('is an array') { expect(declaration.association).to be_a Array }
+    it('#to_s') { expect(declaration.to_s).to eq 'sort :size, association: [:one]' }
   end
 
   context 'with multi-level association' do
@@ -32,6 +35,7 @@ RSpec.describe Filterameter::SortDeclaration do
 
     it('#nested?') { expect(declaration.nested?).to be true }
     it('is an array') { expect(declaration.association).to be_a Array }
+    it('#to_s') { expect(declaration.to_s).to eq 'sort :size, association: [:one, :two]' }
   end
 
   context 'with invalid option' do

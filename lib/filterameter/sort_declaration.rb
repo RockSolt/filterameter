@@ -20,6 +20,15 @@ module Filterameter
       !@association.nil?
     end
 
+    def to_s
+      options = {}
+      options[:name] = ":#{@name}" if @parameter_name != @name
+      options[:association] = @association if nested?
+
+      (["sort :#{@parameter_name}"] + options.map { |k, v| "#{k}: #{v}" })
+        .join(', ')
+    end
+
     private
 
     def validate_options(options)

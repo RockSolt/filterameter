@@ -14,6 +14,7 @@ RSpec.describe Filterameter::FilterDeclaration do
     it('#validations?') { expect(declaration.validations?).to be false }
     it('#partial_match?') { expect(declaration.partial_search?).to be false }
     it('#sortable?') { expect(declaration.sortable?).to be true }
+    it('#to_s') { expect(declaration.to_s).to eq 'filter :size' }
   end
 
   context 'with name specified' do
@@ -21,6 +22,7 @@ RSpec.describe Filterameter::FilterDeclaration do
 
     it('#parameter_name') { expect(declaration.parameter_name).to eq 'size' }
     it('#name') { expect(declaration.name).to eq 'shirt_size' }
+    it('#to_s') { expect(declaration.to_s).to eq 'filter :size, name: :shirt_size' }
   end
 
   context 'with association' do
@@ -28,6 +30,7 @@ RSpec.describe Filterameter::FilterDeclaration do
 
     it('#nested?') { expect(declaration.nested?).to be true }
     it('is an array') { expect(declaration.association).to be_a Array }
+    it('#to_s') { expect(declaration.to_s).to eq 'filter :size, association: [:one]' }
   end
 
   context 'with multi-level association' do
@@ -35,6 +38,7 @@ RSpec.describe Filterameter::FilterDeclaration do
 
     it('#nested?') { expect(declaration.nested?).to be true }
     it('is an array') { expect(declaration.association).to be_a Array }
+    it('#to_s') { expect(declaration.to_s).to eq 'filter :size, association: [:one, :two]' }
   end
 
   context 'with partial' do
@@ -42,6 +46,7 @@ RSpec.describe Filterameter::FilterDeclaration do
 
     it('#partial_match?') { expect(declaration.partial_search?).to be true }
     it('#parital_options') { expect(declaration.partial_options).to be_a(Filterameter::Options::PartialOptions) }
+    it('#to_s') { expect(declaration.to_s).to eq 'filter :size, partial: true' }
   end
 
   context 'with range' do

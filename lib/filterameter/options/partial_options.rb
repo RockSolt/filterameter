@@ -49,6 +49,16 @@ module Filterameter
         @match == 'dynamic'
       end
 
+      def to_s
+        if case_sensitive?
+          match_anywhere? ? '{ case_sensitive: true }' : "{ match: :#{@match}, case_sensitive: true }"
+        elsif match_anywhere?
+          'true'
+        else
+          ":#{@match}"
+        end
+      end
+
       private
 
       def evaluate_hash(options)
