@@ -12,6 +12,8 @@ class TasksController < ApplicationController
   filter :with_inactive_activity_manager, name: :inactive, association: %i[activity activity_manager]
   filter :with_inactive_activity_member, name: :inactive, association: %i[activity activity_members]
 
+  sorts :activity_id, :completed
+
   def index
     @tasks = build_query_from_filters
 

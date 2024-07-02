@@ -32,11 +32,17 @@ module Filterameter
     end
 
     def query_builder
-      @query_builder ||= Filterameter::QueryBuilder.new(default_query, registry)
+      @query_builder ||= Filterameter::QueryBuilder.new(default_query, @default_sort, registry)
     end
 
     def query_variable_name
       @query_variable_name ||= model_class.model_name.plural
+    end
+
+    def default_sort=(sort_and_direction_pairs)
+      @default_sort = sort_and_direction_pairs.map do |name, direction|
+        Filterameter::Helpers::RequestedSort.new(name, direction)
+      end
     end
 
     private

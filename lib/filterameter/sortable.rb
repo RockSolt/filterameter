@@ -31,6 +31,10 @@ module Filterameter
       def sorts(*parameter_names)
         parameter_names.each { |parameter_name| filter(parameter_name) }
       end
+
+      def default_sort(sort_and_direction_pairs)
+        filter_coordinator.default_sort = sort_and_direction_pairs
+      end
     end
   end
 end
