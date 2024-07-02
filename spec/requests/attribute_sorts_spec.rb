@@ -10,7 +10,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:activity_manager_id)
+      ordered = response.parsed_body.pluck('activity_manager_id')
       expect(ordered).to eq Activity.order(activity_manager_id: :asc).pluck(:activity_manager_id)
     end
   end
@@ -20,7 +20,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts ascending' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:activity_manager_id)
+      ordered = response.parsed_body.pluck('activity_manager_id')
       expect(ordered).to eq Activity.order(activity_manager_id: :asc).pluck(:activity_manager_id)
     end
   end
@@ -30,7 +30,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts descending' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:activity_manager_id)
+      ordered = response.parsed_body.pluck('activity_manager_id')
       expect(ordered).to eq Activity.order(activity_manager_id: :desc).pluck(:activity_manager_id)
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts correctly' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:activity_manager_id)
+      ordered = response.parsed_body.pluck('activity_manager_id')
       expect(ordered).to eq Activity.order(activity_manager_id: :asc).pluck(:activity_manager_id)
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:completed)
+      ordered = response.parsed_body.pluck('completed')
       expect(ordered).to eq Activity.order(completed: :asc).pluck(:completed)
     end
   end
@@ -60,7 +60,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:activity_id)
+      ordered = response.parsed_body.pluck('activity_id')
       expect(ordered).to eq Task.order(activity_id: :asc).pluck(:activity_id)
     end
   end
@@ -70,7 +70,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:id)
+      ordered = response.parsed_body.pluck('id')
       expect(ordered).to eq Activity.order(completed: :asc, project_id: :desc).pluck(:id)
     end
   end
@@ -80,7 +80,7 @@ RSpec.describe 'Attribute sorts', type: :request do
 
     it 'sorts' do
       expect(response).to have_http_status(:success)
-      ordered = response.parsed_body.pluck(:id)
+      ordered = response.parsed_body.pluck('id')
       expect(ordered).to eq Activity.joins(:project).merge(Project.order(priority: :asc)).pluck(:id)
     end
   end
