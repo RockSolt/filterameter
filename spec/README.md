@@ -15,10 +15,13 @@ In order to support testing across Rails versions, [the schema was manually edit
 The request specs are broken up into the following groups:
 
 - attribute filters
+- attribute sorts
 - scope filters
 - partial filters
 - range filters
 - nested filters
 - multi-level nested filters
+- controller overrides
+- default sorts
 
 The controllers use JSON repsonses because it is easier to check JSON responses than HTML responses.
