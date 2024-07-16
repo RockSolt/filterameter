@@ -200,6 +200,7 @@ Rails conventions are used to determine the controller's model. For example, the
 filter_model 'Picture'
 ```
 
+_Important:_ If the `filter_model` declaration is used, it must be before any filter or sort declarations.
 
 ### Building the Query
 
