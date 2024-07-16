@@ -45,4 +45,18 @@ RSpec.describe Filterameter::Configuration do
       expect(config.action_on_validation_failure).to be false
     end
   end
+
+  describe '#filter_key' do
+    it('defaults to :filter') { expect(config.filter_key).to eq :filter }
+
+    it 'can be overrriden' do
+      config.filter_key = :criteria
+      expect(config.filter_key).to eq :criteria
+    end
+
+    it 'can be set to false' do
+      config.filter_key = false
+      expect(config.filter_key).to be false
+    end
+  end
 end
