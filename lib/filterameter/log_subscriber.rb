@@ -14,8 +14,8 @@ module Filterameter
 
     def undeclared_parameters(event)
       debug do
-        keys = event.payload[:keys]
-        "  Undeclared filter parameter#{'s' if keys.size > 1}: #{keys.map { |e| ":#{e}" }.join(', ')}"
+        key = event.payload[:key]
+        "  Undeclared filter parameter: #{key}"
       end
     end
   end
