@@ -19,7 +19,7 @@ module Filterameter
   class FilterCoordinator
     attr_writer :query_variable_name
 
-    delegate :add_filter, to: :registry
+    delegate :add_filter, :add_sort, to: :registry
     delegate :build_query, to: :query_builder
 
     def initialize(controller_name, controller_path)
@@ -32,11 +32,17 @@ module Filterameter
     end
 
     def query_builder
-      @query_builder ||= Filterameter::QueryBuilder.new(default_query, registry)
+      @query_builder ||= Filterameter::QueryBuilder.new(default_query, @default_sort, registry)
     end
 
     def query_variable_name
       @query_variable_name ||= model_class.model_name.plural
+    end
+
+    def default_sort=(sort_and_direction_pairs)
+      @default_sort = sort_and_direction_pairs.map do |name, direction|
+        Filterameter::Helpers::RequestedSort.new(name, direction)
+      end
     end
 
     private
@@ -54,7 +60,7 @@ module Filterameter
 
     # lazy so that model_class can be optionally set
     def registry
-      @registry ||= Filterameter::FilterRegistry.new(Filterameter::FilterFactory.new(model_class))
+      @registry ||= Filterameter::Registries::Registry.new(model_class)
     end
   end
 end

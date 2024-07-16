@@ -24,11 +24,11 @@ module Filterameter
       validate_options(options)
       @name = options.fetch(:name, parameter_name).to_s
       @association = Array.wrap(options[:association]).presence
-      @filter_on_empty = options.fetch(:filter_on_empty, false)
       @validations = Array.wrap(options[:validates])
       @raw_partial_options = options.fetch(:partial, false)
       @raw_range = options[:range]
       @range_type = range_type
+      @sortable = options.fetch(:sortable, true)
     end
 
     def nested?
@@ -37,10 +37,6 @@ module Filterameter
 
     def validations?
       !@validations.empty?
-    end
-
-    def filter_on_empty?
-      @filter_on_empty
     end
 
     def partial_search?
@@ -75,10 +71,24 @@ module Filterameter
       @range_type == :maximum
     end
 
+    def sortable?
+      @sortable
+    end
+
+    def to_s
+      options = {}
+      options[:name] = ":#{@name}" if @parameter_name != @name
+      options[:association] = @association if nested?
+      options[:partial] = partial_options if partial_options
+
+      (["filter :#{@parameter_name}"] + options.map { |k, v| "#{k}: #{v}" })
+        .join(', ')
+    end
+
     private
 
     def validate_options(options)
-      options.assert_valid_keys(:name, :association, :filter_on_empty, :validates, :partial, :range)
+      options.assert_valid_keys(:name, :association, :validates, :partial, :range, :sortable)
       validate_range(options[:range]) if options.key?(:range)
     end
 

@@ -7,6 +7,7 @@ module Filterameter
   module DeclarativeFilters
     extend ActiveSupport::Concern
     include Filterameter::Filterable
+    include Filterameter::Sortable
 
     class_methods do
       def filter_model(model_class, query_var_name = nil)

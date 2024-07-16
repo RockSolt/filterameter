@@ -49,6 +49,16 @@ module Filterameter
         @match == 'dynamic'
       end
 
+      def to_s
+        if case_sensitive?
+          case_sensitive_to_s
+        elsif match_anywhere?
+          'true'
+        else
+          ":#{@match}"
+        end
+      end
+
       private
 
       def evaluate_hash(options)
@@ -78,6 +88,10 @@ module Filterameter
         return if value.is_a?(TrueClass) || value.is_a?(FalseClass)
 
         raise ArgumentError, "Invalid case_sensitive option for partial: #{value}. Valid options are true and false."
+      end
+
+      def case_sensitive_to_s
+        match_anywhere? ? '{ case_sensitive: true }' : "{ match: :#{@match}, case_sensitive: true }"
       end
     end
   end

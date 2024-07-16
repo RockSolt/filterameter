@@ -1,0 +1,13 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe Filterameter::Sorts::AttributeSort do
+  let(:filter) { described_class.new(:color) }
+  let(:query) { class_spy('ActiveRecord::Base') }
+
+  it 'applies sort to query' do
+    filter.apply(query, :asc)
+    expect(query).to have_received(:order).with(color: :asc)
+  end
+end

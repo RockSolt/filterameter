@@ -34,6 +34,7 @@ RSpec.describe Filterameter::Options::PartialOptions do
 
     it_behaves_like 'matches anywhere'
     it_behaves_like 'not case sensitive'
+    it('#to_s') { expect(options.to_s).to eq 'true' }
   end
 
   describe 'partial: :anywhere' do
@@ -41,6 +42,7 @@ RSpec.describe Filterameter::Options::PartialOptions do
 
     it_behaves_like 'matches anywhere'
     it_behaves_like 'not case sensitive'
+    it('#to_s') { expect(options.to_s).to eq 'true' }
   end
 
   describe 'partial: :from_start' do
@@ -48,6 +50,7 @@ RSpec.describe Filterameter::Options::PartialOptions do
 
     it_behaves_like 'matches from start'
     it_behaves_like 'not case sensitive'
+    it('#to_s') { expect(options.to_s).to eq ':from_start' }
   end
 
   describe 'partial: :dynamic' do
@@ -55,6 +58,7 @@ RSpec.describe Filterameter::Options::PartialOptions do
 
     it_behaves_like 'matches dynamically'
     it_behaves_like 'not case sensitive'
+    it('#to_s') { expect(options.to_s).to eq ':dynamic' }
   end
 
   describe "partial: 'anywhere' (as string)" do
@@ -76,6 +80,7 @@ RSpec.describe Filterameter::Options::PartialOptions do
 
     it_behaves_like 'matches from start'
     it_behaves_like 'not case sensitive'
+    it('#to_s') { expect(options.to_s).to eq ':from_start' }
   end
 
   describe 'partial: { case_sensitive: true }' do
@@ -83,6 +88,7 @@ RSpec.describe Filterameter::Options::PartialOptions do
 
     it_behaves_like 'matches anywhere'
     it_behaves_like 'case sensitive'
+    it('#to_s') { expect(options.to_s).to eq '{ case_sensitive: true }' }
   end
 
   describe 'partial: { match: :from_start, case_sensitive: true }' do
@@ -90,5 +96,6 @@ RSpec.describe Filterameter::Options::PartialOptions do
 
     it_behaves_like 'matches from start'
     it_behaves_like 'case sensitive'
+    it('#to_s') { expect(options.to_s).to eq '{ match: :from_start, case_sensitive: true }' }
   end
 end

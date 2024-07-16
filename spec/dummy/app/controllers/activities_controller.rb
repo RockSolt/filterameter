@@ -15,6 +15,11 @@ class ActivitiesController < ApplicationController
   filter :high_priority, association: :project
   filter :incomplete_tasks, name: :incomplete, association: :tasks
 
+  sort :completed
+  sort :project_id
+
+  default_sort project_id: :desc
+
   def index
     render json: @activities
   end

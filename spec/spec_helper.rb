@@ -27,4 +27,20 @@ RSpec.configure do |config|
       expect(records).to include(a_hash_including(expected_attributes))
     end
   end
+
+  RSpec::Matchers.define :sort_by do |expected|
+    # this works on the assumption that adding an order that is already on the query does not change it
+    match do |query|
+      @expected = expected
+      query == query.order(expected)
+    end
+
+    failure_message do |query|
+      "Expected \n\t#{query.to_sql}\nto include the sort #{@expected}"
+    end
+
+    failure_message_when_negated do
+      "Expected \n\t#{query.to_sql}\nnot to include the sort #{@expected}"
+    end
+  end
 end
