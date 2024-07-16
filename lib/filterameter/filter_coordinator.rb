@@ -19,7 +19,7 @@ module Filterameter
   class FilterCoordinator
     attr_writer :query_variable_name
 
-    delegate :add_filter, :add_sort, to: :registry
+    delegate :add_filter, :add_sort, :filter_parameter_names, to: :registry
     delegate :build_query, to: :query_builder
 
     def initialize(controller_name, controller_path)
