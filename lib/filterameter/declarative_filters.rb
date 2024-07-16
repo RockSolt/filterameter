@@ -29,7 +29,13 @@ module Filterameter
     end
 
     def filter_parameters
-      params.to_unsafe_h.fetch(:filter, {})
+      filter_key = Filterameter.configuration.filter_key
+
+      if filter_key
+        params.to_unsafe_h.fetch(filter_key, {})
+      else
+        params.to_unsafe_h.slice(*self.class.filter_coordinator.filter_parameter_names, :sort)
+      end
     end
 
     private

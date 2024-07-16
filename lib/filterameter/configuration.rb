@@ -23,7 +23,7 @@ module Filterameter
   # By default, the filter parameters are nested under the key :filter. Use this setting to override the key.
   #
   # If the filter parameters are NOT nested, set this to false. Doing so will restrict the filter parameters to only
-  # those that have been declared, meaning undeclared parameters be ignored (and the action_on_undeclared_parameters
+  # those that have been declared, meaning undeclared parameters are ignored (and the action_on_undeclared_parameters
   # configuration option does not come into play).
   class Configuration
     attr_accessor :action_on_undeclared_parameters, :action_on_validation_failure, :filter_key

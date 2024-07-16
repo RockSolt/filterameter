@@ -300,24 +300,47 @@ For example, the following sorts by size descending:
 
 `/widgets?filter[sort]=-size`
 
+### Configuration
 
-#### Override the Filter Key
+There are three configuration options:
 
-To change the source of the query parameters, override the `filter_parameters` method. Here is another way to provide a default filter:
+- action_on_undeclared_parameters
+- action_on_validation_failure
+- filter_key
+
+The configuration options can be set in an initializer, an environment file, or in `application.rb`. 
+
+The options can be set directly...
+
+`Filterameter.configuration.action_on_undeclared_parameters = :log`
+
+...or the configuration can be yielded:
 
 ```ruby
-def filter_parameters
-  super.with_defaults(active: true)
+Filterameter.configure do |config|
+  config.action_on_undeclared_parameters = :log
+  config.action_on_validation_failuer = :log
+  config.filter_key = :f
 end
 ```
 
-This also provides an easy way to nest the criteria under a key other than `filter`:
+#### Action On Undeclared Parameters
 
-```ruby
-def filter_parameters
-  params.to_unsafe_h.fetch(:criteria, {})
-end
-```
+Occurs when the filter parameter contains any keys that are not defined. Valid actions are `:log`, `:raise`, and `false` (do not take action). By default, development will log, test will raise, and production will do nothing.
+
+#### Action on Validation Failure
+
+Occurs when a filter parameter fails a validation. Valid actions are `:log`, `:raise`, and `false` (do not take action). By default, development will log, test will raise, and production will do nothing.
+
+#### Filter Key
+
+By default, the filter parameters are nested under the key `:filter`. Use this setting to override the key.
+
+If the filter parameters are NOT nested, set this to false. Doing so will restrict the filter parameters to only
+those that have been declared, meaning undeclared parameters are ignored (and the action_on_undeclared_parameters
+configuration option does not come into play).
+
+
 
 
 ## Installation
