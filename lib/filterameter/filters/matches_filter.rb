@@ -6,6 +6,9 @@ module Filterameter
     #
     # Class MatchesFilter uses arel's `matches` to generate a LIKE query.
     class MatchesFilter
+      include Filterameter::Errors
+      include Filterameter::Filters::AttributeValidator
+
       def initialize(attribute_name, options)
         @attribute_name = attribute_name
         @prefix = options.match_anywhere? ? '%' : nil
