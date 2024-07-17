@@ -46,10 +46,10 @@ module Filterameter
     # Inline scopes return an arity of -1 regardless of arguments, so those will always be assumed to be
     # conditional scopes. To have a filter that passes a value to a scope, it must be a class method.
     def build_scope_filter(model, declaration)
-      if model.method(declaration.name).arity == 1
-        Filterameter::Filters::ScopeFilter.new(declaration.name)
-      else
+      if model.method(declaration.name).arity == -1
         Filterameter::Filters::ConditionalScopeFilter.new(declaration.name)
+      else
+        Filterameter::Filters::ScopeFilter.new(declaration.name)
       end
     end
   end
