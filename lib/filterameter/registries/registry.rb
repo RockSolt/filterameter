@@ -6,7 +6,7 @@ module Filterameter
     #
     # Class Registry records declarations and allows resulting filters and sorts to be fetched from sub-registries.
     class Registry
-      delegate :filter_declarations, :ranges, to: :@filter_registry
+      delegate :filter_declarations, :filter_parameter_names, :ranges, to: :@filter_registry
 
       def initialize(model_class)
         @filter_registry = Filterameter::Registries::FilterRegistry.new(Filterameter::FilterFactory.new(model_class))

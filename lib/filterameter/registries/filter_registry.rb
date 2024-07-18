@@ -24,6 +24,10 @@ module Filterameter
         @declarations.values
       end
 
+      def filter_parameter_names
+        @declarations.keys
+      end
+
       private
 
       # if range is enabled, then in addition to the attribute filter this also adds min and/or max filters
