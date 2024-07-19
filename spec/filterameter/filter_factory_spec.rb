@@ -21,6 +21,11 @@ RSpec.describe Filterameter::FilterFactory do
     it('is a ConditionalScopeFilter') { expect(filter).to be_a Filterameter::Filters::ConditionalScopeFilter }
   end
 
+  context 'with a multi-argument scope declaration' do
+    let(:declaration) { Filterameter::FilterDeclaration.new(:multi_arg_scope, {}) }
+    it('raises ArgumentError') { expect { filter }.to raise_error(ArgumentError) }
+  end
+
   context 'with partial declaration' do
     let(:declaration) { Filterameter::FilterDeclaration.new(:name, { partial: true }) }
     it('is a MatchesFilter') { expect(filter).to be_a Filterameter::Filters::MatchesFilter }
