@@ -3,11 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe Filterameter::Sorts::AttributeSort do
-  let(:filter) { described_class.new(:color) }
+  let(:sort) { described_class.new(:color) }
   let(:query) { class_spy('ActiveRecord::Base') }
 
   it 'applies sort to query' do
-    filter.apply(query, :asc)
+    sort.apply(query, :asc)
     expect(query).to have_received(:order).with(color: :asc)
+  end
+
+  it 'is valid with valid attribute' do
+    sort = described_class.new(:name)
+    expect(sort.valid?(Activity)).to be true
+  end
+
+  context 'with invalid attribute' do
+    let(:sort) { described_class.new(:not_a_thing) }
+
+    it 'is not valid' do
+      expect(sort.valid?(Activity)).to be false
+    end
+
+    it 'reports errors' do
+      sort.valid?(Activity)
+      expect(sort.errors).to contain_exactly "Attribute 'not_a_thing' does not exist on Activity"
+    end
   end
 end

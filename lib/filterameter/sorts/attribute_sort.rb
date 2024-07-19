@@ -6,6 +6,9 @@ module Filterameter
     #
     # Class AttributeSort leverages ActiveRecord's `order` query method to add sorting for an attribute.
     class AttributeSort
+      include Filterameter::Errors
+      include Filterameter::Filters::AttributeValidator
+
       def initialize(attribute_name)
         @attribute_name = attribute_name
       end
