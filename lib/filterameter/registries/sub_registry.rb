@@ -28,6 +28,10 @@ module Filterameter
           @registry[name] = @factory.build(@declarations[name])
         end
       end
+
+      def parameter_names
+        @declarations.keys
+      end
     end
   end
 end
