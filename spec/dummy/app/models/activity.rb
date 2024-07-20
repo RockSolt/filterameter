@@ -8,9 +8,7 @@ class Activity < ApplicationRecord
 
   scope :incomplete, -> { where(completed: false) }
 
-  # these two could be handled by attribute sorts, added here for testing purposes only
-  scope :by_active, ->(dir) { order(active: dir) }
-
+  # this could be handled by attribute sort, added here for testing purposes only
   def self.by_task_count(dir)
     order(task_count: dir)
   end

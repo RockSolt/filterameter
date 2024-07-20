@@ -18,4 +18,12 @@ class Project < ApplicationRecord
   def self.by_created_at(dir)
     order(created_at: dir)
   end
+
+  # could be handled by an attribute sort, added for testing purposes only
+  scope :by_project_id, ->(dir) { order(id: dir) }
+
+  # multi-argument scope, not valid for filter
+  def self.multi_arg_scope(active, priority)
+    where(active:, priority:)
+  end
 end

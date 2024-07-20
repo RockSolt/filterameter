@@ -18,6 +18,14 @@ class ActivitiesController < ApplicationController
   sort :completed
   sort :project_id
 
+  # invalid declarations
+  filter :inline_with_arg
+  filter :not_a_scope
+  filter :not_a_conditional_scope
+  filter :scope_with_multiple_args
+  sort :updated_at_typo
+  sort :sort_scope_with_no_args
+
   default_sort project_id: :desc
 
   def index

@@ -340,8 +340,22 @@ If the filter parameters are NOT nested, set this to false. Doing so will restri
 those that have been declared, meaning undeclared parameters are ignored (and the action_on_undeclared_parameters
 configuration option does not come into play).
 
+### Testing Declarations
 
+The declarations can be tested for each controller, catching typos, incorrectly defined scopes, or any other issues. Method `declarations_validator` is added to each controller, and a single controller test can be added to validate all the declarations for that controller.
 
+An RSpec test might look like this:
+
+```ruby
+expect(WidgetsController.declarations_validator).to be_valid
+```
+
+In Minitest it might look like this:
+
+```ruby
+validator = WidgetsController.declarations_validator
+assert_predicate validator, :valid?, -> { validator.errors }
+```
 
 ## Installation
 Add this line to your application's Gemfile:
