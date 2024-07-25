@@ -31,7 +31,7 @@ RSpec.describe Filterameter::DeclarationsValidator do
       <<~ERROR.chomp
 
         Invalid filter for 'not_an_attribute':
-          Attribute 'not_an_attribute' does not exist on Activity
+          #{Filterameter::DeclarationErrors::NoSuchAttributeError.new('Activity', :not_an_attribute)}
       ERROR
     end
 
@@ -122,8 +122,52 @@ RSpec.describe Filterameter::DeclarationsValidator do
         expect(validator.errors).to contain_exactly <<~ERROR.chomp
 
           Invalid filter for 'inline_with_arg':
-            Activity scope 'inline_with_arg' needs to be written as a class method, not as an inline scope
+            #{Filterameter::DeclarationErrors::CannotBeInlineScopeError.new('Activity', :inline_with_arg)}
         ERROR
+      end
+    end
+
+    describe 'filter factory error handling' do
+      let(:registry) do
+        Filterameter::Registries::Registry.new(Activity).tap do |r|
+          r.add_filter(:name, {})
+        end
+      end
+
+      before { allow(registry).to receive(:fetch_filter).and_raise(error) }
+
+      context 'when error is expected' do
+        let(:error) { Filterameter::DeclarationErrors::NoSuchAttributeError.new('Activity', :name) }
+
+        it 'is not valid' do
+          expect(validator).not_to be_valid
+        end
+
+        it 'reports error' do
+          validator.valid?
+          expect(validator.errors).to contain_exactly <<~ERROR.chomp
+
+            Invalid filter for 'name':
+              #{described_class::FactoryErrors.new(error)}
+          ERROR
+        end
+      end
+
+      context 'when error is unexpected' do
+        let(:error) { StandardError.new('That was unexpected!') }
+
+        it 'is not valid' do
+          expect(validator).not_to be_valid
+        end
+
+        it 'reports error' do
+          validator.valid?
+          expect(validator.errors).to contain_exactly <<~ERROR.chomp
+
+            Invalid filter for 'name':
+              #{Filterameter::DeclarationErrors::UnexpectedError.new(error)}
+          ERROR
+        end
       end
     end
   end

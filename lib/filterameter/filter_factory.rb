@@ -52,7 +52,7 @@ module Filterameter
       elsif number_of_arguments == 1
         Filterameter::Filters::ScopeFilter.new(declaration.name)
       else
-        raise ArgumentError, 'Scopes for filters can only have either zero (conditional scopes) or one argument'
+        raise Filterameter::DeclarationErrors::FilterScopeArgumentError.new(model.name, declaration.name)
       end
     end
   end

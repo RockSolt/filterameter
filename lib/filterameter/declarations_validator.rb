@@ -42,7 +42,7 @@ module Filterameter
     def fetch_filter(name)
       @registry.fetch_filter(name)
     rescue StandardError => e
-      FactoryErrors.new("Filter factory failed to build #{name}: #{e.message}")
+      FactoryErrors.new(e)
     end
 
     def fetch_sorts
@@ -52,7 +52,7 @@ module Filterameter
     def fetch_sort(name)
       @registry.fetch_sort(name)
     rescue StandardError => e
-      FactoryErrors.new("Sort factory failed to build #{name}: #{e.message}")
+      FactoryErrors.new(e)
     end
 
     def validation_errors_for(type, items)
@@ -69,16 +69,26 @@ module Filterameter
     #
     # Class FactoryErrors is swapped in if the fetch from a factory fails. It is always invalid and provides the reason.
     class FactoryErrors
-      def initialize(message)
-        @message = message
+      attr_reader :errors
+
+      def initialize(error)
+        @errors = [wrap_if_unexpected(error)]
       end
 
       def valid?(_)
         false
       end
 
-      def errors
-        [@message]
+      def to_s
+        @errors.join("\n")
+      end
+
+      private
+
+      def wrap_if_unexpected(error)
+        return error if error.is_a?(Filterameter::DeclarationErrors::DeclarationError)
+
+        Filterameter::DeclarationErrors::UnexpectedError.new(error)
       end
     end
   end

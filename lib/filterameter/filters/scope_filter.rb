@@ -25,7 +25,7 @@ module Filterameter
       def validate_is_a_scope(model)
         return if model.public_send(@scope_name, '42').is_a? ActiveRecord::Relation
 
-        @errors << "#{model.name} class method '#{@scope_name}' is not a scope"
+        @errors << Filterameter::DeclarationErrors::NotAScopeError.new(model.name, @scope_name)
       end
     end
   end

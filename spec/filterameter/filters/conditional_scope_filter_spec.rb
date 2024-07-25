@@ -33,7 +33,9 @@ RSpec.describe Filterameter::Filters::ConditionalScopeFilter do
 
     it 'reports error' do
       filter.valid?(Activity)
-      expect(filter.errors).to contain_exactly "Activity class method 'not_a_conditional_scope' is not a scope"
+      expect(filter.errors).to contain_exactly(
+        Filterameter::DeclarationErrors::NotAScopeError.new('Activity', :not_a_conditional_scope)
+      )
     end
   end
 
@@ -47,7 +49,7 @@ RSpec.describe Filterameter::Filters::ConditionalScopeFilter do
     it 'reports error' do
       filter.valid?(Activity)
       expect(filter.errors).to contain_exactly(
-        "Activity scope 'inline_with_arg' needs to be written as a class method, not as an inline scope"
+        Filterameter::DeclarationErrors::CannotBeInlineScopeError.new('Activity', :inline_with_arg)
       )
     end
   end

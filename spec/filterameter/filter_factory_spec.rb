@@ -23,7 +23,9 @@ RSpec.describe Filterameter::FilterFactory do
 
   context 'with a multi-argument scope declaration' do
     let(:declaration) { Filterameter::FilterDeclaration.new(:multi_arg_scope, {}) }
-    it('raises ArgumentError') { expect { filter }.to raise_error(ArgumentError) }
+    it('raises FilterScopeArgumentError') do
+      expect { filter }.to raise_error(Filterameter::DeclarationErrors::FilterScopeArgumentError)
+    end
   end
 
   context 'with partial declaration' do

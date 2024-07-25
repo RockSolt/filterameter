@@ -28,7 +28,9 @@ RSpec.describe Filterameter::Filters::ScopeFilter do
 
     it 'reports error' do
       filter.valid?(Activity)
-      expect(filter.errors).to contain_exactly "Activity class method 'not_a_scope' is not a scope"
+      expect(filter.errors).to contain_exactly(
+        Filterameter::DeclarationErrors::NotAScopeError.new('Activity', :not_a_scope)
+      )
     end
   end
 end

@@ -23,13 +23,13 @@ module Filterameter
       def validate(model)
         validate_is_a_scope(model)
       rescue ArgumentError
-        @errors << "#{model.name} scope '#{@scope_name}' needs to be written as a class method, not as an inline scope"
+        @errors << Filterameter::DeclarationErrors::CannotBeInlineScopeError.new(model.name, @scope_name)
       end
 
       def validate_is_a_scope(model)
         return if model.public_send(@scope_name).is_a? ActiveRecord::Relation
 
-        @errors << "#{model.name} class method '#{@scope_name}' is not a scope"
+        @errors << Filterameter::DeclarationErrors::NotAScopeError.new(model.name, @scope_name)
       end
     end
   end

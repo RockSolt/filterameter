@@ -11,7 +11,7 @@ module Filterameter
       def validate(model)
         return if model.attribute_method? @attribute_name
 
-        @errors << "Attribute '#{@attribute_name}' does not exist on #{model.name}"
+        @errors << Filterameter::DeclarationErrors::NoSuchAttributeError.new(model, @attribute_name)
       end
     end
   end

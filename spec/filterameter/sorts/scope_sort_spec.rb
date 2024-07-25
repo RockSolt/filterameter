@@ -25,7 +25,9 @@ RSpec.describe Filterameter::Sorts::ScopeSort do
 
     it 'reports error' do
       sort.valid?(Activity)
-      expect(sort.errors).to contain_exactly "Activity class method 'not_a_scope' is not a scope"
+      expect(sort.errors).to contain_exactly(
+        Filterameter::DeclarationErrors::NotAScopeError.new('Activity', :not_a_scope)
+      )
     end
   end
 
@@ -38,8 +40,10 @@ RSpec.describe Filterameter::Sorts::ScopeSort do
 
     it 'reports errors' do
       sort.valid?(Activity)
-      expect(sort.errors)
-        .to contain_exactly "Activity scope 'inline_sort_scope_with_no_args' must take exactly one argument to sort by"
+      expect(sort.errors).to contain_exactly(
+        Filterameter::DeclarationErrors::SortScopeRequiresOneArgumentError.new(Activity,
+                                                                               :inline_sort_scope_with_no_args)
+      )
     end
   end
 
@@ -52,8 +56,9 @@ RSpec.describe Filterameter::Sorts::ScopeSort do
 
     it 'reports errors' do
       sort.valid?(Activity)
-      expect(sort.errors)
-        .to contain_exactly "Activity scope 'sort_scope_with_no_args' must take exactly one argument to sort by"
+      expect(sort.errors).to contain_exactly(
+        Filterameter::DeclarationErrors::SortScopeRequiresOneArgumentError.new(Activity, :sort_scope_with_no_args)
+      )
     end
   end
 
@@ -66,8 +71,9 @@ RSpec.describe Filterameter::Sorts::ScopeSort do
 
     it 'reports errors' do
       sort.valid?(Activity)
-      expect(sort.errors)
-        .to contain_exactly "Activity scope 'sort_scope_with_two_args' must take exactly one argument to sort by"
+      expect(sort.errors).to contain_exactly(
+        Filterameter::DeclarationErrors::SortScopeRequiresOneArgumentError.new(Activity, :sort_scope_with_two_args)
+      )
     end
   end
 end

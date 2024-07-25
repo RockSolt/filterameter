@@ -25,7 +25,8 @@ RSpec.describe Filterameter::Sorts::AttributeSort do
 
     it 'reports errors' do
       sort.valid?(Activity)
-      expect(sort.errors).to contain_exactly "Attribute 'not_a_thing' does not exist on Activity"
+      expect(sort.errors)
+        .to contain_exactly Filterameter::DeclarationErrors::NoSuchAttributeError.new(Activity, :not_a_thing)
     end
   end
 end
