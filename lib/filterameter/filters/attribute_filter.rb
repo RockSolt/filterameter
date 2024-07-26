@@ -6,6 +6,9 @@ module Filterameter
     #
     # Class AttributeFilter leverages ActiveRecord's where query method to add criteria for an attribute.
     class AttributeFilter
+      include Filterameter::Errors
+      include AttributeValidator
+
       def initialize(attribute_name)
         @attribute_name = attribute_name
       end

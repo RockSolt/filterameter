@@ -45,6 +45,10 @@ module Filterameter
       end
     end
 
+    def declarations_validator
+      Filterameter::DeclarationsValidator.new(@controller_name, model_class, registry)
+    end
+
     private
 
     def model_class

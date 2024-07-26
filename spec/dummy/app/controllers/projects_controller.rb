@@ -8,6 +8,9 @@ class ProjectsController < ApplicationController
   filter :with_incomplete_tasks, name: :incomplete, association: %i[activities tasks]
   filter :in_progress
 
+  sort :by_created_at
+  sort :by_project_id
+
   def index
     @projects = build_query_from_filters
 

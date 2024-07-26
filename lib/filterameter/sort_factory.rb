@@ -33,7 +33,7 @@ module Filterameter
 
     def build_sort(name, declaration_is_a_scope)
       if declaration_is_a_scope
-        Filterameter::Filters::ScopeFilter.new(name)
+        Filterameter::Sorts::ScopeSort.new(name)
       else
         Filterameter::Sorts::AttributeSort.new(name)
       end

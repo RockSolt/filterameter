@@ -10,6 +10,8 @@ module Filterameter
     include Filterameter::Sortable
 
     class_methods do
+      delegate :declarations_validator, to: :filter_coordinator
+
       def filter_model(model_class, query_var_name = nil)
         filter_coordinator.model_class = model_class
         filter_query_var_name(query_var_name) if query_var_name.present?

@@ -16,5 +16,9 @@ RSpec.describe Filterameter::Filters::NestedCollectionFilter do
     it 'applies nested filter' do
       expect(result.where_values_hash('activities')).to match('name' => 'The Activity Name')
     end
+
+    it 'is valid' do
+      expect(filter.valid?(Project)).to be true
+    end
   end
 end
