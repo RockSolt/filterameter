@@ -12,7 +12,7 @@ RSpec.describe ActivitiesController, type: :controller do
     declarations = described_class.declarations_validator
     declarations.valid?
 
-    expect(declarations.errors.join("\n")).to eq <<~ERROR.chomp
+    expect(declarations.errors).to eq <<~ERROR.chomp
 
       Invalid filter for 'inline_with_arg':
         #{Filterameter::DeclarationErrors::CannotBeInlineScopeError.new('Activity', :inline_with_arg)}

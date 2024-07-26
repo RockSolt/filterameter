@@ -59,7 +59,7 @@ RSpec.describe Filterameter::DeclarationsValidator do
 
       it 'reports error' do
         validator.valid?
-        expect(validator.errors).to contain_exactly not_an_attribute_error
+        expect(validator.errors).to eq not_an_attribute_error
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe Filterameter::DeclarationsValidator do
 
       it 'reports error' do
         validator.valid?
-        expect(validator.errors).to contain_exactly updated_at_typo_error
+        expect(validator.errors).to eq updated_at_typo_error
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe Filterameter::DeclarationsValidator do
 
       it 'reports error' do
         validator.valid?
-        expect(validator.errors).to contain_exactly(not_an_attribute_error, updated_at_typo_error)
+        expect(validator.errors).to eq [not_an_attribute_error, updated_at_typo_error].join("\n")
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe Filterameter::DeclarationsValidator do
 
       it 'reports error' do
         validator.valid?
-        expect(validator.errors).to contain_exactly <<~ERROR.chomp
+        expect(validator.errors).to eq <<~ERROR.chomp
 
           Invalid filter for 'inline_with_arg':
             #{Filterameter::DeclarationErrors::CannotBeInlineScopeError.new('Activity', :inline_with_arg)}
@@ -145,7 +145,7 @@ RSpec.describe Filterameter::DeclarationsValidator do
 
         it 'reports error' do
           validator.valid?
-          expect(validator.errors).to contain_exactly <<~ERROR.chomp
+          expect(validator.errors).to eq <<~ERROR.chomp
 
             Invalid filter for 'name':
               #{described_class::FactoryErrors.new(error)}
@@ -162,7 +162,7 @@ RSpec.describe Filterameter::DeclarationsValidator do
 
         it 'reports error' do
           validator.valid?
-          expect(validator.errors).to contain_exactly <<~ERROR.chomp
+          expect(validator.errors).to eq <<~ERROR.chomp
 
             Invalid filter for 'name':
               #{Filterameter::DeclarationErrors::UnexpectedError.new(error)}

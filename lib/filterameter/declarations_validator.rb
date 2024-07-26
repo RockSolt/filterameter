@@ -28,6 +28,10 @@ module Filterameter
       "filter declarations on #{@controller_name.titleize}Controller"
     end
 
+    def errors
+      @errors&.join("\n")
+    end
+
     private
 
     def validate(_)
