@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
   spec.description = "Declare filters in Rails controllers to increase readability and reduce boilerplate code."
   spec.homepage    = "https://github.com/RockSolt/filterameter"
   spec.license     = "MIT"
+  spec.required_ruby_version = '>= 3.1.0'
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
