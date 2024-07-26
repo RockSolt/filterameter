@@ -10,12 +10,12 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          ruby-version: 3.3
       - name: Install RuboCop
         run: |
           gem install bundler --no-document
-          gem install rubocop -v 1.60.2 --no-document
+          gem install rubocop -v 1.65.0 --no-document
           gem install rubocop-packaging -v 0.5.2 --no-document
-          gem install rubocop-rails -v 2.23.1 --no-document
+          gem install rubocop-rails -v 2.25.1 --no-document
       - name: RuboCop
         run: rubocop
