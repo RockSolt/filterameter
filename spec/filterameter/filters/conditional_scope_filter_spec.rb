@@ -3,17 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe Filterameter::Filters::ConditionalScopeFilter do
-  let(:filter) { described_class.new(:the_scope) }
-  let(:query) { spy('query') }
+  let(:filter) { described_class.new(:incomplete) }
+  let(:query) { class_spy(Activity) }
 
   it 'applies filter to query when true' do
     filter.apply(query, true)
-    expect(query).to have_received('the_scope')
+    expect(query).to have_received(:incomplete)
   end
 
   it 'does not apply filter to query when false' do
     filter.apply(query, false)
-    expect(query).not_to have_received('the_scope')
+    expect(query).not_to have_received(:incomplete)
   end
 
   context 'with valid conditional scope' do

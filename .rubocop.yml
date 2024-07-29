@@ -1,6 +1,8 @@
 require: 
   - rubocop-packaging
   - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
 
 AllCops:
   TargetRubyVersion: 3.2
@@ -24,3 +26,6 @@ Style/FrozenStringLiteralComment:
     - 'spec/dummy/db/**/*'
 Style/HashSyntax:
   EnforcedShorthandSyntax: either
+RSpec/MultipleExpectations:
+  Exclude:
+    - 'spec/requests/*'

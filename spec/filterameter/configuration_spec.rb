@@ -12,7 +12,7 @@ RSpec.describe Filterameter::Configuration do
     end
   end
 
-  context 'development environment' do
+  context 'when development environment' do
     before { allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new('development')) }
 
     it '#action_on_undeclared_parameters' do
@@ -24,7 +24,7 @@ RSpec.describe Filterameter::Configuration do
     end
   end
 
-  context 'test environment' do
+  context 'when test environment' do
     it '#action_on_undeclared_parameters' do
       expect(config.action_on_undeclared_parameters).to eq :raise
     end
@@ -34,7 +34,7 @@ RSpec.describe Filterameter::Configuration do
     end
   end
 
-  context 'production environment' do
+  context 'when production environment' do
     before { allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new('production')) }
 
     it '#action_on_undeclared_parameters' do

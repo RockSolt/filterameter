@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Range filters', type: :request do
+RSpec.describe 'Range filters' do
   fixtures :activities
 
   context 'when range: true' do

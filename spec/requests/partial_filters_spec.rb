@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Partial filters', type: :request do
+RSpec.describe 'Partial filters' do
   fixtures :tasks
 
   context 'with defaults' do

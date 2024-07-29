@@ -8,17 +8,20 @@ RSpec.describe Filterameter::SortFactory do
 
   context 'with attribute declaration' do
     let(:declaration) { Filterameter::SortDeclaration.new(:name, {}) }
+
     it('is an AttributeSort') { expect(sort).to be_a Filterameter::Sorts::AttributeSort }
   end
 
   context 'with scope declaration' do
     let(:declaration) { Filterameter::SortDeclaration.new(:by_created_at, {}) }
+
     it('is a ScopeFilter') { expect(sort).to be_a Filterameter::Filters::ScopeFilter }
   end
 
   context 'with singular association declaration' do
     let(:factory) { described_class.new(Activity) }
     let(:declaration) { Filterameter::SortDeclaration.new(:name, { association: :project }) }
+
     it('is an NestedFilter') { expect(sort).to be_a Filterameter::Filters::NestedFilter }
   end
 

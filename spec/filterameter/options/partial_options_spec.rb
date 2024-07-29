@@ -68,13 +68,6 @@ RSpec.describe Filterameter::Options::PartialOptions do
     it_behaves_like 'not case sensitive'
   end
 
-  describe 'partial: :from_start' do
-    let(:options) { described_class.new(:from_start) }
-
-    it_behaves_like 'matches from start'
-    it_behaves_like 'not case sensitive'
-  end
-
   describe 'partial: { match: :from_start }' do
     let(:options) { described_class.new(match: :from_start) }
 

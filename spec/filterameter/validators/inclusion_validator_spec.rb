@@ -15,7 +15,7 @@ RSpec.describe Filterameter::Validators::InclusionValidator do
   end
 
   shared_examples 'flags attribute as invalid' do
-    it do
+    specify(:aggregate_failures) do
       expect(record.errors).not_to be_empty
       expect(record.errors).to include(:size)
       expect(record.errors.full_messages).to contain_exactly('Size is not included in the list')

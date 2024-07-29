@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Filterameter::Filters::ScopeFilter do
-  let(:filter) { described_class.new(:the_scope) }
-  let(:query) { spy('query') }
+  let(:filter) { described_class.new(:in_progress) }
+  let(:query) { class_spy(Project) }
 
   it 'applies filter to query' do
-    filter.apply(query, 20)
-    expect(query).to have_received(:the_scope).with(20)
+    filter.apply(query, true)
+    expect(query).to have_received(:in_progress).with(true)
   end
 
   context 'with valid scope' do
