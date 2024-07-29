@@ -30,7 +30,7 @@ RSpec.describe Filterameter::Filters::MatchesFilter do
 
     it 'applies criteria' do
       expect(query.to_sql).to match(/name.*like.*prepare%/i)
-      expect(query.to_sql).not_to match(/name.*like.*%prepare%/i)
+                          .and not_match(/name.*like.*%prepare%/i)
     end
 
     it 'is valid' do
@@ -47,8 +47,8 @@ RSpec.describe Filterameter::Filters::MatchesFilter do
 
     it 'applies criteria' do
       expect(query.to_sql).to match(/name.*like.*prepare/i)
-      expect(query.to_sql).not_to match(/name.*like.*prepare%/i)
-      expect(query.to_sql).not_to match(/name.*like.*%prepare%/i)
+                          .and not_match(/name.*like.*prepare%/i)
+                          .and not_match(/name.*like.*%prepare%/i)
     end
 
     it 'is valid' do

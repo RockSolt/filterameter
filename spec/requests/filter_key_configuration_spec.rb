@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Filter Key configuration', type: :request do
+RSpec.describe 'Filter Key configuration' do
   fixtures :activities
 
   before { allow(Filterameter).to receive(:configuration).and_return(custom_config) }
@@ -16,7 +16,7 @@ RSpec.describe 'Filter Key configuration', type: :request do
       expect(response.parsed_body.size).to eq count
 
       names = Activity.incomplete.pluck(:name)
-      expect(response.parsed_body.pluck('name')).to contain_exactly(*names)
+      expect(response.parsed_body.pluck('name')).to match_array(names)
     end
 
     it 'applies sort' do
@@ -41,7 +41,7 @@ RSpec.describe 'Filter Key configuration', type: :request do
       expect(response.parsed_body.size).to eq count
 
       names = Activity.incomplete.pluck(:name)
-      expect(response.parsed_body.pluck('name')).to contain_exactly(*names)
+      expect(response.parsed_body.pluck('name')).to match_array(names)
     end
 
     it 'applies sort' do

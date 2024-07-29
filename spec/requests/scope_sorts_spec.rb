@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Scope sorts', type: :request do
+RSpec.describe 'Scope sorts' do
   fixtures :projects
 
   context 'with class method scope' do

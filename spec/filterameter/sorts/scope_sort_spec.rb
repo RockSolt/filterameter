@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Filterameter::Sorts::ScopeSort do
   let(:sort) { described_class.new(:by_task_count) }
-  let(:query) { class_spy('Activity') }
+  let(:query) { class_spy(Activity) }
 
   it 'applies sort to query' do
     sort.apply(query, :asc)

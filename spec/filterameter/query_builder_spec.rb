@@ -59,7 +59,7 @@ RSpec.describe Filterameter::QueryBuilder do
     let(:query) { instance.build_query({}, nil) }
 
     it 'sorts by primary key desc' do
-      expect(query.order_values.map(&:to_sql)).to contain_exactly(*Activity.order(id: :desc).order_values.map(&:to_sql))
+      expect(query.order_values.map(&:to_sql)).to match_array(Activity.order(id: :desc).order_values.map(&:to_sql))
     end
   end
 
@@ -77,9 +77,8 @@ RSpec.describe Filterameter::QueryBuilder do
   describe 'sort defaulting rules' do
     let(:default_sort) { nil }
     let(:requested_sort) { {} }
-    let(:starting_query) { nil }
     let(:instance) { described_class.new(Activity.all, default_sort, registry) }
-    let(:query) { instance.build_query(requested_sort, starting_query) }
+    let(:query) { instance.build_query(requested_sort, nil) }
 
     context 'when there is a default and a requested sort' do
       let(:default_sort) { [Filterameter::Helpers::RequestedSort.new(:created_at, :desc)] }
@@ -94,18 +93,16 @@ RSpec.describe Filterameter::QueryBuilder do
       end
     end
 
-    context 'without a requested sort' do
-      context 'when starting query includes a sort' do
-        let(:starting_query) { Activity.order(task_count: :desc) }
-        let(:default_sort) { [Filterameter::Helpers::RequestedSort.new(:created_at, :desc)] }
+    context 'when starting query includes a sort and none requested' do
+      let(:default_sort) { [Filterameter::Helpers::RequestedSort.new(:created_at, :desc)] }
+      let(:query) { instance.build_query(requested_sort, Activity.order(task_count: :desc)) }
 
-        it 'does not add default' do
-          expect(query).not_to sort_by(created_at: :desc)
-        end
+      it 'does not add default' do
+        expect(query).not_to sort_by(created_at: :desc)
+      end
 
-        it 'does not add primary key' do
-          expect(query).not_to sort_by(id: :desc)
-        end
+      it 'does not add primary key' do
+        expect(query).not_to sort_by(id: :desc)
       end
     end
 
@@ -130,8 +127,7 @@ RSpec.describe Filterameter::QueryBuilder do
 
   describe 'undeclared parameters' do
     let(:filter_params) { { name: 'The Activity Name', not_a_filter: 42 }.stringify_keys }
-    let(:instance) { described_class.new(Activity.all, {}, registry) }
-    let(:query) { instance.build_query(filter_params, Activity.all) }
+    let(:query) { described_class.new(Activity.all, {}, registry).build_query(filter_params, Activity.all) }
 
     before { allow(Filterameter.configuration).to receive(:action_on_undeclared_parameters).and_return(action) }
 

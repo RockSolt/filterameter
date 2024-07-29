@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Attribute sorts', type: :request do
+RSpec.describe 'Attribute sorts' do
   fixtures :projects, :activities, :users, :tasks
 
   context 'with filter declaration' do

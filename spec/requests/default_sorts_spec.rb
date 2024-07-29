@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Default sorts', type: :request do
+RSpec.describe 'Default sorts' do
   fixtures :projects, :activities
 
   context 'with no default specified' do

@@ -45,3 +45,5 @@ RSpec.configure do |config|
     end
   end
 end
+
+RSpec::Matchers.define_negated_matcher :not_match, :match

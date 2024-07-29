@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Attribute filters', type: :request do
+RSpec.describe 'Attribute filters' do
   fixtures :activities, :users
 
   context 'with no options' do

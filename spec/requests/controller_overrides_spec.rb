@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Controller overrides', type: :request do
+RSpec.describe 'Controller overrides' do
   fixtures :projects, :activities
 
   context 'with nested key overridden' do

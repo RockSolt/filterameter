@@ -11,12 +11,12 @@ RSpec.describe Filterameter::Registries::SortRegistry do
     end.new
   end
 
-  let(:registry) { described_class.new(echo_factory) }
-
-  it 'adds and fetches sort' do
+  let(:declaration) do
+    registry = described_class.new(echo_factory)
     registry.add(:foo, {})
-    result = registry.fetch(:foo)
-    expect(result).to be_a Filterameter::SortDeclaration
-    expect(result.name).to eq 'foo'
+    registry.fetch(:foo)
   end
+
+  it('is a sort declaration') { expect(declaration).to be_a Filterameter::SortDeclaration }
+  it('has name') { expect(declaration.name).to eq 'foo' }
 end

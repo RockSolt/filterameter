@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Filterameter::Sorts::AttributeSort do
   let(:sort) { described_class.new(:color) }
-  let(:query) { class_spy('ActiveRecord::Base') }
+  let(:query) { class_spy(ActiveRecord::Base) }
 
   it 'applies sort to query' do
     sort.apply(query, :asc)

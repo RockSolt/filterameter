@@ -100,6 +100,7 @@ RSpec.describe Filterameter::FilterDeclaration do
 
   context 'without sort' do
     let(:options) { { sortable: false } }
+
     it('#sortable?') { expect(declaration.sortable?).to be false }
   end
 
