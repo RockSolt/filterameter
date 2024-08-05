@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Errors
+  # # Errors
   #
   # Module Errors provides `valid?` and `errors` to implementing classes. If the `valid?` method is not overridden,
   # then it returns true.

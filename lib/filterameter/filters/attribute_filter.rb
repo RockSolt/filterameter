@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Attribute Filter
+    # # Attribute Filter
     #
     # Class AttributeFilter leverages ActiveRecord's where query method to add criteria for an attribute.
     class AttributeFilter

@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Nested Attribute Filter
+    # # Nested Attribute Filter
     #
     # Class NestedFilter joins the nested table(s) then merges the filter to the association's model.
     class NestedFilter

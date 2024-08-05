@@ -2,7 +2,7 @@
 
 module Filterameter
   module DeclarationErrors
-    # = Filter Scope Argument Error
+    # # Filter Scope Argument Error
     #
     # Error FilterScopeArgumentError occurs when a scope used as a filter but does not have either zero or one
     # arument. A conditional scope filter should take zero arguments; other scope filters should take one argument.

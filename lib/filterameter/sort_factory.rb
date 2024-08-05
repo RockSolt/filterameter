@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Sort Factory
+  # # Sort Factory
   #
   # Class SortFactory builds a sort from a model and a declaration.
   class SortFactory

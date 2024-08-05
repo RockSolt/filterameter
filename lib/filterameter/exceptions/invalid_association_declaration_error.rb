@@ -2,7 +2,7 @@
 
 module Filterameter
   module Exceptions
-    # = Invalid Association Declaration Error
+    # # Invalid Association Declaration Error
     #
     # Class InvalidAssociationDeclarationError is raised when the declared association(s) are not valid.
     class InvalidAssociationDeclarationError < FilterameterError

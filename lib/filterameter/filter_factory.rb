@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Filter Factory
+  # # Filter Factory
   #
   # Class FilterFactory builds a filter from a FilterDeclaration.
   class FilterFactory

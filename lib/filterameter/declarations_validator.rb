@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Declarations Validator
+  # # Declarations Validator
   #
   # Class DeclarationsValidtor fetches each filter and sort from the registry to validate the declaration. This class
   # can be accessed from the controller as `declarations_validator` (via the FilterCoordinator) and be used in tests.
@@ -10,11 +10,11 @@ module Filterameter
   #
   # A test in RSpec might look like this:
   #
-  #   expect(WidgetsController.declarations_validator).to be_valid
+  #     expect(WidgetsController.declarations_validator).to be_valid
   #
   # In Minitest it might look like this:
   #
-  #   assert WidgetsController.declarations_validator.valid?, WidgetsController.declarations_validator.errors
+  #     assert WidgetsController.declarations_validator.valid?, WidgetsController.declarations_validator.errors
   class DeclarationsValidator
     include Filterameter::Errors
 
@@ -69,7 +69,7 @@ module Filterameter
       "\nInvalid #{type} for '#{name}':\n  #{errors.join("\n  ")}"
     end
 
-    # = Factory Errors
+    # # Factory Errors
     #
     # Class FactoryErrors is swapped in if the fetch from a factory fails. It is always invalid and provides the reason.
     class FactoryErrors

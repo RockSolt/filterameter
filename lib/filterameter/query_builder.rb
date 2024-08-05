@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Query Builder
+  # # Query Builder
   #
   # Class Query Builder turns filter parameters into a query.
   #
   # The query builder is instantiated by the filter coordinator. The default query currently is simple `all`. The
   # default sort comes for the controller declaration of the same name; it is optional and the value may be nil.
   #
-  # If the request includes a sort, it is always applied. If not, the following logic kicks in to provide a sort:
-  # - if the starting query includes a sort, no additional sort is applied
-  # - if a default sort has been declared, it is applied
-  # - if neither of those provides a sort, then the fallback is primary key desc
+  # If the request includes a sort, it is always applied. If not, the following
+  # logic kicks in to provide a sort:
+  # *   if the starting query includes a sort, no additional sort is applied
+  # *   if a default sort has been declared, it is applied
+  # *   if neither of those provides a sort, then the fallback is primary key desc
   class QueryBuilder
     def initialize(default_query, default_sort, filter_registry)
       @default_query = default_query
@@ -87,9 +88,10 @@ module Filterameter
       end
     end
 
-    # TODO: this handles any runtime exceptions, not just undeclared parameter errors:
-    # - should the config option be more generalized?
-    # - or should there be a config option for each type of error?
+    # TODO: this handles any runtime exceptions, not just undeclared parameter
+    # errors:
+    # *   should the config option be more generalized?
+    # *   or should there be a config option for each type of error?
     def handle_undeclared_parameter(exception)
       action = Filterameter.configuration.action_on_undeclared_parameters
       return unless action

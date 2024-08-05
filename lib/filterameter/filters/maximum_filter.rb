@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Maximum Filter
+    # # Maximum Filter
     #
     # Class MaximumFilter adds criteria for all values greater than or equal to a maximum.
     class MaximumFilter < ArelFilter

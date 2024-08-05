@@ -4,7 +4,7 @@ require 'active_model/attribute_assignment'
 require 'active_model/validations'
 
 module Filterameter
-  # = Parameters
+  # # Parameters
   #
   # Class Parameters is sub-classed to provide controller-specific validations.
   class ParametersBase

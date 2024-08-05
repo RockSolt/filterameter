@@ -2,7 +2,7 @@
 
 module Filterameter
   module Exceptions
-    # = Validation Error
+    # # Validation Error
     #
     # Class ValidationError is raised when a specified parameter fails a validation. Configuration setting
     # `action_on_validation_failure` determines whether or not the exception is raised.

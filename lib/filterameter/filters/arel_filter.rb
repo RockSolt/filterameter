@@ -2,9 +2,10 @@
 
 module Filterameter
   module Filters
-    # = Arel Filter
+    # # Arel Filter
     #
-    # Class ArelFilter is a base class for arel queries. It does not implement <tt>apply</tt>.
+    # Class ArelFilter is a base class for arel queries. It does not implement
+    # `apply`.
     class ArelFilter
       include Filterameter::Errors
       include Filterameter::Filters::AttributeValidator

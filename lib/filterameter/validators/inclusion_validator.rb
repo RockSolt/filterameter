@@ -2,14 +2,14 @@
 
 module Filterameter
   module Validators
-    # = Inclusion Validator
+    # # Inclusion Validator
     #
     # Class InclusionValidator extends ActiveModel::Validations::InclusionValidator to enable validations of multiple
     # values.
     #
-    # == Example
+    # ## Example
     #
-    #   validates: { inclusion: { in: %w[Small Medium Large], allow_multiple_values: true } }
+    #     validates: { inclusion: { in: %w[Small Medium Large], allow_multiple_values: true } }
     #
     class InclusionValidator < ActiveModel::Validations::InclusionValidator
       def validate_each(record, attribute, value)

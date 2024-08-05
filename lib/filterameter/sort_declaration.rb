@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Sort Declaration
+  # # Sort Declaration
   #
   # Class SortDeclaration captures the sort declaration within the controller. A sort declaration is also generated
   # from a FilterDeclaration when it is `sortable?`.

@@ -2,7 +2,7 @@
 
 module Filterameter
   module DeclarationErrors
-    # = CannotBeInlineScopeError
+    # # Cannot Be Inline Scope Error
     #
     # Error CannotBeInlineScopeError occurs when an inline scope has been used to define a filter that takes a
     # parameter. This is not valid for use as a Filterameter filter because an inline scope always has an arity of -1

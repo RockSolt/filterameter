@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Attribute Validator
+    # # Attribute Validator
     #
     # Module AttributeValidator validates that the attribute exists on the model.
     module AttributeValidator

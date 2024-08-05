@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Declarative Controller Filters
+  # # Declarative Controller Filters
   #
   # Mixin DeclarativeFilters should be included in controllers to enable the filter DSL.
   module DeclarativeFilters

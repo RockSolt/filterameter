@@ -2,7 +2,7 @@
 
 module Filterameter
   module Helpers
-    # = Joins Values Builder
+    # # Joins Values Builder
     #
     # Class JoinsValuesBuilder evaluates an array of names to return either the single entry when there is only
     # one element in the array or a nested hash when there is more than one element. This is the argument that is
