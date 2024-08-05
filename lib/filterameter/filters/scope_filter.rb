@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Scope Filter
+    # # Scope Filter
     #
     # Class ScopeFilter applies the named scope passing in the parameter value.
     class ScopeFilter

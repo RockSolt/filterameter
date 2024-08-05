@@ -2,7 +2,7 @@
 
 module Filterameter
   module Registries
-    # Sort Registry
+    # # Sort Registry
     #
     # Class SortRegistry is a collection of the sorts. It captures the declarations when classes are loaded,
     # then uses the injected SortFactory to build the sorts on demand as they are needed.

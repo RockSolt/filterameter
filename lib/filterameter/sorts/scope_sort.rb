@@ -2,7 +2,7 @@
 
 module Filterameter
   module Sorts
-    # = Scope Sort
+    # # Scope Sort
     #
     # Class ScopeSort applies the scope with the a param that is either :asc or :desc. A scope that does not take
     # exactly one argument is not valid for sorting.

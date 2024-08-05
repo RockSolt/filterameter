@@ -2,7 +2,7 @@
 
 module Filterameter
   module Sorts
-    # = Attribute Sort
+    # # Attribute Sort
     #
     # Class AttributeSort leverages ActiveRecord's `order` query method to add sorting for an attribute.
     class AttributeSort

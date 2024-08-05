@@ -2,7 +2,7 @@
 
 module Filterameter
   module DeclarationErrors
-    # = No Such Attribute Error
+    # # No Such Attribute Error
     #
     # Error NoSuchAttributeError occurs when a filter or sort references an attribute that does not exist on the model.
     # The most likely case of this is a typo. Note that if the typo was supposed to reference a scope, this error is

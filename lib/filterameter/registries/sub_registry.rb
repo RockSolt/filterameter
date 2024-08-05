@@ -2,12 +2,11 @@
 
 module Filterameter
   module Registries
-    # SubRegistry
+    # # SubRegistry
     #
     # Class SubRegistry provides add and fetch methods as well as the initialization for sub-registries.
     #
     # Subclasses must implement build_declaration.
-    #
     class SubRegistry
       def initialize(factory)
         @factory = factory

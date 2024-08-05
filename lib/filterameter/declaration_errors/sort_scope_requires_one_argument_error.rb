@@ -2,7 +2,7 @@
 
 module Filterameter
   module DeclarationErrors
-    # = Sort Scope Requires One Argument Error
+    # # Sort Scope Requires One Argument Error
     #
     # Error SortScopeRequiresOneArgumentError occurs when a sort has been declared for a scope that does not take
     # exactly one argument. Sort scopes must take a single argument and will receive either :asc or :desc to indicate

@@ -5,7 +5,7 @@ require 'zeitwerk'
 loader = Zeitwerk::Loader.for_gem
 loader.setup # ready!
 
-# = Filterameter
+# # Filterameter
 module Filterameter
   class << self
     attr_writer :configuration

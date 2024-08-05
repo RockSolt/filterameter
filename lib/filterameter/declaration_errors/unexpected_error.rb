@@ -2,7 +2,7 @@
 
 module Filterameter
   module DeclarationErrors
-    # = Unexpected Error
+    # # Unexpected Error
     #
     # Error UnexpectedError occurs when the filter or scope factory raises an exception that the validator did not
     # expect.

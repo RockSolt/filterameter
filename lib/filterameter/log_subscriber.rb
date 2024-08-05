@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # = Log Subscriber
+  # # Log Subscriber
   #
   # Class LogSubscriber provides instrumentation for events.
   class LogSubscriber < ActiveSupport::LogSubscriber

@@ -2,7 +2,7 @@
 
 module Filterameter
   module Helpers
-    # = Reqested Sort
+    # # Reqested Sort
     #
     # Class RequestedSort parses the name and direction from a sort segment.
     class RequestedSort

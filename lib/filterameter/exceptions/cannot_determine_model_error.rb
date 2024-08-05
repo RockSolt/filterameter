@@ -2,7 +2,7 @@
 
 module Filterameter
   module Exceptions
-    # = Cannot Determine Model Error
+    # # Cannot Determine Model Error
     #
     # Class CannotDetermineModelError is raised when the model class cannot be determined from either the controller
     # name or controller path. This is a setup issue; the resolution is for the controller to specify the model class

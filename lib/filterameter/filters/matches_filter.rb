@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Matches Filter
+    # # Matches Filter
     #
     # Class MatchesFilter uses arel's `matches` to generate a LIKE query.
     class MatchesFilter

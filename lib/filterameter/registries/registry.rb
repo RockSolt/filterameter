@@ -2,7 +2,7 @@
 
 module Filterameter
   module Registries
-    # = Registry
+    # # Registry
     #
     # Class Registry records declarations and allows resulting filters and sorts to be fetched from sub-registries.
     class Registry

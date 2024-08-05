@@ -3,7 +3,7 @@
 require 'active_support/core_ext/array/wrap'
 
 module Filterameter
-  # = Filter Declaration
+  # # Filter Declaration
   #
   # Class FilterDeclaration captures the filter declaration within the controller.
   #

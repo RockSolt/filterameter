@@ -2,7 +2,7 @@
 
 module Filterameter
   module DeclarationErrors
-    # = Declaration Error
+    # # Declaration Error
     #
     # Error DeclarationError provides a base class for errors from filter or sort declarations.
     class DeclarationError < StandardError

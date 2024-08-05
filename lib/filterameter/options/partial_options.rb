@@ -2,19 +2,20 @@
 
 module Filterameter
   module Options
-    # = Partial Options
+    # # Partial Options
     #
-    # Class PartialOptions parses the options passed in as partial, then exposes those. Here are the options along with
-    # their valid values:
-    # - match: anywhere (default), from_start, dynamic
-    # - case_sensitive: true, false (default)
+    # Class PartialOptions parses the options passed in as partial, then exposes
+    # those. Here are the options along with their valid values:
+    # *   match: anywhere (default), from_start, dynamic
+    # *   case_sensitive: true, false (default)
     #
     # Options may be specified by passing a hash with the option keys:
     #
-    #   partial: { match: :from_start, case_sensitive: true }
+    #     partial: { match: :from_start, case_sensitive: true }
     #
-    # There are two shortcuts: the partial option can be declared with `true`, which just uses the defaults; or the
-    # partial option can be declared with the match option directly, such as partial: :from_start.
+    # There are two shortcuts: the partial option can be declared with `true`, which
+    # just uses the defaults; or the partial option can be declared with the match
+    # option directly, such as partial: :from_start.
     class PartialOptions
       VALID_OPTIONS = %i[match case_sensitive].freeze
       VALID_MATCH_OPTIONS = %w[anywhere from_start dynamic].freeze

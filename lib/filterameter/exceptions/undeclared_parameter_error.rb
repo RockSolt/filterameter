@@ -2,7 +2,7 @@
 
 module Filterameter
   module Exceptions
-    # = Undeclared Parameter Error
+    # # Undeclared Parameter Error
     #
     # Class UndeclaredParameterError is raised when a request contains filter parameters that have not been declared.
     # Configuration setting `action_on_undeclared_parameters` determines whether or not the exception is raised.

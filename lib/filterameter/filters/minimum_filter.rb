@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Minimum Filter
+    # # Minimum Filter
     #
     # Class MinimumFilter adds criteria for all values greater than or equal to a minimum.
     class MinimumFilter < ArelFilter

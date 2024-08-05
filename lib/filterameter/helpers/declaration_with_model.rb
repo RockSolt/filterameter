@@ -2,7 +2,7 @@
 
 module Filterameter
   module Helpers
-    # = Declaration with Model
+    # # Declaration with Model
     #
     # Class DeclarationWithModel inspects the declaration under the context of the model. This enables
     # predicate methods as well as drilling through associations.

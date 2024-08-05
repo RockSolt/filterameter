@@ -8,7 +8,7 @@ require 'action_controller/metal/live'
 require 'action_controller/metal/strong_parameters'
 
 module Filterameter
-  # = Filter Coordinator
+  # # Filter Coordinator
   #
   # Class FilterCoordinator stores the configuration declared via class-level method calls such as the list of
   # filters and the optionally declared model class. Each controller will have one instance of the coordinator

@@ -2,7 +2,7 @@
 
 module Filterameter
   module Filters
-    # = Conditional Scope Filter
+    # # Conditional Scope Filter
     #
     # Class ConditionalScopeFilter applies the scope if the parameter is not false.
     class ConditionalScopeFilter

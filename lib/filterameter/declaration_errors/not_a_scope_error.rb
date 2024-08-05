@@ -2,7 +2,7 @@
 
 module Filterameter
   module DeclarationErrors
-    # = Not A Scope Error
+    # # Not A Scope Error
     #
     # Error NotAScopeError flags a class method that has been used as a filter but is not a scope. This could occur if
     # there is a class method of the same name an attribute, in which case the class method is going to block the

@@ -2,7 +2,7 @@
 
 module Filterameter
   module Registries
-    # Filters
+    # # Filter Registry
     #
     # Class FilterRegistry is a collection of the filters. It captures the filter declarations when classes are loaded,
     # then uses the injected FilterFactory to build the filters on demand as they are needed.
