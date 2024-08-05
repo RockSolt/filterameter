@@ -26,6 +26,24 @@ module Filterameter
       end
     end
 
+    # Returns an ActiveRecord query from the filter parameters.
+    #
+    #     def index
+    #       @widgets = build_query_from_filters
+    #     end
+    #
+    # The method optionally takes a starting query. For example, this restricts the results
+    # to only active widgets:
+    #
+    #     def index
+    #       @widgets = build_query_from_filters(Widgets.where(active: true))
+    #     end
+    #
+    # The starting query can also be used to provide eager loading:
+    #
+    #     def index
+    #       @widgets = build_query_from_filters(Widgets.includes(:manufacturer))
+    #     end
     def build_query_from_filters(starting_query = nil)
       self.class.filter_coordinator.build_query(filter_parameters, starting_query)
     end
