@@ -14,7 +14,8 @@ module Filterameter
   #
   # In Minitest it might look like this:
   #
-  #     assert WidgetsController.declarations_validator.valid?, WidgetsController.declarations_validator.errors
+  #     validator = WidgetsController.declarations_validator
+  #     assert_predicate validator, :valid?, -> { validator.errors }
   class DeclarationsValidator
     include Filterameter::Errors
 
