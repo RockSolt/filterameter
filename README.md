@@ -273,7 +273,15 @@ This method optionally takes a starting query. If there was a controller for Act
   end
 ```
 
-Note that the starting query provides the model, so the model is not looked up and any `model_name` declaration is ignored.
+The starting query is also a good place to provide any includes to enable eager loading:
+
+```ruby
+  def index
+    @widgets = build_query_from_filters(Widgets.includes(:manufacturer))
+  end
+```
+
+Note that the starting query provides the model, so the model is not looked up and the `model_name` declaration in not needed.
 
 ### Query Parameters
 
