@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Filterameter
-  # # Declarative Filters
+  # # Filterable
   #
   # Mixin Filterable provides class methods `filter` and `filters`.
   module Filterable
@@ -34,6 +34,7 @@ module Filterameter
       # :partial
       # :   Specify the partial option if the filter should do a partial search (SQL's
       #     `LIKE`). The partial option accepts a hash to specify the search behavior.
+      #
       #     Here are the available options:
       #     *   match: anywhere (default), from_start, dynamic
       #     *   case_sensitive: true, false (default)
