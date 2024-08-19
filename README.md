@@ -31,6 +31,8 @@ It's redundant code and a bit of a pain to write and maintain. Not to mention wh
   end
 ```
 
+Simplify and speed development of Rails controllers by making filter parameters declarative with Filterameter.
+
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [Usage](#usage)
