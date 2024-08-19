@@ -4,13 +4,78 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d9d87f9ce8020eb6e656/maintainability)](https://codeclimate.com/github/RockSolt/filterameter/maintainability)
 
 # Filterameter
-Declarative filter parameters provide clean and clear filters for Rails controllers.
+Filterameter provides declarative filters for query classes or Rails controllers to reduce boilerplate code and increase readability. How many times have you seen (or written) this controller action?
+
+```ruby
+def index
+  @films = Films.all
+  @films = @films.where(name: params[:name]) if params[:name]
+  @films = @films.joins(:film_locations).merge(FilmLocations.where(location_id: params[:location_id])) if params[:location_id]
+  @films = @films.directed_by(params[:director_id]) if params[:director_id]
+  @films = @films.written_by(params[:writer_id]) if params[:writer_id]
+  @films = @films.acted_by(params[:actor_id]) if params[:actor_id]
+end
+```
+
+It's redundant code and a bit of a pain to write and maintain. Not to mention what RuboCop is going to say about it. Wouldn't it be nice if you could just declare the filters that the controller accepts?
+
+```ruby
+  filter :name, partial: true
+  filter :location_id, association: :film_locations
+  filter :director_id, name: :directed_by
+  filter :writer_id, name: :written_by
+  filter :actor_id, name: :acted_by
+
+  def index
+    @films = build_query_from_filters
+  end
+```
+
+Simplify and speed development of Rails controllers by making filter parameters declarative with Filterameter.
+
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+  - [Filtering Options](#filtering-options)
+    - [Name](#name)
+    - [Association](#association)
+    - [Validates](#validates)
+    - [Partial](#partial)
+    - [Range](#range)
+    - [Sortable](#sortable)
+  - [Scope Filters](#scope-filters)
+  - [Sorting](#sorting)
+  - [Building the Query](#building-the-query)
+  - [Specifying the Model](#specifying-the-model)
+- [Configuration](#configuration)
+- [Testing Declarations](#testing-declarations)
+- [Forms and Query Parameters](#forms-and-query-parameters)
+- [Contribute](#contribute)
+- [License](#license)
+
+## Getting Started
+
+This gem requires Rails 6.1+, and works with ActiveRecord.
+
+### Installation
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'filterameter'
+```
+
+And then execute:
+```bash
+$ bundle install
+```
+
+Or install it yourself as:
+```bash
+$ gem install filterameter
+```
 
 ## Usage
-Declare filters in controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes or scopes, either directly on the model or on an associated model. Validations can also be assigned.
-
 Include module `Filterameter::DeclarativeFilters` in the controller to provide the filter DSL. It can be included in the `ApplicationController` to make the functionality available to all controllers or it can be mixed in on a case-by-case basis.
-
 
 ```ruby
   filter :color
@@ -190,18 +255,6 @@ default_sort updated_at: :desc, :description
 
 In order to provide consistent results, a sort is always applied. If no default is specified, it will use primary key descending.
 
-### Specifying the Model
-
-Rails conventions are used to determine the controller's model. For example, the PhotosController builds a query against the Photo model. If a controller is namespaced, the model will first be looked up without the namespace, then with the namespace. 
-
-**If the conventions do not provide the correct model**, the model can be named explicitly with the following:
-
-```ruby
-filter_model 'Picture'
-```
-
-_Important:_ If the `filter_model` declaration is used, it must be before any filter or sort declarations.
-
 ### Building the Query
 
 There are two ways to apply the filters and build the query, depending on how much control and/or visibility is desired:
@@ -283,32 +336,19 @@ The starting query is also a good place to provide any includes to enable eager 
 
 Note that the starting query provides the model, so the model is not looked up and the `model_name` declaration in not needed.
 
-### Query Parameters
+### Specifying the Model
 
-The query parameters are pulled from the controller parameters, nested under the key `filter`. For example a request for large, blue widgets might have the following url:
+Rails conventions are used to determine the controller's model. For example, the PhotosController builds a query against the Photo model. If a controller is namespaced, the model will first be looked up without the namespace, then with the namespace. 
 
-`/widgets?filter[size]=large&filter[color]=blue`
+**If the conventions do not provide the correct model**, the model can be named explicitly with the following:
 
-#### Sort Parameters
+```ruby
+filter_model 'Picture'
+```
 
-The sort is also nested underneath the key `filter`. 
+_Important:_ If the `filter_model` declaration is used, it must be before any filter or sort declarations.
 
-`/widgets?filter[sort]=size`
-
-Use an array to pass multiple sorts. The order of the parameters is the order the sorts will be applied. For example, the following sorts first by size then by color:
-
-`/widgets?filter[sort]=size&filter[sort]=color`
-
-Sorts are ascending by default, but can use a prefix can be added to control the sort:
-
-- `+` ascending (the default)
-- `-` descending
-
-For example, the following sorts by size descending:
-
-`/widgets?filter[sort]=-size`
-
-### Configuration
+## Configuration
 
 There are three configuration options:
 
@@ -348,7 +388,7 @@ If the filter parameters are NOT nested, set this to false. Doing so will restri
 those that have been declared, meaning undeclared parameters are ignored (and the action_on_undeclared_parameters
 configuration option does not come into play).
 
-### Testing Declarations
+## Testing Declarations
 
 The declarations can be tested for each controller, catching typos, incorrectly defined scopes, or any other issues. Method `declarations_validator` is added to each controller, and a single controller test can be added to validate all the declarations for that controller.
 
@@ -365,26 +405,9 @@ validator = WidgetsController.declarations_validator
 assert_predicate validator, :valid?, -> { validator.errors }
 ```
 
-## Installation
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'filterameter'
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install filterameter
-```
-
 ## Forms and Query Parameters
 
-The controller mixin will look for filter parameters nested under the `filter` key. For example, here's what the query parameters might look like for size and color:
+The filter parameters are pulled from the controller parameters, nested under the key `filter` (by default; see [Configuration](#configuration) to change the filter key). For example a request for large, blue widgets might have the following query parameters on the url:
 
 ```
 ?filter[size]=large&filter[color]=blue
@@ -402,7 +425,26 @@ On [a generic search form](https://guides.rubyonrails.org/form_helpers.html#a-ge
 <% end %>
 ```
 
-## Contributions
+#### Sort Parameters
+
+The sort is also nested underneath the filter key:
+
+`/widgets?filter[sort]=size`
+
+Use an array to pass multiple sorts. The order of the parameters is the order the sorts will be applied. For example, the following sorts first by size then by color:
+
+`/widgets?filter[sort]=size&filter[sort]=color`
+
+Sorts are ascending by default, but can use a prefix can be added to control the sort:
+
+- `+` ascending (the default)
+- `-` descending
+
+For example, the following sorts by size descending:
+
+`/widgets?filter[sort]=-size`
+
+## Contribute
 
 Feedback, feature requests, and proposed changes are welcomed. Please use the [issue tracker](https://github.com/RockSolt/filterameter/issues) 
 for feedback and feature requests. To propose a change directly, please fork the repo and open a pull request. Keep an eye on the actions to make
