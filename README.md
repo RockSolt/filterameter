@@ -4,13 +4,56 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d9d87f9ce8020eb6e656/maintainability)](https://codeclimate.com/github/RockSolt/filterameter/maintainability)
 
 # Filterameter
-Declarative filter parameters provide clean and clear filters for Rails controllers.
+Filterameter provides declarative filters for query classes or Rails controllers to reduce boilerplate code and increase readability. How many times have you seen (or written) this controller action?
+
+```ruby
+def index
+  @films = Films.all
+  @films = @films.where(name: params[:name]) if params[:name]
+  @films = @films.joins(:film_locations).merge(FilmLocations.where(location_id: params[:location_id])) if params[:location_id]
+  @films = @films.directed_by(params[:director_id]) if params[:director_id]
+  @films = @films.written_by(params[:writer_id]) if params[:writer_id]
+  @films = @films.acted_by(params[:actor_id]) if params[:actor_id]
+end
+```
+
+It's redundant code and a bit of a pain to write and maintain. Not to mention what RuboCop is going to say about it. Wouldn't it be nice if you could just declare the filters that the controller accepts?
+
+```ruby
+  filter :name, partial: true
+  filter :location_id, association: :film_locations
+  filter :director_id, name: :directed_by
+  filter :writer_id, name: :written_by
+  filter :actor_id, name: :acted_by
+
+  def index
+    @films = build_query_from_filters
+  end
+```
+
+## Getting Started
+
+This gem requires Rails 6.1+, and works with ActiveRecord.
+
+### Installation
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'filterameter'
+```
+
+And then execute:
+```bash
+$ bundle install
+```
+
+Or install it yourself as:
+```bash
+$ gem install filterameter
+```
 
 ## Usage
-Declare filters in controllers to increase readability and reduce boilerplate code. Filters can be declared for attributes or scopes, either directly on the model or on an associated model. Validations can also be assigned.
-
 Include module `Filterameter::DeclarativeFilters` in the controller to provide the filter DSL. It can be included in the `ApplicationController` to make the functionality available to all controllers or it can be mixed in on a case-by-case basis.
-
 
 ```ruby
   filter :color
@@ -365,23 +408,6 @@ validator = WidgetsController.declarations_validator
 assert_predicate validator, :valid?, -> { validator.errors }
 ```
 
-## Installation
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'filterameter'
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install filterameter
-```
-
 ## Forms and Query Parameters
 
 The controller mixin will look for filter parameters nested under the `filter` key. For example, here's what the query parameters might look like for size and color:
@@ -402,7 +428,7 @@ On [a generic search form](https://guides.rubyonrails.org/form_helpers.html#a-ge
 <% end %>
 ```
 
-## Contributions
+## Contribute
 
 Feedback, feature requests, and proposed changes are welcomed. Please use the [issue tracker](https://github.com/RockSolt/filterameter/issues) 
 for feedback and feature requests. To propose a change directly, please fork the repo and open a pull request. Keep an eye on the actions to make
