@@ -4,7 +4,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/d9d87f9ce8020eb6e656/maintainability)](https://codeclimate.com/github/RockSolt/filterameter/maintainability)
 
 # Filterameter
-Filterameter provides declarative filters for query classes or Rails controllers to reduce boilerplate code and increase readability. How many times have you seen (or written) this controller action?
+Filterameter provides declarative filters for Rails controllers to reduce boilerplate code and increase readability. How many times have you seen (or written) this controller action?
 
 ```ruby
 def index
