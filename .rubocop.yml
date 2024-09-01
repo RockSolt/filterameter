@@ -19,6 +19,8 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'Guardfile'
+  AllowedMethods:
+    - 'class_methods'
 Layout/LineLength:
   Max: 120
 Style/FrozenStringLiteralComment:
