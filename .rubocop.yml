@@ -19,10 +19,11 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'Guardfile'
-  AllowedMethods:
-    - 'class_methods'
 Layout/LineLength:
   Max: 120
+Style/Documentation:
+  AllowedConstants:
+    - ClassMethods
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'spec/dummy/db/**/*'
