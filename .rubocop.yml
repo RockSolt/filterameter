@@ -21,6 +21,9 @@ Metrics/BlockLength:
     - 'Guardfile'
 Layout/LineLength:
   Max: 120
+Style/Documentation:
+  AllowedConstants:
+    - ClassMethods
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'spec/dummy/db/**/*'
