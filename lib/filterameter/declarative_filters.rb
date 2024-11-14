@@ -7,7 +7,7 @@ module Filterameter
   module DeclarativeFilters
     extend ActiveSupport::Concern
 
-    class_methods do
+    module ClassMethods
       delegate :declarations_validator, to: :filter_coordinator
 
       # Declares a filter that can be read from the parameters and applied to the
