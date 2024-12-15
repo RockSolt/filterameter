@@ -75,17 +75,18 @@ module Filterameter
       # and is the default value for the attribute name when none is specified in the
       # options.
       #
-      # ### Options
+      # ## Options
       #
-      # :name
-      # :   Specify the attribute or scope name if the parameter name is not the same.
-      #     The default value is the parameter name, so if the two match this can be
-      #     left out.
+      # The declaration can also include an `options` hash to specialize the behavior of the sort.
       #
+      # * **name**: Specify the attribute or scope name if the parameter name is not the same. The default value is the
+      #   parameter name, so if the two match this can be left out.
       #
-      # :association
-      # :   Specify the name of the association if the attribute or scope is nested.
+      # * **association**: Specify the name of the association if the attribute or scope is nested.
       #
+      # Options example:
+      #
+      #     sort :project_created_at, name: :created_at, association: :project
       def sort(parameter_name, options = {})
         filter_coordinator.add_sort(parameter_name, options)
       end
