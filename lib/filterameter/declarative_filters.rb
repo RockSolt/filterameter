@@ -65,7 +65,7 @@ module Filterameter
         filter_coordinator.add_filter(name, options)
       end
 
-      # Declares a list of filters without optoins. Filters that require options must be declared with `filter`.
+      # Declares a list of filters without options. Filters that require options must be declared with `filter`.
       def filters(*names)
         names.each { |name| filter(name) }
       end
@@ -91,7 +91,7 @@ module Filterameter
         filter_coordinator.add_sort(parameter_name, options)
       end
 
-      # Declares a list of sorts without optoins. Sorts that require options must be declared with `sort`.
+      # Declares a list of sorts without options. Sorts that require options must be declared with `sort`.
       def sorts(*parameter_names)
         parameter_names.each { |parameter_name| filter(parameter_name) }
       end
