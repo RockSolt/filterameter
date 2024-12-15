@@ -15,47 +15,52 @@ module Filterameter
       # default value to determine the criteria to be applied. The name can be either
       # an attribute or a scope.
       #
-      # ### Options
+      # ## Options
       #
-      # :name
-      # :   Specify the attribute or scope name if the parameter name is not the same.
-      #     The default value is the parameter name, so if the two match this can be
-      #     left out.
+      # The declaration can also include an `options` hash to specialize the behavior of the filter.
       #
+      # * **name**: Specify the attribute or scope name if the parameter name is not the same. The default value is the
+      #   parameter name, so if the two match this can be left out.
       #
-      # :association
-      # :   Specify the name of the association if the attribute or scope is nested.
+      # * **association**: Specify the name of the association if the attribute or scope is nested. Use an array if the
+      #   asociation is more than one level.
       #
+      # * **validates**: Specify a validation if the parameter value should be validated. This uses ActiveModel
+      #   validations; please review those for types of validations and usage.
       #
-      # :validates
-      # :   Specify a validation if the parameter value should be validated. This uses
-      #     ActiveModel validations; please review those for types of validations and
-      #     usage.
+      # * **partial**: Specify the partial option if the filter should do a partial search (SQL's `LIKE`). The partial
+      #   option accepts a hash to specify the search behavior.
       #
+      #   Here are the available options:
+      #   *   match: `:anywhere` (default), `:from_start`, `:dynamic`
+      #   *   case_sensitive: `true`, `false` (default)
       #
-      # :partial
-      # :   Specify the partial option if the filter should do a partial search (SQL's
-      #     `LIKE`). The partial option accepts a hash to specify the search behavior.
+      #   There are two shortcuts: the partial option can be declared with `true`,
+      #   which just uses the defaults; or the partial option can be declared with
+      #   the match option directly, such as `partial: :from_start`.
       #
-      #     Here are the available options:
-      #     *   match: anywhere (default), from_start, dynamic
-      #     *   case_sensitive: true, false (default)
-      #
-      #     There are two shortcuts: : the partial option can be declared with `true`,
-      #     which just uses the defaults; or the partial option can be declared with
-      #     the match option directly, such as `partial: :from_start`.
-      #
-      #
-      # :range
-      # :   Specify a range option if the filter also allows ranges to be searched.
-      #     The range option accepts the following options:
+      # * **range**: Specify a range option if the filter also allows ranges to be searched. The range option accepts
+      #   the following options:
       #     *   true: enables two additional parameters with attribute name plus
       #         suffixes `_min` and `_max`
-      #     *   :min_only: enables additional parameter with attribute name plus
+      #     *   min_only: enables additional parameter with attribute name plus
       #         suffix `_min`
-      #     *   :max_only: enables additional parameter with attribute name plus
+      #     *   max_only: enables additional parameter with attribute name plus
       #         suffix `_max`
       #
+      # * **sortable**: By default most filters are sortable. To prevent an attribute filter from being sortable, set
+      #   the option to `false`.
+      #
+      # Options examples:
+      #
+      #     filter :status, name: :current_status
+      #     filter :manager_id, association: :department
+      #     filter :business_unit_name, name: :name, association: [:department, :business_unit]
+      #     filter :size, validates: { inclusion: { in: %w[Small Medium Large], allow_multiple_values: true } }
+      #     filter :description, partial: true
+      #     filter :department_name, partial: :from_start
+      #     filter :reason, partial: { match: :dynamic, case_sensitive: true }
+      #     filter :price, range: true
       def filter(name, options = {})
         filter_coordinator.add_filter(name, options)
       end
