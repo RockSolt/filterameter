@@ -100,11 +100,35 @@ module Filterameter
         filter_coordinator.default_sort = sort_and_direction_pairs
       end
 
+      # Rails conventions are used to determine the controller's model. For example, the PhotosController builds a query
+      # against the Photo model. If a controller is namespaced, the model will first be looked up without the namespace,
+      # then with the namespace.
+      #
+      # **If the conventions do not provide the correct model**, the model can be named explicitly with the following:
+      #
+      # ```ruby
+      # filter_model 'Picture'
+      # ```
+      #
+      # An optional second parameter can be used to specify the variable name. Both the model and the variable name can
+      # be specified with this short-cut. For example, to use the Picture model and store the results as `@data`, use
+      # the following:
+      #
+      #     filter_model 'Picture', :data
+      #
+      # **Important:** If the `filter_model` declaration is used, it must be before any filter or sort declarations.
       def filter_model(model_class, query_var_name = nil)
         filter_coordinator.model_class = model_class
         filter_query_var_name(query_var_name) if query_var_name.present?
       end
 
+      # When using the before action callback `build_filtered_query`, the query is assigned to an instance variable with
+      # the name of the model pluralized. For example, the Photo model will use the variable `@photos`.
+      #
+      # To use a different variable name with the callback, assign it with `filter_query_var_name`. For example, if the
+      # query is stored as `@data`, use the following:
+      #
+      #     filter_query_var_name :data
       def filter_query_var_name(query_variable_name)
         filter_coordinator.query_variable_name = query_variable_name
       end
