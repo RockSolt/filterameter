@@ -4,5 +4,9 @@ source "https://rubygems.org"
 
 gem "rails", "~> 6.1.0"
 gem "rspec-rails", "~> 6.1"
+gem "base64"
+gem "bigdecimal"
+gem "drb"
+gem "mutex_m"
 
 gemspec path: "../"
