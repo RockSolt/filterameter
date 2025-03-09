@@ -2,6 +2,7 @@
 
 appraise 'rails-6-1' do
   gem 'rails', '~> 6.1.0'
+  gem 'concurrent-ruby', '1.3.4' # https://github.com/rails/rails/pull/54264
   gem 'rspec-rails', '~> 6.1'
   gem 'base64'
   gem 'bigdecimal'
@@ -11,6 +12,7 @@ end
 
 appraise 'rails-7' do
   gem 'rails', '~> 7.0.0'
+  gem 'concurrent-ruby', '1.3.4' # https://github.com/rails/rails/pull/54264
   gem 'base64'
   gem 'bigdecimal'
   gem 'drb'
