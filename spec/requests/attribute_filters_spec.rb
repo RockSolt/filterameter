@@ -61,4 +61,13 @@ RSpec.describe 'Attribute filters' do
         .to raise_exception(Filterameter::Exceptions::ValidationError)
     end
   end
+
+  context 'with empty filters' do
+    before { get '/activities', params: { filter: { manager_id: users(:joe_jackson).id, activity_manager_id: '' } } }
+
+    it 'returns the correct number of rows' do
+      count = Activity.where(activity_manager_id: users(:joe_jackson).id).count
+      expect(response.parsed_body.size).to eq count
+    end
+  end
 end
