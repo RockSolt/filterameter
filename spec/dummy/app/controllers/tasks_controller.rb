@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TasksController < ApplicationController
+  filter :completed
   filter :description, partial: true
   filter :description_starts_with, name: :description, partial: :from_start
   filter :description_case_sensitive, name: :description, partial: { case_sensitive: true }

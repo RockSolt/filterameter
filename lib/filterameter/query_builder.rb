@@ -30,7 +30,9 @@ module Filterameter
 
     def parse_filter_params(filter_params)
       sort = parse_sorts(filter_params.delete('sort'))
-      [sort, remove_invalid_values(filter_params)]
+      params = filter_params.reject { |_k, v| v.is_a?(String) && v.empty? }
+                            .then { |p| remove_invalid_values(p) }
+      [sort, params]
     end
 
     def parse_sorts(sorts)
