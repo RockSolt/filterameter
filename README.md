@@ -247,10 +247,10 @@ end
 
 #### Default Sort
 
-A default sort can be declared using `default_sort`. The argument(s) should specify one or more of the declared sorts or sortable filters by name. By default, the order is ascending. If you want descending order, you can map the column name symbol to :desc.
+A default sort can be declared using `default_sort`. The argument(s) should specify one or more of the declared sorts or sortable filters by name. The sorts should be defined as key-value pairs, with the name as the key and the direction as the value.
 
 ```ruby
-default_sort updated_at: :desc, :description
+default_sort updated_at: :desc, description: :asc
 ```
 
 In order to provide consistent results, a sort is always applied. If no default is specified, it will use primary key descending.

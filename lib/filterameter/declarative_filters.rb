@@ -96,6 +96,7 @@ module Filterameter
         parameter_names.each { |parameter_name| filter(parameter_name) }
       end
 
+      # Declares a default sort order for the query. Specify a list of sort names and directions as pairs.
       def default_sort(sort_and_direction_pairs)
         filter_coordinator.default_sort = sort_and_direction_pairs
       end
