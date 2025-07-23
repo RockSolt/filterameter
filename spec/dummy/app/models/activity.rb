@@ -3,8 +3,8 @@
 class Activity < ApplicationRecord
   belongs_to :project
   belongs_to :activity_manager, class_name: 'User'
-  has_many :activity_members
-  has_many :tasks
+  has_many :activity_members, dependent: :destroy
+  has_many :tasks, dependent: :destroy
 
   scope :incomplete, -> { where(completed: false) }
 
