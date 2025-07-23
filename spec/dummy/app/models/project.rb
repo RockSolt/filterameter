@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Project < ApplicationRecord
-  has_many :activities
+  has_many :activities, dependent: :destroy
 
   # enum signature changed in Rails 7
   if method(:enum).arity == 1
-    enum priority: %i[low medium high], _suffix: true
+    enum priority: { low: 0, medium: 1, high: 2 }, _suffix: true # rubocop:disable Rails/EnumSyntax
   else
-    enum :priority, %i[low medium high], suffix: true
+    enum :priority, { low: 0, medium: 1, high: 2 }, suffix: true
   end
 
   def self.in_progress(as_of)
