@@ -1,7 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/filterameter.svg)](https://badge.fury.io/rb/filterameter)
 [![RuboCop](https://github.com/RockSolt/filterameter/workflows/RuboCop/badge.svg)](https://github.com/RockSolt/filterameter/actions?query=workflow%3ARuboCop)
 [![RSpec](https://github.com/RockSolt/filterameter/workflows/RSpec/badge.svg)](https://github.com/RockSolt/filterameter/actions?query=workflow%3ARSpec)
-[![Maintainability](https://api.codeclimate.com/v1/badges/d9d87f9ce8020eb6e656/maintainability)](https://codeclimate.com/github/RockSolt/filterameter/maintainability)
 
 # Filterameter
 Filterameter provides declarative filters for Rails controllers to reduce boilerplate code and increase readability. How many times have you seen (or written) this controller action?
