@@ -146,7 +146,7 @@ There are two shortcuts: : the partial option can be declared with `true`, which
 ```ruby
 filter :description, partial: true
 filter :department_name, partial: :from_start
-filter :reason, partial: { match: :dynamic, case_sensitive: true } 
+filter :reason, partial: { match: :dynamic, case_sensitive: true }
 ```
 
 The `match` options defines where you are searching (which then controls where the wildcard(s) appear):
@@ -337,7 +337,7 @@ Note that the starting query provides the model, so the model is not looked up a
 
 ### Specifying the Model
 
-Rails conventions are used to determine the controller's model. For example, the PhotosController builds a query against the Photo model. If a controller is namespaced, the model will first be looked up without the namespace, then with the namespace. 
+Rails conventions are used to determine the controller's model. For example, the PhotosController builds a query against the Photo model. If a controller is namespaced, the model will first be looked up without the namespace, then with the namespace.
 
 **If the conventions do not provide the correct model**, the model can be named explicitly with the following:
 
@@ -355,7 +355,7 @@ There are three configuration options:
 - action_on_validation_failure
 - filter_key
 
-The configuration options can be set in an initializer, an environment file, or in `application.rb`. 
+The configuration options can be set in an initializer, an environment file, or in `application.rb`.
 
 The options can be set directly...
 
@@ -445,7 +445,7 @@ For example, the following sorts by size descending:
 
 ## Contribute
 
-Feedback, feature requests, and proposed changes are welcomed. Please use the [issue tracker](https://github.com/RockSolt/filterameter/issues) 
+Feedback, feature requests, and proposed changes are welcomed. Please use the [issue tracker](https://github.com/RockSolt/filterameter/issues)
 for feedback and feature requests. To propose a change directly, please fork the repo and open a pull request. Keep an eye on the actions to make
 sure the tests and Rubocop are passing. [Code Climate](https://codeclimate.com/github/RockSolt/filterameter) is also used manually to assess the codeline.
 
@@ -463,7 +463,7 @@ Tests are written in RSpec and the dummy app uses a docker database. The script 
 database. It is a one-time step before running the tests.
 
 ```bash
-bin/start_db.rb
+bin/start_db.sh
 bundle exec rspec
 ```
 
