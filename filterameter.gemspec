@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard", "~> 2.16"
   spec.add_development_dependency "guard-rspec", "~> 4.7"
   spec.add_development_dependency "guard-rubocop", "~> 1.5.0"
-  spec.add_development_dependency "pg", "~> 1.5.4"
+  spec.add_development_dependency "pg", "~> 1.6.2"
   spec.add_development_dependency "rspec-rails", "~> 7.0"
   spec.add_development_dependency "rubocop", "~> 1.64"
   spec.add_development_dependency "rubocop-packaging", "~> 0.5.2"
