@@ -6,6 +6,7 @@ RSpec.describe Filterameter::Validators::InclusionValidator do
   let(:record) do
     Class.new do
       include ActiveModel::Model
+
       attr_accessor :size
 
       def self.name
