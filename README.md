@@ -432,7 +432,7 @@ The sort is also nested underneath the filter key:
 
 Use an array to pass multiple sorts. The order of the parameters is the order the sorts will be applied. For example, the following sorts first by size then by color:
 
-`/widgets?filter[sort]=size&filter[sort]=color`
+`/widgets?filter[sort][]=size&filter[sort][]=color`
 
 Sorts are ascending by default, but can use a prefix can be added to control the sort:
 
