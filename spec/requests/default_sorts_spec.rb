@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Default sorts' do
-  fixtures :projects, :activities
-
   context 'with no default specified' do
     before { get '/projects' }
 

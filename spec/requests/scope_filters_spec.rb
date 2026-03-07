@@ -4,8 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Scope filters' do
   context 'when conditional' do
-    fixtures :activities, :users
-
     context 'when true' do
       before { get '/activities', params: { filter: { incomplete: true } } }
 
@@ -54,8 +52,6 @@ RSpec.describe 'Scope filters' do
   end
 
   context 'with arguments' do
-    fixtures :projects
-
     before { get '/projects', params: { filter: { in_progress: 1.day.from_now } } }
 
     it 'returns the correct number of rows' do

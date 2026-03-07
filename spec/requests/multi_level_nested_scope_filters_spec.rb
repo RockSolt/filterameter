@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Nested scope filters' do
-  fixtures :projects, :activities, :tasks, :users, :activity_members
-
   context 'with singular-to-singular association' do
     before { get '/tasks', params: { filter: { low_priority_projects: 'low' } } }
 

@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Filter Key configuration' do
-  fixtures :activities
-
   before { allow(Filterameter).to receive(:configuration).and_return(custom_config) }
 
   context 'with key overriden to f' do

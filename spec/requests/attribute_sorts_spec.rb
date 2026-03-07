@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Attribute sorts' do
-  fixtures :projects, :activities, :users, :tasks
-
   context 'with filter declaration' do
     before { get '/activities', params: { filter: { sort: :activity_manager_id } } }
 

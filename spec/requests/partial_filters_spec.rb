@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Partial filters' do
-  fixtures :tasks
-
   context 'with defaults' do
     before { get '/tasks', params: { filter: { description: 'beans' } } }
 

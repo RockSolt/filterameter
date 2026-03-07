@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Attribute filters' do
-  fixtures :activities, :users, :tasks
-
   context 'with no options' do
     before { get '/activities', params: { filter: { activity_manager_id: users(:joe_jackson).id } } }
 
@@ -39,7 +37,6 @@ RSpec.describe 'Attribute filters' do
   end
 
   context 'with validations' do
-    fixtures :projects
     before { get '/projects', params: { filter: { priority: 'high' } } }
 
     it 'returns the correct number of rows' do
@@ -54,8 +51,6 @@ RSpec.describe 'Attribute filters' do
   end
 
   context 'with validations and invalid value' do
-    fixtures :projects
-
     it 'raises validation error' do
       expect { get '/projects', params: { filter: { priority: 'top' } } }
         .to raise_exception(Filterameter::Exceptions::ValidationError)

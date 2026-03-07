@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Controller overrides' do
-  fixtures :projects, :activities
-
   context 'with nested key overridden' do
     before { get '/legacy_projects', params: { criteria: { priority: 'high' } } }
 
@@ -34,8 +32,6 @@ RSpec.describe 'Controller overrides' do
   end
 
   context 'with filter_parameters overridden' do
-    fixtures :tasks
-
     before { get '/active_tasks', params: { filter: { activity_id: activities(:good_breakfast).id } } }
 
     it 'returns the correct number of rows' do

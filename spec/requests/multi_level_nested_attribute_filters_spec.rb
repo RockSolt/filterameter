@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Multi-level nested attribute filters' do
-  fixtures :projects, :activities, :tasks, :users, :activity_members
-
   context 'with singular-to-singular association' do
     before { get '/tasks', params: { filter: { project_priority: 'high' } } }
 
