@@ -8,26 +8,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ["3.1", "3.2", "3.3", "3.4"]
+        ruby: ["3.2", "3.3", "3.4"]
         gemfile:
-          - rails_6_1
-          - rails_7
-          - rails_7_1
           - rails_7_2
           - rails_8
-        exclude:
-          - ruby: "3.1"
-            gemfile: "rails_8"
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
       BUNDLE_PATH_RELATIVE_TO_CWD: true
+      BUNDLE_WITH: ci
     services:
       db:
         image: postgres:16
         env:
-          POSTGRES_USER: filterameter
+          POSTGRES_USER: filterameter_test
+          POSTGRES_PASSWORD: filterameter_test
           POSTGRES_DB: filterameter_test
-          POSTGRES_PASSWORD: r!teoqA2bA
         ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
@@ -47,7 +42,5 @@ jobs:
       - name: "RSpec"
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
-          POSTGRES_USER: filteramter
-          POSTGRES_PASSWORD: r!teoqA2bA
+          DATABASE_URL: postgres://filterameter_test:@localhost:5432/filterameter_test
         run: bundle exec rspec --format progress

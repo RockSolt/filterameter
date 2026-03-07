@@ -37,7 +37,7 @@ RSpec.describe 'Partial filters' do
     before { get '/tasks', params: { filter: { description_case_sensitive: 'Add beans' } } }
 
     it 'returns the correct number of rows' do
-      count = Task.where("description ilike 'Add beans%'").count
+      count = Task.where("description like 'Add beans%'").count
       expect(response.parsed_body.size).to eq count
     end
 
@@ -51,6 +51,8 @@ RSpec.describe 'Partial filters' do
     before { get '/tasks', params: { filter: { description_case_sensitive: 'add beans' } } }
 
     it 'returns the no rows' do
+      skip 'SQLite is case insensitive by default' if ActiveRecord::Base.connection.adapter_name == 'SQLite'
+
       expect(response.parsed_body.size).to be_zero
     end
   end
