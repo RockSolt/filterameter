@@ -1,14 +1,14 @@
-name: 'RSpec'
+name: "RSpec"
 on:
   - push
 
 jobs:
   tests:
-    name: 'RSpec'
+    name: "RSpec"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ['3.1', '3.2', '3.3', '3.4']
+        ruby: ["3.1", "3.2", "3.3", "3.4"]
         gemfile:
           - rails_6_1
           - rails_7
@@ -16,8 +16,8 @@ jobs:
           - rails_7_2
           - rails_8
         exclude:
-          - ruby: '3.1'
-            gemfile: 'rails_8'
+          - ruby: "3.1"
+            gemfile: "rails_8"
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
       BUNDLE_PATH_RELATIVE_TO_CWD: true
@@ -28,12 +28,12 @@ jobs:
           POSTGRES_USER: filterameter
           POSTGRES_DB: filterameter_test
           POSTGRES_PASSWORD: r!teoqA2bA
-        ports: ['5432:5432']
+        ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-interval 1s
+          --health-timeout 1s
+          --health-retries 30
     steps:
       - uses: actions/checkout@master
 
@@ -44,7 +44,7 @@ jobs:
           bundler: default
           bundler-cache: true
 
-      - name: 'RSpec'
+      - name: "RSpec"
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
