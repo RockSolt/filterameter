@@ -15,3 +15,11 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+
+group :development, :test do
+  gem 'sqlite3', '~> 2.9.1'
+end
+
+group :ci do
+  gem 'pg', '~> 1.6.3'
+end

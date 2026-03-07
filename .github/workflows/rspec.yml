@@ -15,13 +15,13 @@ jobs:
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
       BUNDLE_PATH_RELATIVE_TO_CWD: true
+      BUNDLE_WITH: ci
     services:
       db:
         image: postgres:16
         env:
-          POSTGRES_USER: filterameter
-          POSTGRES_DB: filterameter_test
-          POSTGRES_PASSWORD: r!teoqA2bA
+          DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
+          POSTGRES_PASSWORD: filterameter
         ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
@@ -42,6 +42,5 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
-          POSTGRES_USER: filteramter
-          POSTGRES_PASSWORD: r!teoqA2bA
+          POSTGRES_PASSWORD: filterameter
         run: bundle exec rspec --format progress

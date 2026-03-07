@@ -1,15 +1,16 @@
+# yaml-language-server: $schema=https://www.rubyschema.org/rails/database.json
+
+%YAML 1.1
+---
 default: &default
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
-  user: filterameter
-  password: r!teoqA2bA
-  host: localhost
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: 5
 
 development:
   <<: *default
-  database: filterameter
+  database: storage/development.sqlite3
 
 test:
   <<: *default
-  database: filterameter_test
+  database: storage/test.sqlite3

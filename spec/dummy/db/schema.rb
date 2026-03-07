@@ -11,9 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2024_05_28_224846) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "activities", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.bigint "activity_manager_id", null: false

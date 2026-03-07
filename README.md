@@ -459,11 +459,10 @@ Gold stars will be awarded if you are able to [replicate the issue with a test](
 
 ### Running Tests
 
-Tests are written in RSpec and the dummy app uses a docker database. The script `bin/start_db.sh` starts and prepares the test
-database. It is a one-time step before running the tests.
+Tests are written in RSpec.
 
 ```bash
-bin/start_db.sh
+bin/prepare_db.sh
 bundle exec rspec
 ```
 
