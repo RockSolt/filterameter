@@ -4,8 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Nested filters' do
   describe 'attribute filters' do
-    fixtures :projects, :activities, :tasks
-
     context 'with singular association' do
       before { get '/activities', params: { filter: { project_priority: 'high' } } }
 
@@ -36,8 +34,6 @@ RSpec.describe 'Nested filters' do
   end
 
   describe 'scope filters' do
-    fixtures :projects, :activities, :tasks
-
     context 'with singular association' do
       before { get '/activities', params: { filter: { high_priority: 'true' } } }
 

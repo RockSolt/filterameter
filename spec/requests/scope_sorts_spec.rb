@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Scope sorts' do
-  fixtures :projects
-
   context 'with class method scope' do
     before { get '/projects', params: { filter: { sort: :by_created_at } } }
 

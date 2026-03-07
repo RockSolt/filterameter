@@ -5,16 +5,15 @@ breakfast_toast:
 breakfast_juice:
   activity: good_breakfast
   user: juice_guy
-  
+
 breakfast_chef:
   activity: good_breakfast
   user: egg_chef
 
-
 exercise_steph:
-  activity: lace_up_running_shoes
-  user: step
+  activity: go_for_a_run
+  user: steph
 
 exercise_klay:
-  activity: lace_up_running_shoes
+  activity: go_for_a_run
   user: klay

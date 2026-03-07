@@ -1,4 +1,4 @@
-require: 
+plugins:
   - rubocop-packaging
   - rubocop-rails
   - rubocop-rspec
@@ -7,27 +7,27 @@ require:
 AllCops:
   TargetRubyVersion: 3.2
   Exclude:
-    - 'filterameter.gemspec'
-    - 'gemfiles/*.gemfile'
-    - 'Rakefile'
-    - 'spec/dummy/bin/**/*'
-    - 'spec/dummy/db/schema.rb'
-    - 'spec/dummy/config.ru'
-    - 'spec/dummy/config/**/*'
+    - "filterameter.gemspec"
+    - "gemfiles/*.gemfile"
+    - "Rakefile"
+    - "spec/dummy/bin/**/*"
+    - "spec/dummy/db/schema.rb"
+    - "spec/dummy/config.ru"
+    - "spec/dummy/config/**/*"
   NewCops: enable
 Metrics/BlockLength:
   Exclude:
-    - 'spec/**/*'
-    - 'Guardfile'
+    - "spec/**/*"
+    - "Guardfile"
   AllowedMethods:
-    - 'class_methods'
+    - "class_methods"
 Layout/LineLength:
   Max: 120
 Style/FrozenStringLiteralComment:
   Exclude:
-    - 'spec/dummy/db/**/*'
+    - "spec/dummy/db/**/*"
 Style/HashSyntax:
   EnforcedShorthandSyntax: either
 RSpec/MultipleExpectations:
   Exclude:
-    - 'spec/requests/*'
+    - "spec/requests/*"

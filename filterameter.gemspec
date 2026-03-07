@@ -22,9 +22,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "appraisal", "~> 2.5.0"
   spec.add_development_dependency "rspec-rails", "~> 7.0"
   spec.add_development_dependency "rubocop", "~> 1.64"
-  spec.add_development_dependency "rubocop-packaging", "~> 0.5.2"
+  spec.add_development_dependency "rubocop-packaging", "~> 0.6"
   spec.add_development_dependency "rubocop-rails", "~> 2.25"
-  spec.add_development_dependency "rubocop-rspec", "~> 3.2.0"
-  spec.add_development_dependency "rubocop-rspec_rails", "~> 2.30.0"
+  spec.add_development_dependency "rubocop-rspec", "~> 3.9"
+  spec.add_development_dependency "rubocop-rspec_rails", "~> 2.32"
   spec.add_development_dependency "simplecov", "~> 0.18"
 end

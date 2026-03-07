@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Filterameter::ParametersBase do
   let(:parameters) do
     Class.new(described_class).tap do |pc|
-      pc.add_validation(:size, [inclusion: { in: %w[Small Medium Large] }])
+      pc.add_validation(:size, [{ inclusion: { in: %w[Small Medium Large] } }])
       pc.add_validation(:percent_reduced, [{ numericality: { greater_than: 0 } },
                                            { numericality: { less_than: 100 } }])
     end.new({})

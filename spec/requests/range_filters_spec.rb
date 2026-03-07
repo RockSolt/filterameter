@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Range filters' do
-  fixtures :activities
-
   context 'when range: true' do
     context 'with exact value' do
       before { get '/activities', params: { filter: { task_count: 3 } } }
