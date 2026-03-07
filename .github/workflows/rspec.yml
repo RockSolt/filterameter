@@ -20,8 +20,9 @@ jobs:
       db:
         image: postgres:16
         env:
-          DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
-          POSTGRES_PASSWORD: filterameter
+          POSTGRES_USER: filterameter_test
+          POSTGRES_PASSWORD: filterameter_test
+          POSTGRES_DB: filterameter_test
         ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
@@ -41,5 +42,5 @@ jobs:
       - name: "RSpec"
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://filterameter:@localhost:5432/filterameter_test
+          DATABASE_URL: postgres://filterameter_test:@localhost:5432/filterameter_test
         run: bundle exec rspec --format progress

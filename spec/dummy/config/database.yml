@@ -14,4 +14,4 @@ development:
 test:
   <<: *default
   database: storage/test.sqlite3
-  password: filterameter
+  password: filterameter_test
