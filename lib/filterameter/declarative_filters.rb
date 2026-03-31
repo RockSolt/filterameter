@@ -93,7 +93,7 @@ module Filterameter
 
       # Declares a list of sorts without options. Sorts that require options must be declared with `sort`.
       def sorts(*parameter_names)
-        parameter_names.each { |parameter_name| filter(parameter_name) }
+        parameter_names.each { |parameter_name| sort(parameter_name) }
       end
 
       # Declares a default sort order for the query. Specify a list of sort names and directions as pairs.
