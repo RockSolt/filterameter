@@ -266,7 +266,7 @@ There are two ways to apply the filters and build the query, depending on how mu
 
 Add before action callback `build_filtered_query` for controller actions that should build the query. This can be done either in the `ApplicationController` or on a case-by-case basis.
 
-When using the callback, the variable name is the pluralized model name. For example, the Photo model will use the variable `@photos` to store the query. The variable name can be explicitly specified with with `filter_query_var_name`. For example, if the query is stored as `@data`, use the following:
+When using the callback, the variable name is the pluralized model name. For example, the Photo model will use the variable `@photos` to store the query. The variable name can be explicitly specified with `filter_query_var_name`. For example, if the query is stored as `@data`, use the following:
 
 ```ruby
 filter_query_var_name :data
@@ -366,7 +366,7 @@ The options can be set directly...
 ```ruby
 Filterameter.configure do |config|
   config.action_on_undeclared_parameters = :log
-  config.action_on_validation_failuer = :log
+  config.action_on_validation_failure = :log
   config.filter_key = :f
 end
 ```
