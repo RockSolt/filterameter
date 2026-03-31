@@ -24,4 +24,4 @@ The request specs are broken up into the following groups:
 - controller overrides
 - default sorts
 
-The controllers use JSON repsonses because it is easier to check JSON responses than HTML responses.
+The controllers use JSON responses because it is easier to check JSON responses than HTML responses.
