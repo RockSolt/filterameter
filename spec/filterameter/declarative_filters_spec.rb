@@ -39,6 +39,27 @@ RSpec.describe Filterameter::DeclarativeFilters do
     end
   end
 
+  describe '.sorts' do
+    let(:coordinator) { controller.filter_coordinator }
+    let(:controller) do
+      Class.new(ApplicationController) do
+        @controller_name = 'projects'
+        @controller_path = 'projects'
+        include Filterameter::DeclarativeFilters
+
+        sorts :name, :priority
+      end
+    end
+
+    it 'registers name and priority as sorts' do
+      expect(coordinator.instance_variable_get('@registry').sort_parameter_names).to include('name', 'priority')
+    end
+
+    it 'does not register name and priority as filters' do
+      expect(coordinator.filter_parameter_names).not_to include('name', 'priority')
+    end
+  end
+
   describe '.filter_query_var_name' do
     let(:controller) do
       Class.new(ApplicationController) do
