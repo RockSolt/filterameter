@@ -29,4 +29,15 @@ RSpec.describe Filterameter::Filters::AttributeFilter do
         .to contain_exactly Filterameter::DeclarationErrors::NoSuchAttributeError.new('Activity', :not_a_thing)
     end
   end
+
+  context 'with converter' do
+    let(:filter) { described_class.new(:color, &:upcase) }
+
+    it 'applies converter to value' do
+      query = class_spy(ActiveRecord::Base)
+
+      filter.apply(query, 'blue')
+      expect(query).to have_received(:where).with(color: 'BLUE')
+    end
+  end
 end

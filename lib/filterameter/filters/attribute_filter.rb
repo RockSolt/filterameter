@@ -9,11 +9,13 @@ module Filterameter
       include Filterameter::Errors
       include AttributeValidator
 
-      def initialize(attribute_name)
+      def initialize(attribute_name, &converter)
         @attribute_name = attribute_name
+        @converter = converter
       end
 
       def apply(query, value)
+        value = @converter.call(value) if @converter
         query.where(@attribute_name => value)
       end
     end
