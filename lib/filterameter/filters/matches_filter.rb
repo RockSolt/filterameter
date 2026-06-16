@@ -9,14 +9,16 @@ module Filterameter
       include Filterameter::Errors
       include Filterameter::Filters::AttributeValidator
 
-      def initialize(attribute_name, options)
+      def initialize(attribute_name, options, &converter)
         @attribute_name = attribute_name
         @prefix = options.match_anywhere? ? '%' : nil
         @suffix = options.match_anywhere? || options.match_from_start? ? '%' : nil
         @case_sensitive = options.case_sensitive?
+        @converter = converter
       end
 
       def apply(query, value)
+        value = @converter.call(value) if @converter
         arel = query.arel_table[@attribute_name].matches("#{@prefix}#{value}#{@suffix}", false, @case_sensitive)
         query.where(arel)
       end
