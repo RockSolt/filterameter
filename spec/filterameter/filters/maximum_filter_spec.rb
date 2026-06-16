@@ -25,4 +25,13 @@ RSpec.describe Filterameter::Filters::MaximumFilter do
       expect(filter.valid?(Activity)).to be false
     end
   end
+
+  context 'with converter' do
+    let(:filter) { described_class.new(Activity, :task_count) { |v| v.is_a?(String) ? v.delete(',') : v } }
+    let(:query) { filter.apply(Activity.all, '1,234') }
+
+    it 'converts value' do
+      expect(query.to_sql).to include '<= 1234'
+    end
+  end
 end

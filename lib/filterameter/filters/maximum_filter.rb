@@ -7,6 +7,7 @@ module Filterameter
     # Class MaximumFilter adds criteria for all values greater than or equal to a maximum.
     class MaximumFilter < ArelFilter
       def apply(query, value)
+        value = @converter.call(value) if @converter
         query.where(@arel_attribute.lteq(value))
       end
     end
