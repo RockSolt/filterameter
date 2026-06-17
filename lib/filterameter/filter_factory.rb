@@ -15,7 +15,7 @@ module Filterameter
       if declaration.nested?
         build_nested_filter(declaration, context)
       else
-        build_filter(@model_class, declaration, context.scope?)
+        build_filter_or_scope_filter(@model_class, declaration, context.scope?)
       end
     end
 
@@ -23,23 +23,29 @@ module Filterameter
 
     def build_nested_filter(declaration, context)
       model = context.model_from_association
-      filter = build_filter(model, declaration, context.scope?)
+      filter = build_filter_or_scope_filter(model, declaration, context.scope?)
       nested_filter_class = context.any_collections? ? Filters::NestedCollectionFilter : Filters::NestedFilter
 
       nested_filter_class.new(declaration.association, model, filter)
     end
 
-    def build_filter(model, declaration, declaration_is_a_scope) # rubocop:disable Metrics/MethodLength
+    def build_filter_or_scope_filter(model, declaration, declaration_is_a_scope)
       if declaration_is_a_scope
         build_scope_filter(model, declaration)
-      elsif declaration.partial_search?
-        Filterameter::Filters::MatchesFilter.new(declaration.name, declaration.partial_options)
-      elsif declaration.minimum_range?
-        Filterameter::Filters::MinimumFilter.new(model, declaration.name)
-      elsif declaration.maximum_range?
-        Filterameter::Filters::MaximumFilter.new(model, declaration.name)
       else
-        Filterameter::Filters::AttributeFilter.new(declaration.name)
+        build_filter(model, declaration)
+      end
+    end
+
+    def build_filter(model, declaration)
+      if declaration.partial_search?
+        Filterameter::Filters::MatchesFilter.new(declaration.name, declaration.partial_options, &declaration.converter)
+      elsif declaration.minimum_range?
+        Filterameter::Filters::MinimumFilter.new(model, declaration.name, &declaration.converter)
+      elsif declaration.maximum_range?
+        Filterameter::Filters::MaximumFilter.new(model, declaration.name, &declaration.converter)
+      else
+        Filterameter::Filters::AttributeFilter.new(declaration.name, &declaration.converter)
       end
     end
 
@@ -48,9 +54,9 @@ module Filterameter
     def build_scope_filter(model, declaration)
       number_of_arguments = model.method(declaration.name).arity
       if number_of_arguments < 1
-        Filterameter::Filters::ConditionalScopeFilter.new(declaration.name)
+        Filterameter::Filters::ConditionalScopeFilter.new(declaration.name, &declaration.converter)
       elsif number_of_arguments == 1
-        Filterameter::Filters::ScopeFilter.new(declaration.name)
+        Filterameter::Filters::ScopeFilter.new(declaration.name, &declaration.converter)
       else
         raise Filterameter::DeclarationErrors::FilterScopeArgumentError.new(model.name, declaration.name)
       end
