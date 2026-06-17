@@ -111,4 +111,11 @@ RSpec.describe Filterameter::FilterDeclaration do
       expect { declaration }.to raise_error(ArgumentError)
     end
   end
+
+  context 'with converter' do
+    let(:converter) { ->(value) { value.to_i } }
+    let(:declaration) { described_class.new(:size, { converter: converter }) }
+
+    it('#converter') { expect(declaration.converter).to eq converter }
+  end
 end
