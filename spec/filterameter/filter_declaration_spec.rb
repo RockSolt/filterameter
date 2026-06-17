@@ -15,6 +15,7 @@ RSpec.describe Filterameter::FilterDeclaration do
     it('#partial_match?') { expect(declaration.partial_search?).to be false }
     it('#sortable?') { expect(declaration.sortable?).to be true }
     it('#to_s') { expect(declaration.to_s).to eq 'filter :size' }
+    it('#converter') { expect(declaration.converter).to be_nil }
   end
 
   context 'with name specified' do
