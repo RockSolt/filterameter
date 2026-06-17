@@ -33,4 +33,13 @@ RSpec.describe Filterameter::Filters::ScopeFilter do
       )
     end
   end
+
+  context 'with a converter' do
+    let(:filter) { described_class.new(:in_progress) { |v| v == 'TOTALLY' } }
+
+    it 'applies converter to value' do
+      filter.apply(query, 'TOTALLY')
+      expect(query).to have_received(:in_progress).with(true)
+    end
+  end
 end

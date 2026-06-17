@@ -8,11 +8,13 @@ module Filterameter
     class ScopeFilter
       include Filterameter::Errors
 
-      def initialize(scope_name)
+      def initialize(scope_name, &converter)
         @scope_name = scope_name
+        @converter = converter
       end
 
       def apply(query, value)
+        value = @converter.call(value) if @converter
         query.public_send(@scope_name, value)
       end
 
