@@ -27,6 +27,29 @@ RSpec.describe 'Scope filters' do
       end
     end
 
+    context 'with converter and true' do
+      before { get '/activities', params: { filter: { yes_no_incomplete: 'YES' } } }
+
+      it 'returns the correct number of rows' do
+        count = Activity.where(completed: false).count
+        expect(response.parsed_body.size).to eq count
+      end
+
+      it 'returns Have a good breakfast' do
+        expect(response).to have_http_status(:success)
+        expect(response.parsed_body).to include_a_record_with('name' => activities(:good_breakfast).name)
+      end
+    end
+
+    context 'with converter and false' do
+      before { get '/activities', params: { filter: { yes_no_incomplete: 'NO' } } }
+
+      it 'does not apply the scope' do
+        count = Activity.count
+        expect(response.parsed_body.size).to eq count
+      end
+    end
+
     context 'with name specified' do
       before { get '/activities', params: { filter: { in_progress: true } } }
 
@@ -62,6 +85,20 @@ RSpec.describe 'Scope filters' do
     it 'returns Start day on the right foot' do
       expect(response).to have_http_status(:success)
       expect(response.parsed_body).to include_a_record_with('name' => projects(:start_day).name)
+    end
+  end
+
+  context 'with arguments and converter' do
+    before { get '/projects', params: { filter: { in_progress_as_of_days_ago: 10 } } }
+
+    it 'returns the correct number of rows' do
+      count = Project.in_progress(10.days.ago).count
+      expect(response.parsed_body.size).to eq count
+    end
+
+    it 'returns "Read a book"' do
+      expect(response).to have_http_status(:success)
+      expect(response.parsed_body).to include_a_record_with('name' => projects(:read_a_book).name)
     end
   end
 end
