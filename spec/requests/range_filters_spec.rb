@@ -99,4 +99,17 @@ RSpec.describe 'Range filters' do
       end
     end
   end
+
+  context 'with converter' do
+    it 'returns no rows (for min 1,000)' do
+      get '/activities', params: { filter: { task_count_with_comma_min: '1,000' } }
+      expect(response.parsed_body.size).to eq 0
+    end
+
+    it 'returns all rows (for max 1,000)' do
+      get '/activities', params: { filter: { task_count_with_comma_max: '1,000' } }
+      count = Activity.where('task_count <= 1000').count
+      expect(response.parsed_body.size).to eq count
+    end
+  end
 end

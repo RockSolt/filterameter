@@ -6,8 +6,14 @@ class ActivitiesController < ApplicationController
   filter :activity_manager_id
   filter :manager_id, name: :activity_manager_id
   filter :incomplete
+  filter :yes_no_incomplete, name: :incomplete do |value|
+    value == 'YES'
+  end
   filter :in_progress, name: :incomplete
   filter :task_count, range: true
+  filter :task_count_with_comma, name: :task_count, range: true do |value|
+    value.to_s.delete(',').to_i
+  end
   filter :min_only_task_count, name: :task_count, range: :min_only
   filter :max_only_task_count, name: :task_count, range: :max_only
   filter :project_priority, name: :priority, association: :project

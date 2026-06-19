@@ -8,11 +8,13 @@ module Filterameter
     class ConditionalScopeFilter
       include Filterameter::Errors
 
-      def initialize(scope_name)
+      def initialize(scope_name, &converter)
         @scope_name = scope_name
+        @converter = converter
       end
 
       def apply(query, value)
+        value = @converter.call(value) if @converter
         return query unless ActiveModel::Type::Boolean.new.cast(value)
 
         query.public_send(@scope_name)

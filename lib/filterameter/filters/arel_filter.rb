@@ -10,9 +10,10 @@ module Filterameter
       include Filterameter::Errors
       include Filterameter::Filters::AttributeValidator
 
-      def initialize(model, attribute_name)
+      def initialize(model, attribute_name, &converter)
         @attribute_name = attribute_name
         @arel_attribute = model.arel_table[attribute_name]
+        @converter = converter
       end
     end
   end

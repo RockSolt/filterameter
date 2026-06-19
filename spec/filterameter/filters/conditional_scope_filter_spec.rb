@@ -53,4 +53,18 @@ RSpec.describe Filterameter::Filters::ConditionalScopeFilter do
       )
     end
   end
+
+  context 'with converter' do
+    let(:filter) { described_class.new(:incomplete) { |v| v == 'YES' } }
+
+    it 'applies converter to value' do
+      filter.apply(query, 'YES')
+      expect(query).to have_received(:incomplete)
+    end
+
+    it 'does not apply filter when converter returns false' do
+      filter.apply(query, 'NO')
+      expect(query).not_to have_received(:incomplete)
+    end
+  end
 end

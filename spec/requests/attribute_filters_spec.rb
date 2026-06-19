@@ -85,8 +85,46 @@ RSpec.describe 'Attribute filters' do
     end
   end
 
+  context 'with boolean filter and value converted to true' do
+    before { get '/tasks', params: { filter: { yes_no_completed: 'YES' } } }
+
+    it 'returns the correct number of rows' do
+      count = Task.where(completed: true).count
+      expect(response.parsed_body.size).to eq count
+    end
+
+    it 'returns Grind coffee beans' do
+      expect(response).to have_http_status(:success)
+      expect(response.parsed_body).to include_a_record_with('description' => tasks(:grind_coffee_beans).description)
+    end
+
+    it 'does not return Make toast' do
+      expect(response).to have_http_status(:success)
+      expect(response.parsed_body).not_to include_a_record_with('description' => tasks(:make_toast).description)
+    end
+  end
+
   context 'with boolean filter set to false' do
     before { get '/tasks', params: { filter: { completed: false } } }
+
+    it 'returns the correct number of rows' do
+      count = Task.where(completed: false).count
+      expect(response.parsed_body.size).to eq count
+    end
+
+    it 'does not return Grind coffee beans' do
+      expect(response).to have_http_status(:success)
+      expect(response.parsed_body).not_to include_a_record_with('description' => tasks(:grind_coffee_beans).description)
+    end
+
+    it 'returns Make toast' do
+      expect(response).to have_http_status(:success)
+      expect(response.parsed_body).to include_a_record_with('description' => tasks(:make_toast).description)
+    end
+  end
+
+  context 'with boolean filter and value converted to false' do
+    before { get '/tasks', params: { filter: { yes_no_completed: 'NOPE' } } }
 
     it 'returns the correct number of rows' do
       count = Task.where(completed: false).count

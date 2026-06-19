@@ -42,6 +42,7 @@ Simplify and speed development of Rails controllers by making filter parameters 
     - [Partial](#partial)
     - [Range](#range)
     - [Sortable](#sortable)
+    - [Converters](#converters)
   - [Scope Filters](#scope-filters)
   - [Sorting](#sorting)
   - [Building the Query](#building-the-query)
@@ -82,6 +83,9 @@ Include module `Filterameter::DeclarativeFilters` in the controller to provide t
   filter :brand_name, association: :brand, name: :name
   filter :on_sale, association: :price, validates: [{ numericality: { greater_than: 0 } },
                                                     { numericality: { less_than: 100 } }]
+  filter :amount do |value|
+    value.is_a?(String) ? value.delete(",") : value
+  end
 ```
 
 Filters without options can be declared all at once with `filters`:
@@ -185,6 +189,17 @@ The following filters are not sortable:
 - scope filters (see [_Sorting with a Scope_](#sorting-with-a-scope))
 - filters with collection associations
 
+#### Converters
+
+If the filter value needs to be converted before being applied to the query, a converter block can be provided. The block should take the parameter value as an argument and return the converted value.
+
+For example, if the amount filter should remove commas from the value before applying it to the query, the declaration would look like this:
+
+```ruby
+filter :amount do |value|
+  value.is_a?(String) ? value.delete(",") : value
+end
+```
 
 ### Scope Filters
 

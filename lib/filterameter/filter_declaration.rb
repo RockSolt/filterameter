@@ -16,7 +16,7 @@ module Filterameter
   class FilterDeclaration
     VALID_RANGE_OPTIONS = [true, :min_only, :max_only].freeze
 
-    attr_reader :name, :parameter_name, :association, :validations
+    attr_reader :name, :parameter_name, :association, :validations, :converter
 
     def initialize(parameter_name, options, range_type: nil)
       @parameter_name = parameter_name.to_s
@@ -29,6 +29,7 @@ module Filterameter
       @raw_range = options[:range]
       @range_type = range_type
       @sortable = options.fetch(:sortable, true)
+      @converter = options[:converter]
     end
 
     def nested?
@@ -88,7 +89,7 @@ module Filterameter
     private
 
     def validate_options(options)
-      options.assert_valid_keys(:name, :association, :validates, :partial, :range, :sortable)
+      options.assert_valid_keys(:name, :association, :validates, :partial, :range, :sortable, :converter)
       validate_range(options[:range]) if options.key?(:range)
     end
 

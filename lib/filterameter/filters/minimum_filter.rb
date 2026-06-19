@@ -7,6 +7,7 @@ module Filterameter
     # Class MinimumFilter adds criteria for all values greater than or equal to a minimum.
     class MinimumFilter < ArelFilter
       def apply(query, value)
+        value = @converter.call(value) if @converter
         query.where(@arel_attribute.gteq(value))
       end
     end

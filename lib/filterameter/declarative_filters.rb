@@ -61,8 +61,8 @@ module Filterameter
       #     filter :department_name, partial: :from_start
       #     filter :reason, partial: { match: :dynamic, case_sensitive: true }
       #     filter :price, range: true
-      def filter(name, options = {})
-        filter_coordinator.add_filter(name, options)
+      def filter(name, options = {}, &converter)
+        filter_coordinator.add_filter(name, options.merge(converter:))
       end
 
       # Declares a list of filters without options. Filters that require options must be declared with `filter`.
