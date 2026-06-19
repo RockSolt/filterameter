@@ -68,7 +68,7 @@ RSpec.describe Filterameter::Filters::MatchesFilter do
     let(:filter) { described_class.new(:name, options, &:upcase) }
 
     it 'applies converter to value' do
-      expect(query.to_sql).to match(/PREPARE/)
+      expect(query.to_sql).to include('PREPARE')
     end
   end
 end
