@@ -1,6 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/filterameter.svg)](https://badge.fury.io/rb/filterameter)
 [![RuboCop](https://github.com/RockSolt/filterameter/workflows/RuboCop/badge.svg)](https://github.com/RockSolt/filterameter/actions?query=workflow%3ARuboCop)
 [![RSpec](https://github.com/RockSolt/filterameter/workflows/RSpec/badge.svg)](https://github.com/RockSolt/filterameter/actions?query=workflow%3ARSpec)
+[![Ruby Users Forum](https://img.shields.io/discourse/topics?server=https%3A%2F%2Fwww.rubyforum.org&style=flat&logo=discourse&label=Ruby%20Users%20Forum)](https://www.rubyforum.org/tag/filterameter)
 
 # Filterameter
 Filterameter provides declarative filters for Rails controllers to reduce boilerplate code and increase readability. How many times have you seen (or written) this controller action?
@@ -51,6 +52,7 @@ Simplify and speed development of Rails controllers by making filter parameters 
 - [Testing Declarations](#testing-declarations)
 - [Forms and Query Parameters](#forms-and-query-parameters)
 - [Contribute](#contribute)
+- [Community](#community)
 - [License](#license)
 
 ## Getting Started
@@ -457,6 +459,10 @@ Sorts are ascending by default, but can use a prefix can be added to control the
 For example, the following sorts by size descending:
 
 `/widgets?filter[sort]=-size`
+
+## Community
+
+Join us in the `filterameter` category on the [Ruby Users Forum](https://www.rubyforum.org/tag/filterameter).
 
 ## Contribute
 
