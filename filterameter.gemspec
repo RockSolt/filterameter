@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   spec.metadata["rubygems_mfa_required"] = "true"
+  spec.metadata["mailing_list_uri"]      = "https://www.rubyforum.org/tag/filterameter"
 
   spec.add_dependency "rails", '>= 6.1'
 
