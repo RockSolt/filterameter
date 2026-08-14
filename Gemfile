@@ -17,6 +17,7 @@ gemspec
 # gem 'byebug', group: [:development, :test]
 
 group :development, :test do
+  gem 'ruby-lsp', '~> 0.26'
   gem 'sqlite3', '~> 2.9.1'
 end
 
