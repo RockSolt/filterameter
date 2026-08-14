@@ -7,6 +7,8 @@ module Filterameter
   # *   action_on_undeclared_parameters
   # *   action_on_validation_failure
   # *   filter_key
+  # *   pagination_page_param
+  # *   pagination_size_param
   #
   # ## Action on Undeclared Parameters
   #
@@ -29,21 +31,54 @@ module Filterameter
   # restrict the filter parameters to only those that have been declared, meaning
   # undeclared parameters are ignored (and the action_on_undeclared_parameters
   # configuration option does not come into play).
+  #
+  # ## Pagination Parameters
+  #
+  # Pagination parameter paths are arrays of keys. They default to
+  # `[:page, :number]` and `[:page, :size]`, producing the nested parameters
+  # `page[number]` and `page[size]`. Use a single-key path, such as `[:page]`
+  # and `[:per_page]`, for top-level pagination parameters.
   class Configuration
     attr_accessor :action_on_undeclared_parameters, :action_on_validation_failure, :filter_key
+    attr_reader :pagination_page_param, :pagination_size_param
 
     def initialize
-      @action_on_undeclared_parameters =
-        @action_on_validation_failure =
-          if Rails.env.development?
-            :log
-          elsif Rails.env.test?
-            :raise
-          else
-            false
-          end
+      @action_on_undeclared_parameters = @action_on_validation_failure = default_action
 
       @filter_key = :filter
+      configure_pagination
+    end
+
+    def pagination_page_param=(param)
+      @pagination_page_param = pagination_param(param)
+    end
+
+    def pagination_size_param=(param)
+      @pagination_size_param = pagination_param(param)
+    end
+
+    private
+
+    def default_action
+      if Rails.env.development?
+        :log
+      elsif Rails.env.test?
+        :raise
+      else
+        false
+      end
+    end
+
+    def configure_pagination
+      self.pagination_page_param = %i[page number]
+      self.pagination_size_param = %i[page size]
+    end
+
+    def pagination_param(param)
+      path = Array(param).map(&:to_sym)
+      raise ArgumentError, 'pagination parameter path cannot be empty' if path.empty?
+
+      path
     end
   end
 end

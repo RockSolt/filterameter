@@ -54,23 +54,65 @@ RSpec.describe Filterameter::QueryParameters do
   end
 
   describe '#for_sort' do
-    it 'uses Filterameter ascending sort syntax and resets the page' do
-      expect(query_parameters.for_sort(:name)).to eq(
-        filter: { status: 'active', sort: 'name' },
-        page: { number: 1 }
-      )
+    it 'uses Filterameter ascending sort syntax and omits the page parameter' do
+      expect(query_parameters.for_sort(:name)).to eq(filter: { status: 'active', sort: 'name' })
     end
 
     it 'uses Filterameter descending sort syntax' do
-      expect(query_parameters.for_sort(:name, direction: :desc)).to eq(
-        filter: { status: 'active', sort: '-name' },
-        page: { number: 1 }
-      )
+      expect(query_parameters.for_sort(:name, direction: :desc)).to eq(filter: { status: 'active', sort: '-name' })
     end
 
     it 'rejects directions that Filterameter does not support' do
       expect { query_parameters.for_sort(:name, direction: :sideways) }
         .to raise_error(ArgumentError, 'direction must be :asc or :desc')
+    end
+  end
+
+  context 'with nested pagination parameters' do
+    let(:params) do
+      ActionController::Parameters.new(
+        filter: { status: 'active', sort: '-created_at' },
+        page: { number: '3', size: '50' }
+      )
+    end
+
+    it 'preserves the page size when replacing the page number' do
+      expect(query_parameters.for_page(4)).to eq(
+        filter: { status: 'active', sort: '-created_at' },
+        page: { number: 4, size: '50' }
+      )
+    end
+
+    it 'preserves the page size and omits the page number for a sort' do
+      expect(query_parameters.for_sort(:name)).to eq(
+        filter: { status: 'active', sort: 'name' },
+        page: { size: '50' }
+      )
+    end
+  end
+
+  context 'with top-level pagination parameters' do
+    before do
+      Filterameter.configuration.pagination_page_param = [:page]
+      Filterameter.configuration.pagination_size_param = [:per_page]
+    end
+
+    let(:params) do
+      ActionController::Parameters.new(
+        filter: { status: 'active', sort: '-created_at' }, page: '3', per_page: '50'
+      )
+    end
+
+    it 'uses the configured page parameter and preserves the page size' do
+      expect(query_parameters.for_page(4)).to eq(
+        filter: { status: 'active', sort: '-created_at' }, page: 4, per_page: '50'
+      )
+    end
+
+    it 'omits the configured page parameter when building a sort link' do
+      expect(query_parameters.for_sort(:name)).to eq(
+        filter: { status: 'active', sort: 'name' }, per_page: '50'
+      )
     end
   end
 
@@ -83,8 +125,7 @@ RSpec.describe Filterameter::QueryParameters do
 
     it 'uses the configured key when building links' do
       expect(query_parameters.for_sort(:name, direction: :desc)).to eq(
-        criteria: { status: 'active', sort: '-name' },
-        page: { number: 1 }
+        criteria: { status: 'active', sort: '-name' }
       )
     end
   end
@@ -101,7 +142,7 @@ RSpec.describe Filterameter::QueryParameters do
     end
 
     it 'uses top-level parameters when building sort links' do
-      expect(query_parameters.for_sort(:name)).to eq(status: 'active', sort: 'name', page: { number: 1 })
+      expect(query_parameters.for_sort(:name)).to eq(status: 'active', sort: 'name')
     end
   end
 end

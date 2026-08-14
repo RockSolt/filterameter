@@ -393,11 +393,13 @@ _Important:_ If the `filter_model` declaration is used, it must be before any fi
 
 ## Configuration
 
-There are three configuration options:
+The following configuration options are available:
 
 - action_on_undeclared_parameters
 - action_on_validation_failure
 - filter_key
+- pagination_page_param
+- pagination_size_param
 
 The configuration options can be set in an initializer, an environment file, or in `application.rb`.
 
@@ -412,6 +414,8 @@ Filterameter.configure do |config|
   config.action_on_undeclared_parameters = :log
   config.action_on_validation_failure = :log
   config.filter_key = :f
+  config.pagination_page_param = %i[page number]
+  config.pagination_size_param = %i[page size]
 end
 ```
 
@@ -430,6 +434,23 @@ By default, the filter parameters are nested under the key `:filter`. Use this s
 If the filter parameters are NOT nested, set this to false. Doing so will restrict the filter parameters to only
 those that have been declared, meaning undeclared parameters are ignored (and the action_on_undeclared_parameters
 configuration option does not come into play).
+
+#### Pagination Parameters
+
+`pagination_page_param` and `pagination_size_param` are arrays describing the parameter paths used for the page
+number and page size. They default to `%i[page number]` and `%i[page size]`, which produce `page[number]` and
+`page[size]`. Page-size values are preserved when generating page and sort links.
+
+For top-level parameters, such as the common Pagy or Kaminari convention, configure single-key paths (which do not need to be arrays):
+
+```ruby
+Filterameter.configure do |config|
+  config.pagination_page_param = :page
+  config.pagination_size_param = :per_page
+end
+```
+
+This produces `page=2&per_page=50`. Parameter paths may use any nesting or key names.
 
 ## Testing Declarations
 
