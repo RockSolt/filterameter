@@ -35,7 +35,11 @@ module Filterameter
 
     # Returns the current filter and sort state with the page number replaced.
     def for_page(page_number)
-      current_query_params.deep_merge(pagination_params(page_number))
+      current_query_params.deep_merge(params_for_path(@pagination_page_param, page_number))
+    end
+
+    def for_size(page_size)
+      current_query_params_without_page.deep_merge(params_for_path(@pagination_size_param, page_size))
     end
 
     # Returns the current filter state with a single sort applied. Ascending sorts are represented without a prefix;
@@ -76,6 +80,12 @@ module Filterameter
       @params.slice(*@pagination_roots).deep_dup
     end
 
+    def current_query_params_without_page
+      query_params = current_query_params
+      remove_pagination_param(query_params, @pagination_page_param)
+      query_params
+    end
+
     def current_pagination_params_without_page
       pagination_params = current_pagination_params
       remove_pagination_param(pagination_params, @pagination_page_param)
@@ -94,8 +104,8 @@ module Filterameter
       end
     end
 
-    def pagination_params(value)
-      @pagination_page_param.reverse_each.reduce(value) { |params, key| { key => params } }
+    def params_for_path(path, value)
+      path.reverse_each.reduce(value) { |params, key| { key => params } }
     end
 
     def query_params_with_sort(sort)

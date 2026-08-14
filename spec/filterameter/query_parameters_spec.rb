@@ -53,6 +53,15 @@ RSpec.describe Filterameter::QueryParameters do
     end
   end
 
+  describe '#for_size' do
+    it 'preserves the Filterameter query state, removes the page number, and replaces the page size' do
+      expect(query_parameters.for_size(50)).to eq(
+        filter: { status: 'active', sort: '-created_at' },
+        page: { size: 50 }
+      )
+    end
+  end
+
   describe '#for_sort' do
     it 'uses Filterameter ascending sort syntax and omits the page parameter' do
       expect(query_parameters.for_sort(:name)).to eq(filter: { status: 'active', sort: 'name' })
@@ -106,6 +115,12 @@ RSpec.describe Filterameter::QueryParameters do
     it 'uses the configured page parameter and preserves the page size' do
       expect(query_parameters.for_page(4)).to eq(
         filter: { status: 'active', sort: '-created_at' }, page: 4, per_page: '50'
+      )
+    end
+
+    it 'omits the page number when changing the size' do
+      expect(query_parameters.for_size(100)).to eq(
+        filter: { status: 'active', sort: '-created_at' }, per_page: 100
       )
     end
 
