@@ -4,6 +4,7 @@
 [![Ruby Users Forum](https://img.shields.io/discourse/topics?server=https%3A%2F%2Fwww.rubyforum.org&style=flat&logo=discourse&label=Ruby%20Users%20Forum)](https://www.rubyforum.org/tag/filterameter)
 
 # Filterameter
+
 Filterameter provides declarative filters for Rails controllers to reduce boilerplate code and increase readability. How many times have you seen (or written) this controller action?
 
 ```ruby
@@ -34,6 +35,7 @@ It's redundant code and a bit of a pain to write and maintain. Not to mention wh
 Simplify and speed development of Rails controllers by making filter parameters declarative with Filterameter.
 
 ## Table of Contents
+
 - [Getting Started](#getting-started)
 - [Usage](#usage)
   - [Filtering Options](#filtering-options)
@@ -47,12 +49,13 @@ Simplify and speed development of Rails controllers by making filter parameters 
   - [Scope Filters](#scope-filters)
   - [Sorting](#sorting)
   - [Building the Query](#building-the-query)
+  - [Query Parameters](#query-parameters)
   - [Specifying the Model](#specifying-the-model)
 - [Configuration](#configuration)
 - [Testing Declarations](#testing-declarations)
 - [Forms and Query Parameters](#forms-and-query-parameters)
-- [Contribute](#contribute)
 - [Community](#community)
+- [Contribute](#contribute)
 - [License](#license)
 
 ## Getting Started
@@ -60,6 +63,7 @@ Simplify and speed development of Rails controllers by making filter parameters 
 This gem requires Rails 6.1+, and works with ActiveRecord.
 
 ### Installation
+
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -67,16 +71,19 @@ gem 'filterameter'
 ```
 
 And then execute:
+
 ```bash
 $ bundle install
 ```
 
 Or install it yourself as:
+
 ```bash
 $ gem install filterameter
 ```
 
 ## Usage
+
 Include module `Filterameter::DeclarativeFilters` in the controller to provide the filter DSL. It can be included in the `ApplicationController` to make the functionality available to all controllers or it can be mixed in on a case-by-case basis.
 
 ```ruby
@@ -103,6 +110,7 @@ filters :color,
 The following options can be specified for each filter.
 
 #### name
+
 If the name of the parameter is different than the name of the attribute or scope, then use the name parameter to specify the name of the attribute or scope. For example, if the attribute name is `current_status` but the filter is exposed simply as `status` use the following:
 
 ```ruby
@@ -112,6 +120,7 @@ filter :status, name: :current_status
 This option can also be helpful with nested filters so that the query parameter can be prefixed with the model name. See the `association` option for an example.
 
 #### association
+
 If the attribute or scope is nested, it can be referenced by naming the association. For example, if the manager_id attribute lives on an employee's department record, use the following:
 
 ```ruby
@@ -129,6 +138,7 @@ If an association is a `has_many` [the distinct method](https://api.rubyonrails.
 _Limitation:_ If there is more than one association to the same table _and_ both associations can be part of the query, then you cannot use a nested filter directly. Instead, build a scope that disambiguates the associations then build a filter against that scope.
 
 #### validates
+
 If the filter value should be validated, use the `validates` option along with [ActiveModel validations](https://api.rubyonrails.org/classes/ActiveModel/Validations/ClassMethods.html#method-i-validates). Here's an example of the inclusion validator being used to restrict sizes:
 
 ```ruby
@@ -141,9 +151,10 @@ The `inclusion` validator has been overridden to provide the additional option `
 filter :size, validates: { inclusion: { in: %w[Small Medium Large], allow_multiple_values: true } }
 ```
 
-
 #### partial
+
 Specify the partial option if the filter should do a partial search (SQL's `LIKE`). The partial option accepts a hash to specify the search behavior. Here are the available options:
+
 - match: anywhere (default), from_start, dynamic
 - case_sensitive: true, false (default)
 
@@ -156,14 +167,17 @@ filter :reason, partial: { match: :dynamic, case_sensitive: true }
 ```
 
 The `match` options defines where you are searching (which then controls where the wildcard(s) appear):
+
 - anywhere: adds wildcards at the start and end, for example '%blue%'
 - from_start: adds a wildcard at the end, for example 'blue%'
 - dynamic: adds no wildcards; this enables the client to fully control the search string
 
 #### range
+
 Specify the range option to enable searches by ranges, minimum values, or maximum values. (All of these are inclusive. A search for a minimum value of $10.00 would include all items priced at $10.00.)
 
 Here are the available options:
+
 - true: enable ranges, minimum values, and/or maximum values
 - min_only: enables minimum values
 - max_only: enables maximum values
@@ -278,7 +292,6 @@ There are two ways to apply the filters and build the query, depending on how mu
 - Use the `build_filtered_query` before action callback
 - Manually call `build_query_from_filters`
 
-
 #### Use the `build_filtered_query` before action callback
 
 Add before action callback `build_filtered_query` for controller actions that should build the query. This can be done either in the `ApplicationController` or on a case-by-case basis.
@@ -351,6 +364,20 @@ The starting query is also a good place to provide any includes to enable eager 
 ```
 
 Note that the starting query provides the model, so the model is not looked up and the `model_name` declaration in not needed.
+
+### Query Parameters
+
+Because Filterameter knows all about the filter and sort parameters in the query string, it is also able to generate query parameters for similar links. For example, sorting by a different column or direction should still carry all the same filters and page parameters; or pagination might require links with the same filtering and sorting but a different page number or page size.
+
+The `DeclarativeFilters` mixin exposes method `query_parameters`, which returns an instance of QueryParameters. The object can be passed to views to build pagination and sort links.
+
+The following methods are available:
+
+| Method     | Updates   | Preserves                    | Resets |
+| ---------- | --------- | ---------------------------- | ------ |
+| `for_page` | Page      | Filters, sort, and page size | —      |
+| `for_size` | Page size | Filters and sort             | Page   |
+| `for_sort` | Sort      | Filters and page size        | Page   |
 
 ### Specifying the Model
 
@@ -495,4 +522,5 @@ bundle exec appraisal rspec
 ```
 
 ## License
+
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
