@@ -17,6 +17,7 @@ module Filterameter
   #
   # The return of each method are the arguments that can be passed to Rails path builders.
   class QueryParameters
+    # `sort` is the requested sort, or the supplied default when the request has no explicit sort.
     attr_reader :filter_params, :sort
 
     def self.build(params, default_sort: nil)
