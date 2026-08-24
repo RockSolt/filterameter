@@ -20,10 +20,6 @@ module Filterameter
     # `sort` is the requested sort, or the supplied default when the request has no explicit sort.
     attr_reader :filter_params, :sort
 
-    def self.build(params, default_sort: nil)
-      new(params, default_sort:)
-    end
-
     def initialize(params, default_sort: nil)
       @filter_key = Filterameter.configuration.filter_key
       configure_pagination

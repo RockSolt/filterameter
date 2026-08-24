@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Filterameter::QueryParameters do
-  subject(:query_parameters) { described_class.build(params, default_sort:) }
+  subject(:query_parameters) { described_class.new(params, default_sort:) }
 
   let(:params) do
     ActionController::Parameters.new(
@@ -16,32 +16,30 @@ RSpec.describe Filterameter::QueryParameters do
 
   after { Filterameter.reset }
 
-  describe '.build' do
-    it 'extracts filters separately from the requested sort' do
-      expect(query_parameters.filter_params).to eq(status: 'active')
-    end
+  it 'extracts filters separately from the requested sort' do
+    expect(query_parameters.filter_params).to eq(status: 'active')
+  end
 
-    it 'exposes the requested sort' do
-      expect(query_parameters.sort).to eq('-created_at')
-    end
+  it 'exposes the requested sort' do
+    expect(query_parameters.sort).to eq('-created_at')
+  end
 
-    it 'uses the supplied default when a sort was not requested' do
-      params[:filter].delete(:sort)
+  it 'uses the supplied default when a sort was not requested' do
+    params[:filter].delete(:sort)
 
-      expect(query_parameters.sort).to eq('name')
-    end
+    expect(query_parameters.sort).to eq('name')
+  end
 
-    it 'supports multiple default sorts in declaration order' do
-      params[:filter].delete(:sort)
-      query_parameters = described_class.build(params, default_sort: { created_at: :desc, name: :asc })
+  it 'supports multiple default sorts in declaration order' do
+    params[:filter].delete(:sort)
+    query_parameters = described_class.new(params, default_sort: { created_at: :desc, name: :asc })
 
-      expect(query_parameters.sort).to eq(%w[-created_at name])
-    end
+    expect(query_parameters.sort).to eq(%w[-created_at name])
+  end
 
-    it 'rejects defaults that do not use the declaration hash format' do
-      expect { described_class.build(params, default_sort: '-name') }
-        .to raise_error(ArgumentError, 'default_sort must be a hash of sort names and directions')
-    end
+  it 'rejects defaults that do not use the declaration hash format' do
+    expect { described_class.new(params, default_sort: '-name') }
+      .to raise_error(ArgumentError, 'default_sort must be a hash of sort names and directions')
   end
 
   describe '#for_page' do

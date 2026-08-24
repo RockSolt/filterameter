@@ -164,7 +164,7 @@ module Filterameter
     # Returns the current Filterameter query state for pagination and sortable links.
     # Its sort is the requested sort, or this controller's declared default when none was requested.
     def query_parameters
-      Filterameter::QueryParameters.build(
+      Filterameter::QueryParameters.new(
         params,
         default_sort: self.class.filter_coordinator.default_sort_parameters
       )
