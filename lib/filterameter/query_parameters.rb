@@ -50,6 +50,16 @@ module Filterameter
       override_sort(current_query_params_without_page, sort_value(name, direction))
     end
 
+    def sorted_by?(name)
+      Array.wrap(@sort).any? { |s| s.to_s.delete_prefix('-') == name.to_s }
+    end
+
+    def sort_direction(name)
+      return nil unless sorted_by?(name)
+
+      Array.wrap(@sort).find { |s| s.to_s.delete_prefix('-') == name.to_s }.to_s.start_with?('-') ? :desc : :asc
+    end
+
     private
 
     def configure_pagination

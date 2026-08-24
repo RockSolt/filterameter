@@ -379,6 +379,19 @@ The following methods are available:
 | `for_size` | Page size | Filters and sort             | Page   |
 | `for_sort` | Sort      | Filters and page size        | Page   |
 
+```ruby
+products_path(query_parameters.for_page(2))
+products_path(query_parameters.for_size(100))
+products_path(query_parameters.for_sort(:name, direction: :asc))
+```
+
+#### Sort Helpers
+
+The `query_parameters` object also provides helpers to provide info on the current sort for each field name. The following methods are available:
+
+- `sorted_by?(name)` - returns true if the current sort includes the specified name
+- `sort_direction(name)` - returns the current sort direction for the given name, or nil if the name is not part of the current sort
+
 ### Specifying the Model
 
 Rails conventions are used to determine the controller's model. For example, the PhotosController builds a query against the Photo model. If a controller is namespaced, the model will first be looked up without the namespace, then with the namespace.

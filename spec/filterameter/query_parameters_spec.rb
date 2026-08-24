@@ -77,6 +77,54 @@ RSpec.describe Filterameter::QueryParameters do
     end
   end
 
+  describe '#sorted_by?' do
+    it 'returns true when the current sort matches the name' do
+      expect(query_parameters.sorted_by?(:created_at)).to be true
+    end
+
+    it 'returns false when the current sort does not match the name' do
+      expect(query_parameters.sorted_by?(:name)).to be false
+    end
+
+    context 'with multiple sorts' do
+      let(:params) { ActionController::Parameters.new(filter: { status: 'active', sort: %w[name -created_at] }) }
+
+      it 'returns true for ascending sort' do
+        expect(query_parameters.sorted_by?(:name)).to be true
+      end
+
+      it 'returns true for descending sort' do
+        expect(query_parameters.sorted_by?(:created_at)).to be true
+      end
+    end
+  end
+
+  describe '#sort_direction' do
+    it 'returns nil when field not sorted' do
+      expect(query_parameters.sort_direction(:name)).to be_nil
+    end
+
+    it 'returns :desc when field sorted descending' do
+      expect(query_parameters.sort_direction(:created_at)).to eq :desc
+    end
+
+    context 'with multiple sorts' do
+      let(:params) { ActionController::Parameters.new(filter: { status: 'active', sort: %w[name -created_at] }) }
+
+      it 'returns nil when field not sorted' do
+        expect(query_parameters.sort_direction(:status)).to be_nil
+      end
+
+      it 'returns :asc for ascending sort' do
+        expect(query_parameters.sort_direction(:name)).to eq :asc
+      end
+
+      it 'returns :desc for descending sort' do
+        expect(query_parameters.sort_direction(:created_at)).to eq :desc
+      end
+    end
+  end
+
   context 'with nested pagination parameters' do
     let(:params) do
       ActionController::Parameters.new(
