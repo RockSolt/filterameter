@@ -36,18 +36,18 @@ module Filterameter
 
     # Returns the current filter and sort state with the page number replaced.
     def for_page(page_number)
-      current_query_params.deep_merge(params_for_path(@pagination_page_param, page_number))
+      write_at_path(current_query_params, @pagination_page_param, page_number)
     end
 
     def for_size(page_size)
-      current_query_params_without_page.deep_merge(params_for_path(@pagination_size_param, page_size))
+      write_at_path(current_query_params_without_page, @pagination_size_param, page_size)
     end
 
     # Returns the current filter state with a single sort applied. Ascending sorts are represented without a prefix;
     # descending sorts are prefixed with `-`. The page number is omitted, allowing the pagination library to use its
     # configured first page.
     def for_sort(name, direction: :asc)
-      query_params_with_sort(sort_value(name, direction)).deep_merge(current_pagination_params_without_page)
+      override_sort(current_query_params_without_page, sort_value(name, direction))
     end
 
     private
@@ -77,44 +77,42 @@ module Filterameter
       end
     end
 
-    def current_pagination_params
-      @params.slice(*@pagination_roots).deep_dup
-    end
-
     def current_query_params_without_page
-      query_params = current_query_params
-      remove_pagination_param(query_params, @pagination_page_param)
-      query_params
+      delete_at_path(current_query_params, @pagination_page_param)
     end
 
-    def current_pagination_params_without_page
-      pagination_params = current_pagination_params
-      remove_pagination_param(pagination_params, @pagination_page_param)
-      pagination_params
+    # Methods `write_at_path` and `delete_at_path` introduce a fair amount of the complexity here. If this could assume
+    # how the pagination parameters are stored, it could be much simpler. But the configuration allows for params at the
+    # root (such as `page` and `per_page`) or nested under a key (such as `page[number]` and `page[size]`).
+    #
+    # All of which is to say, you can ignore these methods for the most part. The write method is also used to override
+    # the sort, since that can also optionally be nested.
+
+    def write_at_path(params, path, value)
+      container = path[0...-1].reduce(params) do |hash, key|
+        hash[key] = {} unless hash[key].is_a?(Hash)
+        hash[key]
+      end
+      container[path.last] = value
+      params
     end
 
-    def remove_pagination_param(params, path)
-      return unless params.is_a?(Hash)
+    def delete_at_path(params, path)
+      return params unless params.is_a?(Hash)
 
       key = path.first
       if path.one?
         params.delete(key)
-      elsif (nested_params = params[key])
-        remove_pagination_param(nested_params, path.drop(1))
+      elsif (nested_params = params[key]).is_a?(Hash)
+        delete_at_path(nested_params, path.drop(1))
         params.delete(key) if nested_params.empty?
       end
+      params
     end
 
-    def params_for_path(path, value)
-      path.reverse_each.reduce(value) { |params, key| { key => params } }
-    end
-
-    def query_params_with_sort(sort)
-      if @filter_key
-        { @filter_key.to_sym => @filter_params.merge(sort:) }
-      else
-        @filter_params.merge(sort:)
-      end
+    def override_sort(params, sort)
+      path = @filter_key ? [@filter_key.to_sym, :sort] : [:sort]
+      write_at_path(params, path, sort)
     end
 
     def default_sort_value(default_sort)
