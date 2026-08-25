@@ -75,13 +75,13 @@ RSpec.describe Filterameter::DeclarativeFilters do
     it 'uses the controller default sort when the request has no explicit sort' do
       allow(controller).to receive(:params).and_return(ActionController::Parameters.new(filter: { status: 'active' }))
 
-      expect(controller.query_parameters.sort).to eq('-created_at')
+      expect(controller.query_parameters.sort).to eq(created_at: :desc)
     end
 
     it 'uses the requested sort instead of the controller default' do
       allow(controller).to receive(:params).and_return(ActionController::Parameters.new(filter: { sort: 'name' }))
 
-      expect(controller.query_parameters.sort).to eq('name')
+      expect(controller.query_parameters.sort).to eq(name: :asc)
     end
   end
 

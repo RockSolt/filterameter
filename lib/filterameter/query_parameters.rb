@@ -20,13 +20,15 @@ module Filterameter
     # `sort` is the requested sort, or the supplied default when the request has no explicit sort.
     attr_reader :filter_params, :sort
 
-    def initialize(params, default_sort: nil)
+    def initialize(params, default_sort: nil, sort_strategy: SortStrategies::ReplacementSortStrategy.new)
       @filter_key = Filterameter.configuration.filter_key
       configure_pagination
       @params = normalize(params)
+      @sort_strategy = sort_strategy
       @default_sort = default_sort_value(default_sort)
       @filter_params = extract_filter_params
-      @sort = @filter_params[:sort] || @default_sort
+      raw_sort = @filter_params[:sort]
+      @sort = raw_sort.present? ? parse_sort(raw_sort) : (@default_sort || {})
       @filter_params = @filter_params.except(:sort)
     end
 
@@ -39,21 +41,19 @@ module Filterameter
       write_at_path(current_query_params_without_page, @pagination_size_param, page_size)
     end
 
-    # Returns the current filter state with a single sort applied. Ascending sorts are represented without a prefix;
-    # descending sorts are prefixed with `-`. The page number is omitted, allowing the pagination library to use its
-    # configured first page.
-    def for_sort(name, direction: :asc)
-      override_sort(current_query_params_without_page, sort_value(name, direction))
+    # Returns the current filter state with the sort updated according to the sort strategy. The page number is
+    # omitted, allowing the pagination library to use its configured first page.
+    def for_sort(name, initial_direction: :asc)
+      result = @sort_strategy.call(self, name, initial_direction)
+      override_sort(current_query_params_without_page, result)
     end
 
     def sorted_by?(name)
-      Array.wrap(@sort).any? { |s| s.to_s.delete_prefix('-') == name.to_s }
+      @sort.key?(name.to_sym)
     end
 
     def sort_direction(name)
-      return nil unless sorted_by?(name)
-
-      Array.wrap(@sort).find { |s| s.to_s.delete_prefix('-') == name.to_s }.to_s.start_with?('-') ? :desc : :asc
+      @sort[name.to_sym]
     end
 
     private
@@ -118,15 +118,28 @@ module Filterameter
 
     def override_sort(params, sort)
       path = @filter_key ? [@filter_key.to_sym, :sort] : [:sort]
-      write_at_path(params, path, sort)
+      if sort.empty?
+        delete_at_path(params, path)
+      else
+        serialized = sort.map { |name, dir| sort_value(name, dir) }
+        write_at_path(params, path, serialized.one? ? serialized.first : serialized)
+      end
     end
 
     def default_sort_value(default_sort)
       return if default_sort.nil?
       raise ArgumentError, 'default_sort must be a hash of sort names and directions' unless default_sort.is_a?(Hash)
 
-      values = default_sort.map { |name, direction| sort_value(name, direction) }
-      values.one? ? values.first : values
+      result = default_sort.transform_keys(&:to_sym)
+      result.each { |name, direction| sort_value(name, direction) } # validate directions
+      result
+    end
+
+    def parse_sort(sort)
+      Array.wrap(sort).each_with_object({}) do |s, hash|
+        parsed = Helpers::RequestedSort.parse(s.to_s)
+        hash[parsed.name.to_sym] = parsed.direction
+      end
     end
 
     def sort_value(name, direction)

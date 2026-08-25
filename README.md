@@ -382,7 +382,7 @@ The following methods are available:
 ```ruby
 products_path(query_parameters.for_page(2))
 products_path(query_parameters.for_size(100))
-products_path(query_parameters.for_sort(:name, direction: :asc))
+products_path(query_parameters.for_sort(:name, initial_direction: :asc))
 ```
 
 #### Sort Helpers

@@ -21,20 +21,20 @@ RSpec.describe Filterameter::QueryParameters do
   end
 
   it 'exposes the requested sort' do
-    expect(query_parameters.sort).to eq('-created_at')
+    expect(query_parameters.sort).to eq(created_at: :desc)
   end
 
   it 'uses the supplied default when a sort was not requested' do
     params[:filter].delete(:sort)
 
-    expect(query_parameters.sort).to eq('name')
+    expect(query_parameters.sort).to eq(name: :asc)
   end
 
   it 'supports multiple default sorts in declaration order' do
     params[:filter].delete(:sort)
     query_parameters = described_class.new(params, default_sort: { created_at: :desc, name: :asc })
 
-    expect(query_parameters.sort).to eq(%w[-created_at name])
+    expect(query_parameters.sort).to eq(created_at: :desc, name: :asc)
   end
 
   it 'rejects defaults that do not use the declaration hash format' do
@@ -66,12 +66,47 @@ RSpec.describe Filterameter::QueryParameters do
     end
 
     it 'uses Filterameter descending sort syntax' do
-      expect(query_parameters.for_sort(:name, direction: :desc)).to eq(filter: { status: 'active', sort: '-name' })
+      expect(query_parameters.for_sort(:name,
+                                       initial_direction: :desc)).to eq(filter: { status: 'active', sort: '-name' })
     end
 
     it 'rejects directions that Filterameter does not support' do
-      expect { query_parameters.for_sort(:name, direction: :sideways) }
+      expect { query_parameters.for_sort(:name, initial_direction: :sideways) }
         .to raise_error(ArgumentError, 'direction must be :asc or :desc')
+    end
+
+    context 'when the strategy returns multiple fields' do
+      subject(:query_parameters) do
+        strategy = ->(_query_params, _name, _dir) { { name: :asc, created_at: :desc } }
+        described_class.new(params, sort_strategy: strategy)
+      end
+
+      it 'serializes as an array' do
+        expect(query_parameters.for_sort(:name)).to eq(filter: { status: 'active', sort: %w[name -created_at] })
+      end
+    end
+
+    context 'when the strategy returns an empty hash' do
+      subject(:query_parameters) do
+        strategy = ->(_query_params, _name, _dir) { {} }
+        described_class.new(params, sort_strategy: strategy)
+      end
+
+      it 'removes the sort key from the parameters' do
+        expect(query_parameters.for_sort(:name)).to eq(filter: { status: 'active' })
+      end
+    end
+
+    context 'when the strategy returns an invalid direction' do
+      subject(:query_parameters) do
+        strategy = ->(_query_params, _name, _dir) { { name: :sideways } }
+        described_class.new(params, sort_strategy: strategy)
+      end
+
+      it 'rejects the direction regardless of what the strategy returns' do
+        expect { query_parameters.for_sort(:name) }
+          .to raise_error(ArgumentError, 'direction must be :asc or :desc')
+      end
     end
   end
 
@@ -180,12 +215,13 @@ RSpec.describe Filterameter::QueryParameters do
   context 'with a custom filter key' do
     before { Filterameter.configuration.filter_key = :criteria }
 
+    let(:default_sort) { nil }
     let(:params) do
       ActionController::Parameters.new(criteria: { status: 'active' }, page: { number: '3' })
     end
 
     it 'uses the configured key when building links' do
-      expect(query_parameters.for_sort(:name, direction: :desc)).to eq(
+      expect(query_parameters.for_sort(:name, initial_direction: :desc)).to eq(
         criteria: { status: 'active', sort: '-name' }
       )
     end
