@@ -25,10 +25,10 @@ module Filterameter
       configure_pagination
       @params = normalize(params)
       @sort_strategy = sort_strategy
-      @default_sort = default_sort_value(default_sort)
+      @default_sort = Helpers::SortNormalizer.normalize(default_sort) || {}
       @filter_params = extract_filter_params
       raw_sort = @filter_params[:sort]
-      @sort = raw_sort.present? ? parse_sort(raw_sort) : (@default_sort || {})
+      @sort = raw_sort.present? ? parse_sort(raw_sort) : @default_sort
       @filter_params = @filter_params.except(:sort)
     end
 
@@ -121,33 +121,15 @@ module Filterameter
       if sort.empty?
         delete_at_path(params, path)
       else
-        serialized = sort.map { |name, dir| sort_value(name, dir) }
+        serialized = sort.map { |name, dir| Helpers::SortSerializer.serialize(name, dir) }
         write_at_path(params, path, serialized.one? ? serialized.first : serialized)
       end
     end
 
-    def default_sort_value(default_sort)
-      return if default_sort.nil?
-      raise ArgumentError, 'default_sort must be a hash of sort names and directions' unless default_sort.is_a?(Hash)
-
-      result = default_sort.transform_keys(&:to_sym)
-      result.each { |name, direction| sort_value(name, direction) } # validate directions
-      result
-    end
-
     def parse_sort(sort)
       Array.wrap(sort).each_with_object({}) do |s, hash|
-        parsed = Helpers::RequestedSort.parse(s.to_s)
+        parsed = RequestedSort.parse(s.to_s)
         hash[parsed.name.to_sym] = parsed.direction
-      end
-    end
-
-    def sort_value(name, direction)
-      case direction.to_sym
-      when :asc then name.to_s
-      when :desc then "-#{name}"
-      else
-        raise ArgumentError, 'direction must be :asc or :desc'
       end
     end
   end

@@ -30,6 +30,13 @@ RSpec.describe Filterameter::QueryParameters do
     expect(query_parameters.sort).to eq(name: :asc)
   end
 
+  it 'normalizes string keys and directions for direct callers' do
+    params[:filter].delete(:sort)
+    query_parameters = described_class.new(params, default_sort: { 'created_at' => 'desc' })
+
+    expect(query_parameters.sort).to eq(created_at: :desc)
+  end
+
   it 'supports multiple default sorts in declaration order' do
     params[:filter].delete(:sort)
     query_parameters = described_class.new(params, default_sort: { created_at: :desc, name: :asc })
