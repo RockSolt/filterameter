@@ -2,12 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe Filterameter::Helpers::RequestedSort do
+RSpec.describe Filterameter::RequestedSort do
   context 'with no sign' do
     let(:result) { described_class.parse('created_at') }
 
     it('#name') { expect(result.name).to eq 'created_at' }
     it('#direction') { expect(result.direction).to eq :asc }
+    it('is frozen') { expect(result).to be_frozen }
   end
 
   context 'with plus sign' do

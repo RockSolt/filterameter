@@ -81,7 +81,7 @@ RSpec.describe Filterameter::QueryBuilder do
     let(:query) { instance.build_query(requested_sort, nil) }
 
     context 'when there is a default and a requested sort' do
-      let(:default_sort) { [Filterameter::Helpers::RequestedSort.new(:created_at, :desc)] }
+      let(:default_sort) { [Filterameter::RequestedSort.new(:created_at, :desc)] }
       let(:requested_sort) { { sort: '+name' } }
 
       it 'includes requested sort' do
@@ -94,7 +94,7 @@ RSpec.describe Filterameter::QueryBuilder do
     end
 
     context 'when starting query includes a sort and none requested' do
-      let(:default_sort) { [Filterameter::Helpers::RequestedSort.new(:created_at, :desc)] }
+      let(:default_sort) { [Filterameter::RequestedSort.new(:created_at, :desc)] }
       let(:query) { instance.build_query(requested_sort, Activity.order(task_count: :desc)) }
 
       it 'does not add default' do
@@ -107,7 +107,7 @@ RSpec.describe Filterameter::QueryBuilder do
     end
 
     context 'with only default sort' do
-      let(:default_sort) { [Filterameter::Helpers::RequestedSort.new(:created_at, :desc)] }
+      let(:default_sort) { [Filterameter::RequestedSort.new(:created_at, :desc)] }
 
       it 'adds default' do
         expect(query).to sort_by(created_at: :desc)
