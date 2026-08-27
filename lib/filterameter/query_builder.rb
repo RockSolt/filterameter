@@ -36,7 +36,7 @@ module Filterameter
     end
 
     def parse_sorts(sorts)
-      Array.wrap(sorts).map { |sort| Helpers::RequestedSort.parse(sort) }
+      Array.wrap(sorts).map { |sort| RequestedSort.parse(sort) }
     end
 
     def apply_filters(query, filters)

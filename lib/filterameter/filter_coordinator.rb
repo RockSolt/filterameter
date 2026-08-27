@@ -40,9 +40,11 @@ module Filterameter
     end
 
     def default_sort=(sort_and_direction_pairs)
-      @default_sort = sort_and_direction_pairs.map do |name, direction|
-        Filterameter::Helpers::RequestedSort.new(name, direction)
-      end
+      normalized = Helpers::SortNormalizer.normalize(sort_and_direction_pairs).freeze
+
+      @default_sort = normalized.map do |name, direction|
+        RequestedSort.new(name, direction)
+      end.freeze
     end
 
     def declarations_validator

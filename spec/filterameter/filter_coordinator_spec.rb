@@ -26,6 +26,15 @@ RSpec.describe Filterameter::FilterCoordinator do
     end
   end
 
+  describe '#default_sort=' do
+    let(:instance) { described_class.new(nil, nil) }
+
+    it 'rejects a default sort that is not a hash' do
+      expect { instance.default_sort = '-created_at' }
+        .to raise_error(ArgumentError, 'default_sort must be a hash of sort names and directions')
+    end
+  end
+
   describe '#model_class=' do
     let(:instance) { described_class.new(nil, nil) }
     let(:result) { instance.send(:model_class) }
