@@ -30,6 +30,13 @@ RSpec.describe Filterameter::QueryParameters do
     expect(query_parameters.sort_order).to eq(name: :asc)
   end
 
+  it 'tracks whether the effective sort was explicitly requested' do
+    params[:filter].delete(:sort)
+
+    expect(query_parameters.sort_requested?).to be false
+    expect(query_parameters.requested_sort_order).to eq({})
+  end
+
   it 'normalizes string keys and directions for direct callers' do
     params[:filter].delete(:sort)
     query_parameters = described_class.new(params, default_sort: { 'created_at' => 'desc' })
@@ -80,6 +87,33 @@ RSpec.describe Filterameter::QueryParameters do
     it 'rejects directions that Filterameter does not support' do
       expect { query_parameters.for_sort(:name, initial_direction: :sideways) }
         .to raise_error(ArgumentError, 'direction must be :asc or :desc')
+    end
+
+    it 'changes a matching ascending default to descending' do
+      params[:filter].delete(:sort)
+      query_parameters = described_class.new(params, default_sort: { name: :asc })
+
+      expect(query_parameters.for_sort(:name, initial_direction: :asc)).to eq(
+        filter: { status: 'active', sort: '-name' }
+      )
+    end
+
+    it 'changes a matching descending default to ascending instead of omitting sort' do
+      params[:filter].delete(:sort)
+      query_parameters = described_class.new(params, default_sort: { name: :desc })
+
+      expect(query_parameters.for_sort(:name, initial_direction: :asc)).to eq(
+        filter: { status: 'active', sort: 'name' }
+      )
+    end
+
+    it 'does not omit an explicit sort when it matches the default' do
+      params[:filter][:sort] = '-name'
+      query_parameters = described_class.new(params, default_sort: { name: :desc })
+
+      expect(query_parameters.for_sort(:name, initial_direction: :asc)).to eq(
+        filter: { status: 'active', sort: 'name' }
+      )
     end
 
     context 'when the strategy returns multiple fields' do

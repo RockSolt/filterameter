@@ -385,6 +385,8 @@ products_path(query_parameters.for_size(100))
 products_path(query_parameters.for_sort(:name, initial_direction: :asc))
 ```
 
+`for_sort` cycles a field from its initial direction to the opposite direction and then removes the explicit sort. When a controller default sort is active, it removes the explicit sort only when doing so changes the effective ordering; otherwise it returns the field to the initial direction so the link is not a no-op.
+
 #### Sort Helpers
 
 The `query_parameters` object also provides helpers to provide info on the current sort for each field name. The following methods are available:

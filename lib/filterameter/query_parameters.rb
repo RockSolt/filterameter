@@ -17,7 +17,7 @@ module Filterameter
   #
   # The return of each method are the arguments that can be passed to Rails path builders.
   class QueryParameters
-    attr_reader :filter_params, :sort_order
+    attr_reader :filter_params, :sort_order, :requested_sort_order
 
     def initialize(params, default_sort: nil, sort_strategy: SortStrategies::ReplacementSortStrategy.new)
       @request_params = Filterameter::RequestParameters.new(params)
@@ -25,7 +25,9 @@ module Filterameter
       @default_sort = Helpers::SortNormalizer.normalize(default_sort) || {}
       @filter_params = @request_params.filter_params
       raw_sort = @request_params.sort_params
-      @sort_order = raw_sort.present? ? parse_sort(raw_sort) : @default_sort
+      @sort_requested = raw_sort.present?
+      @requested_sort_order = @sort_requested ? parse_sort(raw_sort) : {}
+      @sort_order = @sort_requested ? @requested_sort_order : @default_sort
     end
 
     # Returns the current filter and sort state with the page number replaced.
@@ -47,6 +49,14 @@ module Filterameter
 
     def sorted_by?(name)
       @sort_order.key?(name.to_sym)
+    end
+
+    def sort_requested?
+      @sort_requested
+    end
+
+    def default_sort_order
+      @default_sort
     end
 
     def sort_direction(name)

@@ -34,6 +34,22 @@ RSpec.describe 'Query parameters path helpers' do
     end
   end
 
+  describe 'default sort interactions' do
+    let(:params) do
+      ActionController::Parameters.new(page: { number: '2', size: '10' })
+    end
+    let(:query_params) { Filterameter::QueryParameters.new(params, default_sort: { project_id: :desc }) }
+
+    it 'changes the effective order when toggling a descending default with ascending initial direction' do
+      generated_params = query_params.for_sort(:project_id, initial_direction: :asc)
+
+      get activities_path(generated_params)
+
+      expect(response).to have_http_status(:success)
+      expect(response.parsed_body.pluck('project_id')).to eq Activity.order(project_id: :asc).pluck(:project_id)
+    end
+  end
+
   describe '#for_page' do
     it 'generates a URL with the updated page number and preserves the sort' do
       get activities_path(query_params.for_page(3))

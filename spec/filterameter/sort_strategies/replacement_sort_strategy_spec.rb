@@ -29,4 +29,21 @@ RSpec.describe Filterameter::SortStrategies::ReplacementSortStrategy do
     result = strategy.call(query_parameters, 'created_at', :asc)
     expect(result).to eq({})
   end
+
+  it 'does not remove a default sort when omission would be a no-op' do
+    params[:filter].delete(:sort)
+    query_parameters = Filterameter::QueryParameters.new(params, default_sort: { name: :desc })
+
+    result = strategy.call(query_parameters, 'name', :asc)
+
+    expect(result).to eq({ 'name' => :asc })
+  end
+
+  it 'removes an explicit sort when omission restores a different default' do
+    query_parameters = Filterameter::QueryParameters.new(params, default_sort: { name: :asc })
+
+    result = strategy.call(query_parameters, 'created_at', :asc)
+
+    expect(result).to eq({})
+  end
 end
