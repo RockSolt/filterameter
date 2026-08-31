@@ -17,28 +17,25 @@ module Filterameter
   #
   # The return of each method are the arguments that can be passed to Rails path builders.
   class QueryParameters
-    # `sort` is the requested sort, or the supplied default when the request has no explicit sort.
-    attr_reader :filter_params, :sort
+    attr_reader :filter_params, :sort_order
 
     def initialize(params, default_sort: nil, sort_strategy: SortStrategies::ReplacementSortStrategy.new)
-      @filter_key = Filterameter.configuration.filter_key
-      configure_pagination
-      @params = normalize(params)
+      @request_params = Filterameter::RequestParameters.new(params)
       @sort_strategy = sort_strategy
       @default_sort = Helpers::SortNormalizer.normalize(default_sort) || {}
-      @filter_params = extract_filter_params
-      raw_sort = @filter_params[:sort]
-      @sort = raw_sort.present? ? parse_sort(raw_sort) : @default_sort
-      @filter_params = @filter_params.except(:sort)
+      @filter_params = @request_params.filter_params
+      raw_sort = @request_params.sort_params
+      @sort_order = raw_sort.present? ? parse_sort(raw_sort) : @default_sort
     end
 
     # Returns the current filter and sort state with the page number replaced.
     def for_page(page_number)
-      write_at_path(current_query_params, @pagination_page_param, page_number)
+      write_at_path(@request_params.filter_sort_and_pagination_params, @request_params.pagination_page_path,
+                    page_number)
     end
 
     def for_size(page_size)
-      write_at_path(current_query_params_without_page, @pagination_size_param, page_size)
+      write_at_path(current_query_params_without_page, @request_params.pagination_size_path, page_size)
     end
 
     # Returns the current filter state with the sort updated according to the sort strategy. The page number is
@@ -49,42 +46,17 @@ module Filterameter
     end
 
     def sorted_by?(name)
-      @sort.key?(name.to_sym)
+      @sort_order.key?(name.to_sym)
     end
 
     def sort_direction(name)
-      @sort[name.to_sym]
+      @sort_order[name.to_sym]
     end
 
     private
 
-    def configure_pagination
-      @pagination_page_param = Filterameter.configuration.pagination_page_param
-      @pagination_size_param = Filterameter.configuration.pagination_size_param
-      @pagination_roots = [@pagination_page_param.first, @pagination_size_param.first].uniq
-    end
-
-    def normalize(params)
-      hash = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params.to_h
-      hash.deep_symbolize_keys
-    end
-
-    def extract_filter_params
-      return @params.except(*@pagination_roots) unless @filter_key
-
-      @params.fetch(@filter_key.to_sym, {}).deep_dup
-    end
-
-    def current_query_params
-      if @filter_key
-        @params.slice(@filter_key.to_sym, *@pagination_roots).deep_dup
-      else
-        @params.deep_dup
-      end
-    end
-
     def current_query_params_without_page
-      delete_at_path(current_query_params, @pagination_page_param)
+      delete_at_path(@request_params.filter_sort_and_pagination_params, @request_params.pagination_page_path)
     end
 
     # Methods `write_at_path` and `delete_at_path` introduce a fair amount of the complexity here. If this could assume
@@ -117,7 +89,7 @@ module Filterameter
     end
 
     def override_sort(params, sort)
-      path = @filter_key ? [@filter_key.to_sym, :sort] : [:sort]
+      path = @request_params.sort_path
       if sort.empty?
         delete_at_path(params, path)
       else

@@ -21,27 +21,27 @@ RSpec.describe Filterameter::QueryParameters do
   end
 
   it 'exposes the requested sort' do
-    expect(query_parameters.sort).to eq(created_at: :desc)
+    expect(query_parameters.sort_order).to eq(created_at: :desc)
   end
 
   it 'uses the supplied default when a sort was not requested' do
     params[:filter].delete(:sort)
 
-    expect(query_parameters.sort).to eq(name: :asc)
+    expect(query_parameters.sort_order).to eq(name: :asc)
   end
 
   it 'normalizes string keys and directions for direct callers' do
     params[:filter].delete(:sort)
     query_parameters = described_class.new(params, default_sort: { 'created_at' => 'desc' })
 
-    expect(query_parameters.sort).to eq(created_at: :desc)
+    expect(query_parameters.sort_order).to eq(created_at: :desc)
   end
 
   it 'supports multiple default sorts in declaration order' do
     params[:filter].delete(:sort)
     query_parameters = described_class.new(params, default_sort: { created_at: :desc, name: :asc })
 
-    expect(query_parameters.sort).to eq(created_at: :desc, name: :asc)
+    expect(query_parameters.sort_order).to eq(created_at: :desc, name: :asc)
   end
 
   it 'rejects defaults that do not use the declaration hash format' do
