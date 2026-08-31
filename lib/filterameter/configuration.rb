@@ -37,10 +37,11 @@ module Filterameter
   # Pagination parameter paths are arrays of keys. They default to
   # `[:page, :number]` and `[:page, :size]`, producing the nested parameters
   # `page[number]` and `page[size]`. Use a single-key path, such as `[:page]`
-  # and `[:per_page]`, for top-level pagination parameters.
+  # and `[:per_page]`, for top-level pagination parameters. Pagination paths
+  # cannot be rooted at the configured filter key.
   class Configuration
-    attr_accessor :action_on_undeclared_parameters, :action_on_validation_failure, :filter_key
-    attr_reader :pagination_page_param, :pagination_size_param
+    attr_accessor :action_on_undeclared_parameters, :action_on_validation_failure
+    attr_reader :pagination_page_param, :pagination_size_param, :filter_key
 
     def initialize
       @action_on_undeclared_parameters = @action_on_validation_failure = default_action
@@ -49,12 +50,21 @@ module Filterameter
       configure_pagination
     end
 
+    def filter_key=(key)
+      validate_pagination_paths(key)
+      @filter_key = key
+    end
+
     def pagination_page_param=(param)
-      @pagination_page_param = pagination_param(param)
+      path = pagination_param(param)
+      validate_pagination_path(path, :pagination_page_param)
+      @pagination_page_param = path
     end
 
     def pagination_size_param=(param)
-      @pagination_size_param = pagination_param(param)
+      path = pagination_param(param)
+      validate_pagination_path(path, :pagination_size_param)
+      @pagination_size_param = path
     end
 
     private
@@ -79,6 +89,19 @@ module Filterameter
       raise ArgumentError, 'pagination parameter path cannot be empty' if path.empty?
 
       path
+    end
+
+    def validate_pagination_paths(filter_key)
+      return unless filter_key
+
+      validate_pagination_path(@pagination_page_param, :pagination_page_param, filter_key)
+      validate_pagination_path(@pagination_size_param, :pagination_size_param, filter_key)
+    end
+
+    def validate_pagination_path(path, name, filter_key = @filter_key)
+      return unless filter_key && path&.first == filter_key.to_sym
+
+      raise ArgumentError, "#{name} cannot be nested under filter_key (#{filter_key.inspect})"
     end
   end
 end

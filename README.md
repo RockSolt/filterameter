@@ -465,7 +465,7 @@ Filterameter.configure do |config|
 end
 ```
 
-This produces `page=2&per_page=50`. Parameter paths may use any nesting or key names.
+This produces `page=2&per_page=50`. Parameter paths may use any nesting or key names, except that they cannot be rooted at the configured `filter_key`. The filter namespace is reserved for filter and sort parameters.
 
 ## Testing Declarations
 

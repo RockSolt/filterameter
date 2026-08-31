@@ -73,6 +73,19 @@ RSpec.describe Filterameter::Configuration do
       expect { config.pagination_page_param = [] }
         .to raise_error(ArgumentError, 'pagination parameter path cannot be empty')
     end
+
+    it 'rejects a path rooted at the filter key' do
+      expect { config.pagination_page_param = %i[filter page] }
+        .to raise_error(ArgumentError, 'pagination_page_param cannot be nested under filter_key (:filter)')
+    end
+
+    it 'rejects a path rooted at a filter key configured afterward' do
+      config.filter_key = false
+      config.pagination_page_param = %i[filter page]
+
+      expect { config.filter_key = :filter }
+        .to raise_error(ArgumentError, 'pagination_page_param cannot be nested under filter_key (:filter)')
+    end
   end
 
   describe '#pagination_size_param' do
@@ -96,6 +109,11 @@ RSpec.describe Filterameter::Configuration do
     it 'can accept a symbol parameter for top-level' do
       config.pagination_size_param = :per_page
       expect(config.pagination_size_param).to eq [:per_page]
+    end
+
+    it 'rejects a path rooted at the filter key' do
+      expect { config.pagination_size_param = %i[filter size] }
+        .to raise_error(ArgumentError, 'pagination_size_param cannot be nested under filter_key (:filter)')
     end
 
     it 'rejects an empty parameter path when configured' do
