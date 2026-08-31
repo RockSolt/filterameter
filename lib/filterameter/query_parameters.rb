@@ -19,8 +19,9 @@ module Filterameter
   class QueryParameters
     attr_reader :filter_params, :sort_order, :requested_sort_order
 
-    def initialize(params, default_sort: nil, sort_strategy: SortStrategies::ReplacementSortStrategy.new)
-      @request_params = Filterameter::RequestParameters.new(params)
+    def initialize(request_parameters, default_sort: nil,
+                   sort_strategy: SortStrategies::ReplacementSortStrategy.new)
+      @request_params = request_parameters
       @sort_strategy = sort_strategy
       @default_sort = Helpers::SortNormalizer.normalize(default_sort) || {}
       @filter_params = @request_params.filter_params

@@ -165,23 +165,23 @@ module Filterameter
     # Its sort is the requested sort, or this controller's declared default when none was requested.
     def query_parameters
       Filterameter::QueryParameters.new(
-        params,
+        filterameter_request_parameters,
         default_sort: self.class.filter_coordinator.default_sort_parameters
       )
     end
 
     def filter_parameters
-      request_params = Filterameter::RequestParameters.new(params)
-      filter_and_sort = request_params.filter_and_sort_params
-      return filter_and_sort if Filterameter.configuration.filter_key
-
-      # When params are flat (no filter key), restrict to declared names so that
-      # unrelated URL params are silently ignored rather than raising an error.
-      declared_keys = self.class.filter_coordinator.filter_parameter_names.map(&:to_sym) + [:sort]
-      filter_and_sort.slice(*declared_keys)
+      filterameter_request_parameters.filter_and_sort_params
     end
 
     private
+
+    def filterameter_request_parameters
+      @filterameter_request_parameters ||= Filterameter::RequestParameters.new(
+        params,
+        declared_filter_parameter_names: self.class.filter_coordinator.filter_parameter_names
+      )
+    end
 
     def build_filtered_query
       var_name = "@#{self.class.filter_coordinator.query_variable_name}"

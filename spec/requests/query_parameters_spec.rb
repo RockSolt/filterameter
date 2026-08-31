@@ -9,7 +9,8 @@ RSpec.describe 'Query parameters path helpers' do
       page: { number: '2', size: '10' }
     )
   end
-  let(:query_params) { Filterameter::QueryParameters.new(params) }
+  let(:request_parameters) { Filterameter::RequestParameters.new(params) }
+  let(:query_params) { Filterameter::QueryParameters.new(request_parameters) }
 
   describe '#for_sort' do
     it 'generates a URL with the new sort and no page number' do
@@ -38,7 +39,9 @@ RSpec.describe 'Query parameters path helpers' do
     let(:params) do
       ActionController::Parameters.new(page: { number: '2', size: '10' })
     end
-    let(:query_params) { Filterameter::QueryParameters.new(params, default_sort: { project_id: :desc }) }
+    let(:query_params) do
+      Filterameter::QueryParameters.new(request_parameters, default_sort: { project_id: :desc })
+    end
 
     it 'changes the effective order when toggling a descending default with ascending initial direction' do
       generated_params = query_params.for_sort(:project_id, initial_direction: :asc)

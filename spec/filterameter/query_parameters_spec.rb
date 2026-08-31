@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Filterameter::QueryParameters do
-  subject(:query_parameters) { described_class.new(params, default_sort:) }
+  subject(:query_parameters) { described_class.new(request_parameters, default_sort:) }
+
+  let(:request_parameters) { Filterameter::RequestParameters.new(params) }
 
   let(:params) do
     ActionController::Parameters.new(
@@ -39,20 +41,20 @@ RSpec.describe Filterameter::QueryParameters do
 
   it 'normalizes string keys and directions for direct callers' do
     params[:filter].delete(:sort)
-    query_parameters = described_class.new(params, default_sort: { 'created_at' => 'desc' })
+    query_parameters = described_class.new(request_parameters, default_sort: { 'created_at' => 'desc' })
 
     expect(query_parameters.sort_order).to eq(created_at: :desc)
   end
 
   it 'supports multiple default sorts in declaration order' do
     params[:filter].delete(:sort)
-    query_parameters = described_class.new(params, default_sort: { created_at: :desc, name: :asc })
+    query_parameters = described_class.new(request_parameters, default_sort: { created_at: :desc, name: :asc })
 
     expect(query_parameters.sort_order).to eq(created_at: :desc, name: :asc)
   end
 
   it 'rejects defaults that do not use the declaration hash format' do
-    expect { described_class.new(params, default_sort: '-name') }
+    expect { described_class.new(request_parameters, default_sort: '-name') }
       .to raise_error(ArgumentError, 'default_sort must be a hash of sort names and directions')
   end
 
@@ -91,7 +93,7 @@ RSpec.describe Filterameter::QueryParameters do
 
     it 'changes a matching ascending default to descending' do
       params[:filter].delete(:sort)
-      query_parameters = described_class.new(params, default_sort: { name: :asc })
+      query_parameters = described_class.new(request_parameters, default_sort: { name: :asc })
 
       expect(query_parameters.for_sort(:name, initial_direction: :asc)).to eq(
         filter: { status: 'active', sort: '-name' }
@@ -100,7 +102,7 @@ RSpec.describe Filterameter::QueryParameters do
 
     it 'changes a matching descending default to ascending instead of omitting sort' do
       params[:filter].delete(:sort)
-      query_parameters = described_class.new(params, default_sort: { name: :desc })
+      query_parameters = described_class.new(request_parameters, default_sort: { name: :desc })
 
       expect(query_parameters.for_sort(:name, initial_direction: :asc)).to eq(
         filter: { status: 'active', sort: 'name' }
@@ -109,7 +111,7 @@ RSpec.describe Filterameter::QueryParameters do
 
     it 'does not omit an explicit sort when it matches the default' do
       params[:filter][:sort] = '-name'
-      query_parameters = described_class.new(params, default_sort: { name: :desc })
+      query_parameters = described_class.new(request_parameters, default_sort: { name: :desc })
 
       expect(query_parameters.for_sort(:name, initial_direction: :asc)).to eq(
         filter: { status: 'active', sort: 'name' }
@@ -119,7 +121,7 @@ RSpec.describe Filterameter::QueryParameters do
     context 'when the strategy returns multiple fields' do
       subject(:query_parameters) do
         strategy = ->(_query_params, _name, _dir) { { name: :asc, created_at: :desc } }
-        described_class.new(params, sort_strategy: strategy)
+        described_class.new(request_parameters, sort_strategy: strategy)
       end
 
       it 'serializes as an array' do
@@ -130,7 +132,7 @@ RSpec.describe Filterameter::QueryParameters do
     context 'when the strategy returns an empty hash' do
       subject(:query_parameters) do
         strategy = ->(_query_params, _name, _dir) { {} }
-        described_class.new(params, sort_strategy: strategy)
+        described_class.new(request_parameters, sort_strategy: strategy)
       end
 
       it 'removes the sort key from the parameters' do
@@ -141,7 +143,7 @@ RSpec.describe Filterameter::QueryParameters do
     context 'when the strategy returns an invalid direction' do
       subject(:query_parameters) do
         strategy = ->(_query_params, _name, _dir) { { name: :sideways } }
-        described_class.new(params, sort_strategy: strategy)
+        described_class.new(request_parameters, sort_strategy: strategy)
       end
 
       it 'rejects the direction regardless of what the strategy returns' do

@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe Filterameter::SortStrategies::ReplacementSortStrategy do
   let(:strategy) { described_class.new }
 
-  let(:query_parameters) { Filterameter::QueryParameters.new(params, default_sort:) }
+  let(:query_parameters) { Filterameter::QueryParameters.new(request_parameters, default_sort:) }
+  let(:request_parameters) { Filterameter::RequestParameters.new(params) }
   let(:params) do
     ActionController::Parameters.new(
       filter: { status: 'active', sort: '-created_at' },
@@ -32,7 +33,7 @@ RSpec.describe Filterameter::SortStrategies::ReplacementSortStrategy do
 
   it 'does not remove a default sort when omission would be a no-op' do
     params[:filter].delete(:sort)
-    query_parameters = Filterameter::QueryParameters.new(params, default_sort: { name: :desc })
+    query_parameters = Filterameter::QueryParameters.new(request_parameters, default_sort: { name: :desc })
 
     result = strategy.call(query_parameters, 'name', :asc)
 
@@ -40,7 +41,7 @@ RSpec.describe Filterameter::SortStrategies::ReplacementSortStrategy do
   end
 
   it 'removes an explicit sort when omission restores a different default' do
-    query_parameters = Filterameter::QueryParameters.new(params, default_sort: { name: :asc })
+    query_parameters = Filterameter::QueryParameters.new(request_parameters, default_sort: { name: :asc })
 
     result = strategy.call(query_parameters, 'created_at', :asc)
 
