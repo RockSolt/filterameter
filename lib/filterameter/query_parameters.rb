@@ -44,7 +44,8 @@ module Filterameter
     # Returns the current filter state with the sort updated according to the sort strategy. The page number is
     # omitted, allowing the pagination library to use its configured first page.
     def for_sort(name, initial_direction: :asc)
-      result = @sort_strategy.call(self, name, initial_direction)
+      normalized_direction = Helpers::SortSerializer.normalize_direction(initial_direction)
+      result = @sort_strategy.call(self, name, normalized_direction)
       override_sort(current_query_params_without_page, result)
     end
 

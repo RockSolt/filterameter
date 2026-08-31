@@ -96,6 +96,40 @@ RSpec.describe Filterameter::QueryParameters do
         .to raise_error(ArgumentError, 'direction must be :asc or :desc')
     end
 
+    it 'rejects an invalid direction when the field is already sorted in that direction' do
+      params[:filter][:sort] = 'name'
+
+      expect { query_parameters.for_sort(:name, initial_direction: :sideways) }
+        .to raise_error(ArgumentError, 'direction must be :asc or :desc')
+    end
+
+    it 'rejects an invalid direction before removing an opposite explicit sort' do
+      params[:filter][:sort] = '-name'
+
+      expect { query_parameters.for_sort(:name, initial_direction: :sideways) }
+        .to raise_error(ArgumentError, 'direction must be :asc or :desc')
+    end
+
+    it 'accepts string directions and passes them to the strategy as symbols' do
+      received_direction = nil
+      strategy = lambda do |_query_params, _name, direction|
+        received_direction = direction
+        { name: direction }
+      end
+      query_parameters = described_class.new(request_parameters, sort_strategy: strategy)
+
+      expect(query_parameters.for_sort(:name, initial_direction: 'desc')).to eq(
+        filter: { status: 'active', sort: '-name' }
+      )
+      expect(received_direction).to eq(:desc)
+    end
+
+    it 'accepts a string ascending direction' do
+      expect(query_parameters.for_sort(:name, initial_direction: 'asc')).to eq(
+        filter: { status: 'active', sort: 'name' }
+      )
+    end
+
     it 'changes a matching ascending default to descending' do
       params[:filter].delete(:sort)
       query_parameters = described_class.new(request_parameters, default_sort: { name: :asc })
