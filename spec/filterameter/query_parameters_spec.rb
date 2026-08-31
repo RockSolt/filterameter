@@ -32,11 +32,16 @@ RSpec.describe Filterameter::QueryParameters do
     expect(query_parameters.sort_order).to eq(name: :asc)
   end
 
-  it 'tracks whether the effective sort was explicitly requested' do
-    params[:filter].delete(:sort)
+  context 'without a request sort' do
+    before { params[:filter].delete(:sort) }
 
-    expect(query_parameters.sort_requested?).to be false
-    expect(query_parameters.requested_sort_order).to eq({})
+    it '#sort_requested? is false' do
+      expect(query_parameters.sort_requested?).to be false
+    end
+
+    it '#requested_sort_order is empty' do
+      expect(query_parameters.requested_sort_order).to eq({})
+    end
   end
 
   it 'normalizes string keys and directions for direct callers' do
