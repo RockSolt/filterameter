@@ -111,17 +111,12 @@ RSpec.describe Filterameter::QueryParameters do
     end
 
     it 'accepts string directions and passes them to the strategy as symbols' do
-      received_direction = nil
-      strategy = lambda do |_query_params, _name, direction|
-        received_direction = direction
-        { name: direction }
-      end
+      strategy = double
       query_parameters = described_class.new(request_parameters, sort_strategy: strategy)
+      allow(strategy).to receive(:call).and_return(name: :desc)
 
-      expect(query_parameters.for_sort(:name, initial_direction: 'desc')).to eq(
-        filter: { status: 'active', sort: '-name' }
-      )
-      expect(received_direction).to eq(:desc)
+      query_parameters.for_sort(:name, initial_direction: 'desc')
+      expect(strategy).to have_received(:call).with(query_parameters, :name, :desc)
     end
 
     it 'accepts a string ascending direction' do
