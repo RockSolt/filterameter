@@ -49,7 +49,7 @@ Simplify and speed development of Rails controllers by making filter parameters 
   - [Scope Filters](#scope-filters)
   - [Sorting](#sorting)
   - [Building the Query](#building-the-query)
-  - [Query Parameters](#query-parameters)
+  - [Building Links](#building-links)
   - [Specifying the Model](#specifying-the-model)
 - [Configuration](#configuration)
 - [Testing Declarations](#testing-declarations)
@@ -365,9 +365,9 @@ The starting query is also a good place to provide any includes to enable eager 
 
 Note that the starting query provides the model, so the model is not looked up and the `model_name` declaration in not needed.
 
-### Query Parameters
+### Building Links
 
-Because Filterameter knows all about the filter and sort parameters in the query string, it is also able to generate query parameters for similar links. For example, sorting by a different column or direction should still carry all the same filters and page parameters; or pagination might require links with the same filtering and sorting but a different page number or page size.
+Because Filterameter knows all about the filter and sort parameters in the query string, it is also able to build similar links. For example, sorting by a different column or direction should still carry all the same filters and page parameters; or pagination might require links with the same filtering and sorting but a different page number or page size.
 
 The `DeclarativeFilters` mixin exposes method `query_parameters`, which returns an instance of QueryParameters. The object can be passed to views to build pagination and sort links.
 
