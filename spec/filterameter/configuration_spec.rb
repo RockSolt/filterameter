@@ -46,6 +46,82 @@ RSpec.describe Filterameter::Configuration do
     end
   end
 
+  describe '#pagination_page_param' do
+    it('defaults to [:page, :number]') { expect(config.pagination_page_param).to eq(%i[page number]) }
+
+    it 'can use a nested page parameter' do
+      config.pagination_page_param = %i[pagination page]
+      expect(config.pagination_page_param).to eq %i[pagination page]
+    end
+
+    it 'can use a top-level page parameter' do
+      config.pagination_page_param = [:page]
+      expect(config.pagination_page_param).to eq [:page]
+    end
+
+    it 'can accept a string parameter for top-level' do
+      config.pagination_page_param = 'page'
+      expect(config.pagination_page_param).to eq [:page]
+    end
+
+    it 'can accept a symbol parameter for top-level' do
+      config.pagination_page_param = :page
+      expect(config.pagination_page_param).to eq [:page]
+    end
+
+    it 'rejects an empty parameter path when configured' do
+      expect { config.pagination_page_param = [] }
+        .to raise_error(ArgumentError, 'pagination parameter path cannot be empty')
+    end
+
+    it 'rejects a path rooted at the filter key' do
+      expect { config.pagination_page_param = %i[filter page] }
+        .to raise_error(ArgumentError, 'pagination_page_param cannot be nested under filter_key (:filter)')
+    end
+
+    it 'rejects a path rooted at a filter key configured afterward' do
+      config.filter_key = false
+      config.pagination_page_param = %i[filter page]
+
+      expect { config.filter_key = :filter }
+        .to raise_error(ArgumentError, 'pagination_page_param cannot be nested under filter_key (:filter)')
+    end
+  end
+
+  describe '#pagination_size_param' do
+    it('defaults to [:page, :size]') { expect(config.pagination_size_param).to eq(%i[page size]) }
+
+    it 'can use a nested size parameter' do
+      config.pagination_size_param = %i[pagination size]
+      expect(config.pagination_size_param).to eq %i[pagination size]
+    end
+
+    it 'can use a top-level size parameter' do
+      config.pagination_size_param = [:per_page]
+      expect(config.pagination_size_param).to eq [:per_page]
+    end
+
+    it 'can accept a string parameter for top-level' do
+      config.pagination_size_param = 'per_page'
+      expect(config.pagination_size_param).to eq [:per_page]
+    end
+
+    it 'can accept a symbol parameter for top-level' do
+      config.pagination_size_param = :per_page
+      expect(config.pagination_size_param).to eq [:per_page]
+    end
+
+    it 'rejects a path rooted at the filter key' do
+      expect { config.pagination_size_param = %i[filter size] }
+        .to raise_error(ArgumentError, 'pagination_size_param cannot be nested under filter_key (:filter)')
+    end
+
+    it 'rejects an empty parameter path when configured' do
+      expect { config.pagination_size_param = [] }
+        .to raise_error(ArgumentError, 'pagination parameter path cannot be empty')
+    end
+  end
+
   describe '#filter_key' do
     it('defaults to :filter') { expect(config.filter_key).to eq :filter }
 

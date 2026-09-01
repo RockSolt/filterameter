@@ -60,6 +60,31 @@ RSpec.describe Filterameter::DeclarativeFilters do
     end
   end
 
+  describe '#query_parameters' do
+    let(:controller_class) do
+      Class.new(ApplicationController) do
+        @controller_name = 'projects'
+        @controller_path = 'projects'
+        include Filterameter::DeclarativeFilters
+
+        default_sort created_at: :desc
+      end
+    end
+    let(:controller) { controller_class.new }
+
+    it 'uses the controller default sort when the request has no explicit sort' do
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new(filter: { status: 'active' }))
+
+      expect(controller.query_parameters.sort_order).to eq(created_at: :desc)
+    end
+
+    it 'uses the requested sort instead of the controller default' do
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new(filter: { sort: 'name' }))
+
+      expect(controller.query_parameters.sort_order).to eq(name: :asc)
+    end
+  end
+
   describe '.filter_query_var_name' do
     let(:controller) do
       Class.new(ApplicationController) do

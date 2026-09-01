@@ -161,17 +161,27 @@ module Filterameter
       self.class.filter_coordinator.build_query(filter_parameters, starting_query)
     end
 
-    def filter_parameters
-      filter_key = Filterameter.configuration.filter_key
+    # Returns the current Filterameter query state for pagination and sortable links.
+    # Its sort is the requested sort, or this controller's declared default when none was requested.
+    def query_parameters
+      Filterameter::QueryParameters.new(
+        filterameter_request_parameters,
+        default_sort: self.class.filter_coordinator.default_sort_parameters
+      )
+    end
 
-      if filter_key
-        params.to_unsafe_h.fetch(filter_key, {})
-      else
-        params.to_unsafe_h.slice(*self.class.filter_coordinator.filter_parameter_names, :sort)
-      end
+    def filter_parameters
+      filterameter_request_parameters.filter_and_sort_params
     end
 
     private
+
+    def filterameter_request_parameters
+      @filterameter_request_parameters ||= Filterameter::RequestParameters.new(
+        params,
+        declared_filter_parameter_names: self.class.filter_coordinator.filter_parameter_names
+      )
+    end
 
     def build_filtered_query
       var_name = "@#{self.class.filter_coordinator.query_variable_name}"

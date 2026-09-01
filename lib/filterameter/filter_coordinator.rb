@@ -17,6 +17,7 @@ module Filterameter
   # The coordinators encapsulate references to the Query Builder and Filter Registry to keep the namespace clean for
   # controllers that implement filter parameters.
   class FilterCoordinator
+    attr_reader :default_sort_parameters
     attr_writer :query_variable_name
 
     delegate :add_filter, :add_sort, :filter_parameter_names, to: :registry
@@ -42,6 +43,7 @@ module Filterameter
     def default_sort=(sort_and_direction_pairs)
       normalized = Helpers::SortNormalizer.normalize(sort_and_direction_pairs).freeze
 
+      @default_sort_parameters = normalized
       @default_sort = normalized.map do |name, direction|
         RequestedSort.new(name, direction)
       end.freeze
