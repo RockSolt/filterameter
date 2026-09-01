@@ -5,6 +5,7 @@ source "https://gem.coop"
 gem "rails", "~> 8.1.0"
 
 group :development, :test do
+  gem "ruby-lsp", "~> 0.26"
   gem "sqlite3", "~> 2.9.1"
 end
 
