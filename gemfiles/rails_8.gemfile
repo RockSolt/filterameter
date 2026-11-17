@@ -3,6 +3,7 @@
 source "https://gem.coop"
 
 gem "rails", "~> 8.0.0"
+gem "json", "< 3.0"
 
 group :development, :test do
   gem "ruby-lsp", "~> 0.26"
